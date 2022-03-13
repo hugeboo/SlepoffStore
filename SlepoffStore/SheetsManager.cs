@@ -90,7 +90,13 @@ namespace SlepoffStore
         {
             using var repo = new Repository();
             var cat = EnsureNewCategory(repo);
-            var entry = new Entry { CategoryId = cat.Id, Caption = DateTime.Now.ToString() };
+            var entry = new Entry 
+            { 
+                CategoryId = cat.Id, 
+                CreationDate = DateTime.Now,
+                Color = EntryColor.Yellow,
+                Caption = DateTime.Now.ToString() 
+            };
             entry.Id = repo.InsertEntry(entry);
 
             var form = new SheetForm();

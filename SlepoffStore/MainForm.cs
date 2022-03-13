@@ -73,6 +73,7 @@ namespace SlepoffStore
 
         public long Id => Entry.Id;
         public string Caption => Entry.Caption;
+        public DateTime CreationDate => Entry.CreationDate;
         public string Text => Entry.Text;
         public bool Displayed { get; set; }
 

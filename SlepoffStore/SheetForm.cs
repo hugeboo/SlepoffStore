@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Templates;
 
 namespace SlepoffStore
 {
-    public partial class SheetForm : Form
+    public partial class SheetForm : BorderLessForm// Form
     {
         public UISheet UISheet { get; private set; }
         public Entry Entry { get; private set; }
@@ -27,23 +28,14 @@ namespace SlepoffStore
             UISheet = uiSheet;
             this.Text = Entry.Caption;
             textBox.Text = Entry.Text;
+            UpadateColors();
         }
 
-        private void OnTitlebarClick(Point pos)
+        private void UpadateColors()
         {
-            contextMenuStrip.Show(pos);
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            const int WM_NCRBUTTONDOWN = 0xa4;
-            if (m.Msg == WM_NCRBUTTONDOWN)
-            {
-                var pos = new Point(m.LParam.ToInt32());
-                OnTitlebarClick(pos);
-                return;
-            }
-            base.WndProc(ref m);
+            this.BackColor = Entry.Color.ToColor();
+            textBox.BackColor = Entry.Color.ToColor();
+            textBox.ForeColor = Entry.Color.GetForeColor();
         }
 
         private void SheetForm_Activated(object sender, EventArgs e)
@@ -84,6 +76,61 @@ namespace SlepoffStore
                 using var repo = new Repository();
                 repo.DeleteUISheet(UISheet);
                 this.Close();
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            if (Entry != null)
+            {
+                using var brush = new SolidBrush(Entry.Color.GetForeColor());
+                var sf = new StringFormat(StringFormatFlags.NoWrap) 
+                {
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Center,
+                    Trimming = StringTrimming.EllipsisCharacter
+                };
+                e.Graphics.DrawString(Entry.Caption, this.Font, brush, 
+                    new Rectangle(0, 0, this.Width, HeaderHeight), sf);
+            }
+        }
+
+        private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
+        {
+            captionToolStripTextBox.Text = Entry?.Caption;
+            colorsToolStripComboBox.SelectedItem = Entry?.Color.ToString();
+        }
+
+        private void colorsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Entry?.Color.ToString() != colorsToolStripComboBox.Text)
+            {
+                Entry.Color = EntryColor.Parse<EntryColor>(colorsToolStripComboBox.Text);
+                using var repo = new Repository();
+                repo.UpdateEntry(Entry);
+                UpadateColors();
+                this.Invalidate();
+            }
+        }
+
+        private void captionToolStripTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                contextMenuStrip.Close();
+            }
+        }
+
+        private void contextMenuStrip_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            if (Entry?.Caption != captionToolStripTextBox.Text)
+            {
+                Entry.Caption = captionToolStripTextBox.Text;
+                using var repo = new Repository();
+                repo.UpdateEntry(Entry);
+                this.Invalidate();
             }
         }
     }

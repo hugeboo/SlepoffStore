@@ -32,17 +32,18 @@
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.sectionsTreeViewControl = new SlepoffStore.Controls.SectionsTreeViewControl();
             this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.entryGridItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Displayed = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.createdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.captionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            //this.entryGridItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            //((System.ComponentModel.ISupportInitialize)(this.entryGridItemBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.entryGridItemBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer
@@ -85,9 +86,10 @@
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idDataGridViewTextBoxColumn,
             this.Displayed,
+            this.createdDataGridViewTextBoxColumn,
             this.captionDataGridViewTextBoxColumn,
             this.textDataGridViewTextBoxColumn});
-            //this.dataGridView.DataSource = this.entryGridItemBindingSource;
+            this.dataGridView.DataSource = this.entryGridItemBindingSource;
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.GridColor = System.Drawing.SystemColors.Window;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
@@ -101,6 +103,10 @@
             this.dataGridView.Size = new System.Drawing.Size(583, 473);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView_CellMouseClick);
+            // 
+            // entryGridItemBindingSource
+            // 
+            this.entryGridItemBindingSource.DataSource = typeof(SlepoffStore.EntryGridItem);
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -120,6 +126,15 @@
             this.Displayed.ReadOnly = true;
             this.Displayed.Width = 8;
             // 
+            // createdDataGridViewTextBoxColumn
+            // 
+            this.createdDataGridViewTextBoxColumn.DataPropertyName = "CreationDate";
+            this.createdDataGridViewTextBoxColumn.HeaderText = "Created";
+            this.createdDataGridViewTextBoxColumn.MinimumWidth = 8;
+            this.createdDataGridViewTextBoxColumn.Name = "createdDataGridViewTextBoxColumn";
+            this.createdDataGridViewTextBoxColumn.ReadOnly = true;
+            this.createdDataGridViewTextBoxColumn.Width = 104;
+            // 
             // captionDataGridViewTextBoxColumn
             // 
             this.captionDataGridViewTextBoxColumn.DataPropertyName = "Caption";
@@ -138,10 +153,6 @@
             this.textDataGridViewTextBoxColumn.ReadOnly = true;
             this.textDataGridViewTextBoxColumn.Width = 77;
             // 
-            // entryGridItemBindingSource
-            // 
-            //this.entryGridItemBindingSource.DataSource = typeof(SlepoffStore.EntryGridItem);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
@@ -159,7 +170,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            //((System.ComponentModel.ISupportInitialize)(this.entryGridItemBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.entryGridItemBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -169,9 +180,10 @@
         private SplitContainer splitContainer;
         private Controls.SectionsTreeViewControl sectionsTreeViewControl;
         private DataGridView dataGridView;
-        //private BindingSource entryGridItemBindingSource;
+        private BindingSource entryGridItemBindingSource;
         private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private DataGridViewCheckBoxColumn Displayed;
+        private DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn captionDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
     }

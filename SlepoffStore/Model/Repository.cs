@@ -10,9 +10,10 @@ namespace SlepoffStore.Model
 {
     public sealed class Repository : IDisposable
     {
-        private const string DatabaseName = "c:/temp/SlepoffStore.db";
         private readonly SQLiteConnection _connection;
- 
+
+        public static string DatabaseName { get; set; }
+
         public Repository()
         {
             _connection = new SQLiteConnection("Data Source=" + DatabaseName + ";Version=3; FailIfMissing=False");
@@ -100,8 +101,10 @@ namespace SlepoffStore.Model
         {
             using (var command = new SQLiteCommand(_connection))
             {
-                command.CommandText = "INSERT INTO Entries (CategoryId, Caption, Text) VALUES (:categoryId, :caption, :text)";
+                command.CommandText = "INSERT INTO Entries (CategoryId, CreationDate, Color, Caption, Text) VALUES (:categoryId, :creationDate, :color, :caption, :text)";
                 command.Parameters.AddWithValue("categoryId", entry.CategoryId);
+                command.Parameters.AddWithValue("creationDate", entry.CreationDate);
+                command.Parameters.AddWithValue("color", entry.Color.ToString());
                 command.Parameters.AddWithValue("caption", entry.Caption);
                 command.Parameters.AddWithValue("text", entry.Text);
                 command.ExecuteNonQuery();
@@ -122,6 +125,8 @@ namespace SlepoffStore.Model
                 {
                     Id = r.Field<long>("Id"),
                     CategoryId = r.Field<long>("CategoryId"),
+                    CreationDate = r.Field<DateTime>("CreationDate"),
+                    Color = EntryColor.Parse<EntryColor>(r.Field<string>("Color")),
                     Caption = r.Field<string>("Caption"),
                     Text = r.Field<string>("Text"),
                 }).ToArray();
@@ -141,6 +146,8 @@ namespace SlepoffStore.Model
                 {
                     Id = r.Field<long>("Id"),
                     CategoryId = r.Field<long>("CategoryId"),
+                    CreationDate = r.Field<DateTime>("CreationDate"),
+                    Color = EntryColor.Parse<EntryColor>(r.Field<string>("Color")),
                     Caption = r.Field<string>("Caption"),
                     Text = r.Field<string>("Text"),
                 }).ToArray();
@@ -160,6 +167,8 @@ namespace SlepoffStore.Model
                 {
                     Id = r.Field<long>("Id"),
                     CategoryId = r.Field<long>("CategoryId"),
+                    CreationDate = r.Field<DateTime>("CreationDate"),
+                    Color = EntryColor.Parse<EntryColor>(r.Field<string>("Color")),
                     Caption = r.Field<string>("Caption"),
                     Text = r.Field<string>("Text"),
                 }).FirstOrDefault();
@@ -170,7 +179,8 @@ namespace SlepoffStore.Model
         {
             using (var command = new SQLiteCommand(_connection))
             {
-                command.CommandText = "UPDATE Entries SET Caption=:caption,Text=:text WHERE Id=:id";
+                command.CommandText = "UPDATE Entries SET Color=:color,Caption=:caption,Text=:text WHERE Id=:id";
+                command.Parameters.AddWithValue("color", entry.Color.ToString());
                 command.Parameters.AddWithValue("caption", entry.Caption);
                 command.Parameters.AddWithValue("text", entry.Text);
                 command.Parameters.AddWithValue("id", entry.Id);

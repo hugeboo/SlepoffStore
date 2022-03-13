@@ -1,3 +1,5 @@
+using SlepoffStore.Model;
+
 namespace SlepoffStore
 {
     internal static class Program
@@ -8,6 +10,15 @@ namespace SlepoffStore
             //// To customize application configuration such as set high DPI settings or default font,
             //// see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+
+            var cla = new CommandLine();
+            if (string.IsNullOrEmpty(cla.DatabaseName))
+            {
+                MessageBox.Show("Database is unspecified!\nUse command line: slepoffstore.exe /database <db_name>",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+            Repository.DatabaseName = cla.DatabaseName;
 
             var sm = new SheetsManager();
             sm.RestoreAllSheets();
@@ -32,6 +43,28 @@ namespace SlepoffStore
 
                 Application.Run();
                 icon.Visible = false;
+            }
+        }
+
+        internal sealed class CommandLine
+        {
+            public string DatabaseName { get; set; }
+
+            public CommandLine()
+            {
+                Parse();
+            }
+
+            private void Parse()
+            {
+                var args = Environment.GetCommandLineArgs();
+                for (int i = 1; i < args.Length; i++)
+                {
+                    if (args[i].ToLower() == "/database" && i < args.Length - 1)
+                    {
+                        DatabaseName = args[++i];
+                    }
+                }
             }
         }
     }
