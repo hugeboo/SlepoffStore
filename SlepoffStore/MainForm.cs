@@ -65,6 +65,22 @@ namespace SlepoffStore
                 }
             }
         }
+
+        private void refreshToolStripButton_Click(object sender, EventArgs e)
+        {
+            sectionsTreeViewControl.Init();
+        }
+
+        private void settingsToolStripButton_Click(object sender, EventArgs e)
+        {
+            var form = new SettingsForm();
+            form.SetSettings(null);
+            if (form.ShowDialog(this)== DialogResult.OK)
+            {
+                var settings = form.GetSettings();
+                //...
+            }
+        }
     }
 
     public sealed class EntryGridItem

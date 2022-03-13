@@ -32,25 +32,30 @@
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.sectionsTreeViewControl = new SlepoffStore.Controls.SectionsTreeViewControl();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.entryGridItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Displayed = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.createdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.captionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.entryGridItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.refreshToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.settingsToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.entryGridItemBindingSource)).BeginInit();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer.Location = new System.Drawing.Point(0, 57);
             this.splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -60,7 +65,7 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.dataGridView);
-            this.splitContainer.Size = new System.Drawing.Size(818, 473);
+            this.splitContainer.Size = new System.Drawing.Size(814, 394);
             this.splitContainer.SplitterDistance = 231;
             this.splitContainer.TabIndex = 0;
             // 
@@ -70,7 +75,7 @@
             this.sectionsTreeViewControl.Location = new System.Drawing.Point(0, 0);
             this.sectionsTreeViewControl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.sectionsTreeViewControl.Name = "sectionsTreeViewControl";
-            this.sectionsTreeViewControl.Size = new System.Drawing.Size(231, 473);
+            this.sectionsTreeViewControl.Size = new System.Drawing.Size(231, 394);
             this.sectionsTreeViewControl.TabIndex = 0;
             // 
             // dataGridView
@@ -100,13 +105,9 @@
             this.dataGridView.RowHeadersWidth = 62;
             this.dataGridView.RowTemplate.Height = 33;
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(583, 473);
+            this.dataGridView.Size = new System.Drawing.Size(579, 394);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView_CellMouseClick);
-            // 
-            // entryGridItemBindingSource
-            // 
-            this.entryGridItemBindingSource.DataSource = typeof(SlepoffStore.EntryGridItem);
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -153,15 +154,64 @@
             this.textDataGridViewTextBoxColumn.ReadOnly = true;
             this.textDataGridViewTextBoxColumn.Width = 77;
             // 
+            // entryGridItemBindingSource
+            // 
+            this.entryGridItemBindingSource.DataSource = typeof(SlepoffStore.EntryGridItem);
+            // 
+            // toolStrip
+            // 
+            this.toolStrip.ImageScalingSize = new System.Drawing.Size(48, 48);
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refreshToolStripButton,
+            this.settingsToolStripButton});
+            this.toolStrip.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(814, 57);
+            this.toolStrip.TabIndex = 1;
+            this.toolStrip.Text = "toolStrip1";
+            // 
+            // refreshToolStripButton
+            // 
+            this.refreshToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.refreshToolStripButton.Image = global::SlepoffStore.Properties.Resources.icons8_обновить_64;
+            this.refreshToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.refreshToolStripButton.Name = "refreshToolStripButton";
+            this.refreshToolStripButton.Size = new System.Drawing.Size(52, 52);
+            this.refreshToolStripButton.Text = "Refresh";
+            this.refreshToolStripButton.Click += new System.EventHandler(this.refreshToolStripButton_Click);
+            // 
+            // settingsToolStripButton
+            // 
+            this.settingsToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.settingsToolStripButton.Image = global::SlepoffStore.Properties.Resources.icons8_настройки_64;
+            this.settingsToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.settingsToolStripButton.Name = "settingsToolStripButton";
+            this.settingsToolStripButton.Size = new System.Drawing.Size(52, 52);
+            this.settingsToolStripButton.Text = "Settings";
+            this.settingsToolStripButton.Click += new System.EventHandler(this.settingsToolStripButton_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 451);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(814, 22);
+            this.statusStrip1.TabIndex = 2;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(818, 473);
             this.Controls.Add(this.splitContainer);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.toolStrip);
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
+            this.Padding = new System.Windows.Forms.Padding(0, 0, 4, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Slepoff Store";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -171,7 +221,10 @@
             this.splitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.entryGridItemBindingSource)).EndInit();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -186,5 +239,9 @@
         private DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn captionDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
+        private ToolStrip toolStrip;
+        private ToolStripButton refreshToolStripButton;
+        private ToolStripButton settingsToolStripButton;
+        private StatusStrip statusStrip1;
     }
 }
