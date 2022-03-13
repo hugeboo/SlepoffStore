@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SlepoffStore": {
+      "commandName": "Project",
+      "commandLineArgs": "/database c:/temp/SlepoffStore.db"
+    }
+  }
+}
