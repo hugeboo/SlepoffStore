@@ -101,12 +101,14 @@ namespace SlepoffStore.Model
         {
             using (var command = new SQLiteCommand(_connection))
             {
-                command.CommandText = "INSERT INTO Entries (CategoryId, CreationDate, Color, Caption, Text) VALUES (:categoryId, :creationDate, :color, :caption, :text)";
+                command.CommandText = "INSERT INTO Entries (CategoryId, CreationDate, Color, Caption, Text, Alarm, AlarmIsOn) VALUES (:categoryId, :creationDate, :color, :caption, :text, :alarm, :alarmIsOn)";
                 command.Parameters.AddWithValue("categoryId", entry.CategoryId);
                 command.Parameters.AddWithValue("creationDate", entry.CreationDate);
                 command.Parameters.AddWithValue("color", entry.Color.ToString());
                 command.Parameters.AddWithValue("caption", entry.Caption);
                 command.Parameters.AddWithValue("text", entry.Text);
+                command.Parameters.AddWithValue("alarm", entry.Alarm);
+                command.Parameters.AddWithValue("alarmIsOn", entry.AlarmIsOn);
                 command.ExecuteNonQuery();
                 return _connection.LastInsertRowId;
             }
@@ -129,6 +131,8 @@ namespace SlepoffStore.Model
                     Color = EntryColor.Parse<EntryColor>(r.Field<string>("Color")),
                     Caption = r.Field<string>("Caption"),
                     Text = r.Field<string>("Text"),
+                    Alarm = r.Field<DateTime?>("Alarm"),
+                    AlarmIsOn = r.Field<bool>("AlarmIsOn"),
                 }).ToArray();
             }
         }
@@ -150,6 +154,8 @@ namespace SlepoffStore.Model
                     Color = EntryColor.Parse<EntryColor>(r.Field<string>("Color")),
                     Caption = r.Field<string>("Caption"),
                     Text = r.Field<string>("Text"),
+                    Alarm = r.Field<DateTime?>("Alarm"),
+                    AlarmIsOn = r.Field<bool>("AlarmIsOn"),
                 }).ToArray();
             }
         }
@@ -171,6 +177,8 @@ namespace SlepoffStore.Model
                     Color = EntryColor.Parse<EntryColor>(r.Field<string>("Color")),
                     Caption = r.Field<string>("Caption"),
                     Text = r.Field<string>("Text"),
+                    Alarm = r.Field<DateTime?>("Alarm"),
+                    AlarmIsOn = r.Field<bool>("AlarmIsOn"),
                 }).FirstOrDefault();
             }
         }
@@ -179,10 +187,12 @@ namespace SlepoffStore.Model
         {
             using (var command = new SQLiteCommand(_connection))
             {
-                command.CommandText = "UPDATE Entries SET Color=:color,Caption=:caption,Text=:text WHERE Id=:id";
+                command.CommandText = "UPDATE Entries SET Color=:color,Caption=:caption,Text=:text,Alarm=:alarm,AlarmIsOn=:alarmIsOn WHERE Id=:id";
                 command.Parameters.AddWithValue("color", entry.Color.ToString());
                 command.Parameters.AddWithValue("caption", entry.Caption);
                 command.Parameters.AddWithValue("text", entry.Text);
+                command.Parameters.AddWithValue("alarm", entry.Alarm);
+                command.Parameters.AddWithValue("alarmIsOn", entry.AlarmIsOn);
                 command.Parameters.AddWithValue("id", entry.Id);
                 command.ExecuteNonQuery();
             }

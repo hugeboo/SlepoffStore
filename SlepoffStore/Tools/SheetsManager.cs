@@ -2,13 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SlepoffStore
+namespace SlepoffStore.Tools
 {
     public sealed class SheetsManager
     {
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
         private const string SECTION_FOR_NEW = "Other";
         private const string CATEGORY_FOR_NEW = "New";
 
@@ -28,6 +35,8 @@ namespace SlepoffStore
         {
             using var repo = new Repository();
             var uiSheets = repo.GetUISheets();
+
+            var focus = GetForegroundWindow();
             
             foreach (var uiSheet in uiSheets)
             {
@@ -41,6 +50,8 @@ namespace SlepoffStore
                     _sheets.Add(form);
                 }
             }
+
+            SetForegroundWindow(focus);
         }
 
         private void Form_FormClosed(object? sender, FormClosedEventArgs e)

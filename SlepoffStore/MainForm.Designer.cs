@@ -32,16 +32,18 @@
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.sectionsTreeViewControl = new SlepoffStore.Controls.SectionsTreeViewControl();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Displayed = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.createdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.captionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.entryGridItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.refreshToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.settingsToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.displayedDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.createdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.captionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alarmDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.alarmIsOnDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -90,9 +92,11 @@
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idDataGridViewTextBoxColumn,
-            this.Displayed,
+            this.displayedDataGridViewTextBoxColumn,
             this.createdDataGridViewTextBoxColumn,
             this.captionDataGridViewTextBoxColumn,
+            this.alarmDataGridViewTextBoxColumn,
+            this.alarmIsOnDataGridViewTextBoxColumn,
             this.textDataGridViewTextBoxColumn});
             this.dataGridView.DataSource = this.entryGridItemBindingSource;
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -108,51 +112,6 @@
             this.dataGridView.Size = new System.Drawing.Size(579, 394);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView_CellMouseClick);
-            // 
-            // idDataGridViewTextBoxColumn
-            // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.MinimumWidth = 8;
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idDataGridViewTextBoxColumn.Width = 58;
-            // 
-            // Displayed
-            // 
-            this.Displayed.DataPropertyName = "Displayed";
-            this.Displayed.HeaderText = "";
-            this.Displayed.MinimumWidth = 8;
-            this.Displayed.Name = "Displayed";
-            this.Displayed.ReadOnly = true;
-            this.Displayed.Width = 8;
-            // 
-            // createdDataGridViewTextBoxColumn
-            // 
-            this.createdDataGridViewTextBoxColumn.DataPropertyName = "CreationDate";
-            this.createdDataGridViewTextBoxColumn.HeaderText = "Created";
-            this.createdDataGridViewTextBoxColumn.MinimumWidth = 8;
-            this.createdDataGridViewTextBoxColumn.Name = "createdDataGridViewTextBoxColumn";
-            this.createdDataGridViewTextBoxColumn.ReadOnly = true;
-            this.createdDataGridViewTextBoxColumn.Width = 104;
-            // 
-            // captionDataGridViewTextBoxColumn
-            // 
-            this.captionDataGridViewTextBoxColumn.DataPropertyName = "Caption";
-            this.captionDataGridViewTextBoxColumn.HeaderText = "Caption";
-            this.captionDataGridViewTextBoxColumn.MinimumWidth = 8;
-            this.captionDataGridViewTextBoxColumn.Name = "captionDataGridViewTextBoxColumn";
-            this.captionDataGridViewTextBoxColumn.ReadOnly = true;
-            this.captionDataGridViewTextBoxColumn.Width = 102;
-            // 
-            // textDataGridViewTextBoxColumn
-            // 
-            this.textDataGridViewTextBoxColumn.DataPropertyName = "Text";
-            this.textDataGridViewTextBoxColumn.HeaderText = "Text";
-            this.textDataGridViewTextBoxColumn.MinimumWidth = 8;
-            this.textDataGridViewTextBoxColumn.Name = "textDataGridViewTextBoxColumn";
-            this.textDataGridViewTextBoxColumn.ReadOnly = true;
-            this.textDataGridViewTextBoxColumn.Width = 77;
             // 
             // entryGridItemBindingSource
             // 
@@ -199,6 +158,69 @@
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.MinimumWidth = 8;
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idDataGridViewTextBoxColumn.Width = 58;
+            // 
+            // Displayed
+            // 
+            this.displayedDataGridViewTextBoxColumn.DataPropertyName = "Displayed";
+            this.displayedDataGridViewTextBoxColumn.HeaderText = "";
+            this.displayedDataGridViewTextBoxColumn.MinimumWidth = 8;
+            this.displayedDataGridViewTextBoxColumn.Name = "Displayed";
+            this.displayedDataGridViewTextBoxColumn.ReadOnly = true;
+            this.displayedDataGridViewTextBoxColumn.Width = 8;
+            // 
+            // createdDataGridViewTextBoxColumn
+            // 
+            this.createdDataGridViewTextBoxColumn.DataPropertyName = "CreationDate";
+            this.createdDataGridViewTextBoxColumn.HeaderText = "Created";
+            this.createdDataGridViewTextBoxColumn.MinimumWidth = 8;
+            this.createdDataGridViewTextBoxColumn.Name = "createdDataGridViewTextBoxColumn";
+            this.createdDataGridViewTextBoxColumn.ReadOnly = true;
+            this.createdDataGridViewTextBoxColumn.Width = 104;
+            // 
+            // captionDataGridViewTextBoxColumn
+            // 
+            this.captionDataGridViewTextBoxColumn.DataPropertyName = "Caption";
+            this.captionDataGridViewTextBoxColumn.HeaderText = "Caption";
+            this.captionDataGridViewTextBoxColumn.MinimumWidth = 8;
+            this.captionDataGridViewTextBoxColumn.Name = "captionDataGridViewTextBoxColumn";
+            this.captionDataGridViewTextBoxColumn.ReadOnly = true;
+            this.captionDataGridViewTextBoxColumn.Width = 102;
+            // 
+            // Alarm
+            // 
+            this.alarmDataGridViewTextBoxColumn.DataPropertyName = "Alarm";
+            this.alarmDataGridViewTextBoxColumn.HeaderText = "Alarm";
+            this.alarmDataGridViewTextBoxColumn.MinimumWidth = 8;
+            this.alarmDataGridViewTextBoxColumn.Name = "Alarm";
+            this.alarmDataGridViewTextBoxColumn.ReadOnly = true;
+            this.alarmDataGridViewTextBoxColumn.Width = 89;
+            // 
+            // AlarmIsOn
+            // 
+            this.alarmIsOnDataGridViewTextBoxColumn.DataPropertyName = "AlarmIsOn";
+            this.alarmIsOnDataGridViewTextBoxColumn.HeaderText = "";
+            this.alarmIsOnDataGridViewTextBoxColumn.MinimumWidth = 8;
+            this.alarmIsOnDataGridViewTextBoxColumn.Name = "AlarmIsOn";
+            this.alarmIsOnDataGridViewTextBoxColumn.ReadOnly = true;
+            this.alarmIsOnDataGridViewTextBoxColumn.Width = 8;
+            // 
+            // textDataGridViewTextBoxColumn
+            // 
+            this.textDataGridViewTextBoxColumn.DataPropertyName = "Text";
+            this.textDataGridViewTextBoxColumn.HeaderText = "Text";
+            this.textDataGridViewTextBoxColumn.MinimumWidth = 8;
+            this.textDataGridViewTextBoxColumn.Name = "textDataGridViewTextBoxColumn";
+            this.textDataGridViewTextBoxColumn.ReadOnly = true;
+            this.textDataGridViewTextBoxColumn.Width = 77;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
@@ -234,14 +256,16 @@
         private Controls.SectionsTreeViewControl sectionsTreeViewControl;
         private DataGridView dataGridView;
         private BindingSource entryGridItemBindingSource;
-        private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
-        private DataGridViewCheckBoxColumn Displayed;
-        private DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn captionDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
         private ToolStrip toolStrip;
         private ToolStripButton refreshToolStripButton;
         private ToolStripButton settingsToolStripButton;
         private StatusStrip statusStrip1;
+        private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
+        private DataGridViewCheckBoxColumn displayedDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn captionDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn alarmDataGridViewTextBoxColumn;
+        private DataGridViewCheckBoxColumn alarmIsOnDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
     }
 }

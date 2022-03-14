@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SlepoffStore
+namespace SlepoffStore.Tools
 {
     public sealed class GenericEventArgs<T> : EventArgs
     {

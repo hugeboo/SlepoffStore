@@ -35,7 +35,10 @@
             this.colorsToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.captionToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.setAlarmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sheetAlarmControl = new SlepoffStore.Controls.SheetAlarmControl();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +50,7 @@
             this.textBox.Location = new System.Drawing.Point(11, 40);
             this.textBox.Multiline = true;
             this.textBox.Name = "textBox";
-            this.textBox.Size = new System.Drawing.Size(389, 147);
+            this.textBox.Size = new System.Drawing.Size(389, 121);
             this.textBox.TabIndex = 0;
             // 
             // timer
@@ -63,10 +66,12 @@
             this.colorsToolStripComboBox,
             this.captionToolStripTextBox,
             this.toolStripSeparator,
+            this.setAlarmToolStripMenuItem,
+            this.toolStripSeparator1,
             this.closeToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.contextMenuStrip.Size = new System.Drawing.Size(411, 116);
+            this.contextMenuStrip.Size = new System.Drawing.Size(411, 154);
             this.contextMenuStrip.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.contextMenuStrip_Closing);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
@@ -98,12 +103,33 @@
             this.toolStripSeparator.Name = "toolStripSeparator";
             this.toolStripSeparator.Size = new System.Drawing.Size(407, 6);
             // 
+            // setAlarmToolStripMenuItem
+            // 
+            this.setAlarmToolStripMenuItem.Name = "setAlarmToolStripMenuItem";
+            this.setAlarmToolStripMenuItem.Size = new System.Drawing.Size(410, 32);
+            this.setAlarmToolStripMenuItem.Text = "Set Alarm...";
+            this.setAlarmToolStripMenuItem.Click += new System.EventHandler(this.setAlarmToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(407, 6);
+            // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
             this.closeToolStripMenuItem.Size = new System.Drawing.Size(410, 32);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            // 
+            // sheetAlarmControl
+            // 
+            this.sheetAlarmControl.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.sheetAlarmControl.Location = new System.Drawing.Point(11, 161);
+            this.sheetAlarmControl.Name = "sheetAlarmControl";
+            this.sheetAlarmControl.Size = new System.Drawing.Size(389, 26);
+            this.sheetAlarmControl.TabIndex = 1;
+            this.sheetAlarmControl.Visible = false;
             // 
             // SheetForm
             // 
@@ -113,6 +139,7 @@
             this.ContextMenuStrip = this.contextMenuStrip;
             this.ControlBox = false;
             this.Controls.Add(this.textBox);
+            this.Controls.Add(this.sheetAlarmControl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.HeaderHeight = 40;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -139,5 +166,8 @@
         private ToolStripTextBox captionToolStripTextBox;
         private ToolStripSeparator toolStripSeparator;
         private ToolStripComboBox colorsToolStripComboBox;
+        private ToolStripMenuItem setAlarmToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private Controls.SheetAlarmControl sheetAlarmControl;
     }
 }

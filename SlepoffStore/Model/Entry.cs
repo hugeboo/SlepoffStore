@@ -14,6 +14,8 @@ namespace SlepoffStore.Model
         public EntryColor Color { get; set; }
         public string Caption { get; set; }
         public string Text { get; set; }
+        public DateTime? Alarm { get; set; }
+        public bool AlarmIsOn { get; set; }
 
         public override string ToString()
         {

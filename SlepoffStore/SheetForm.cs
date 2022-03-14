@@ -12,7 +12,7 @@ using Templates;
 
 namespace SlepoffStore
 {
-    public partial class SheetForm : BorderLessForm// Form
+    public partial class SheetForm : BorderLessForm
     {
         public UISheet UISheet { get; private set; }
         public Entry Entry { get; private set; }
@@ -38,13 +38,8 @@ namespace SlepoffStore
             this.Text = Entry.Caption;
             textBox.Text = Entry.Text;
             UpadateColors();
+            sheetAlarmControl.Init(Entry);
         }
-
-        //public override void Refresh()
-        //{
-        //    base.Refresh();
-        //    textBox.Refresh();
-        //}
 
         private void UpadateColors()
         {
@@ -126,6 +121,7 @@ namespace SlepoffStore
                 using var repo = new Repository();
                 repo.UpdateEntry(Entry);
                 UpadateColors();
+                sheetAlarmControl.Init(Entry);
                 this.Invalidate();
             }
         }
@@ -146,6 +142,29 @@ namespace SlepoffStore
                 using var repo = new Repository();
                 repo.UpdateEntry(Entry);
                 this.Invalidate();
+            }
+        }
+
+        private void setAlarmToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new AlarmEditorForm();
+            if (!Entry.Alarm.HasValue)
+            {
+                // first time alarm is on by default
+                form.AlarmEnabled = true;
+            }
+            else
+            {
+                form.AlarmDateTime = Entry.Alarm.Value;
+                form.AlarmEnabled = Entry.AlarmIsOn;
+            }
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                using var repo = new Repository();
+                Entry.Alarm = form.AlarmDateTime;
+                Entry.AlarmIsOn = form.AlarmEnabled;
+                repo.UpdateEntry(Entry);
+                sheetAlarmControl.Init(Entry);
             }
         }
     }

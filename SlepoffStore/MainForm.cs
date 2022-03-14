@@ -1,4 +1,5 @@
 using SlepoffStore.Model;
+using SlepoffStore.Tools;
 
 namespace SlepoffStore
 {
@@ -47,7 +48,7 @@ namespace SlepoffStore
         private void dataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             // Displayed
-            if (e.RowIndex >= 0 && e.ColumnIndex == 1)
+            if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns.IndexOf(displayedDataGridViewTextBoxColumn))
             {
                 var item = dataGridView.Rows[e.RowIndex].DataBoundItem as EntryGridItem;
                 if (item != null)
@@ -64,7 +65,7 @@ namespace SlepoffStore
                     }
                 }
             }
-        }
+         }
 
         private void refreshToolStripButton_Click(object sender, EventArgs e)
         {
@@ -93,6 +94,8 @@ namespace SlepoffStore
         public string Caption => Entry.Caption;
         public DateTime CreationDate => Entry.CreationDate;
         public string Text => Entry.Text;
+        public DateTime? Alarm => Entry.Alarm;
+        public bool AlarmIsOn => Entry.AlarmIsOn;
         public bool Displayed { get; set; }
 
         public EntryGridItem(Entry entry)

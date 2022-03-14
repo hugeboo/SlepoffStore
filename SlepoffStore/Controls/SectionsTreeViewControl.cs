@@ -1,4 +1,5 @@
 ﻿using SlepoffStore.Model;
+using SlepoffStore.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,6 +26,7 @@ namespace SlepoffStore.Controls
         {
             Fill();
             treeView.ExpandAll();
+            if (treeView.SelectedNode == null && treeView.Nodes.Count > 0) treeView.SelectedNode = treeView.Nodes[0];
         }
 
         private void Fill()
@@ -48,6 +50,21 @@ namespace SlepoffStore.Controls
             }
         }
 
+        private void FireSelectedNodeEvent(TreeNode node)
+        {
+            if (node != null)
+            {
+                if (node.Tag is SectionEx sec)
+                {
+                    SectionSelected?.Invoke(this, new GenericEventArgs<SectionEx>(sec));
+                }
+                else if (node.Tag is Category cat)
+                {
+                    CategorySelected?.Invoke(this, new GenericEventArgs<Category>(cat));
+                }
+            }
+        }
+
         private void treeView_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -59,17 +76,7 @@ namespace SlepoffStore.Controls
 
         private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (e.Node != null)
-            {
-                if (e.Node.Tag is SectionEx sec)
-                {
-                    SectionSelected?.Invoke(this, new GenericEventArgs<SectionEx>(sec));
-                }
-                else if (e.Node.Tag is Category cat)
-                {
-                    CategorySelected?.Invoke(this, new GenericEventArgs<Category>(cat));
-                }
-            }
+            FireSelectedNodeEvent(e.Node);
         }
     }
 
