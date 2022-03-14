@@ -24,12 +24,18 @@ namespace SlepoffStore
 
         public Font MainFont
         {
-            get { return _mainFont; }
-            set 
-            { 
+            get => _mainFont;
+            set
+            {
                 _mainFont = value;
                 fontTextBox.Text = Settings.FontToString(value);
             }
+        }
+
+        public string AlarmRingtone
+        {
+            get => alarmTextBox.Text;
+            set => alarmTextBox.Text = value;
         }
 
         public SettingsForm()
@@ -49,7 +55,16 @@ namespace SlepoffStore
         private void SettingsForm_Load(object sender, EventArgs e)
         {
             StartWithWindows = Settings.StartWithWindows;
+            AlarmRingtone = Settings.AlarmRingtone;
             MainFont = Settings.MainFont;
+        }
+
+        private void alarmButton_Click(object sender, EventArgs e)
+        {
+            if (alarmOpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                alarmTextBox.Text = alarmOpenFileDialog.FileName;
+            }
         }
     }
 }

@@ -10,12 +10,14 @@ namespace SlepoffStore.Tools
     public static class Settings
     {
         public static bool StartWithWindows { get; set; }
+        public static string AlarmRingtone { get; set; }
         public static Font MainFont { get; set; }
 
         public static void Load()
         {
             using var repo = new Repository();
             StartWithWindows = repo["StartWithWindows"] == "true";
+            AlarmRingtone = repo["AlarmRingtone"];
             MainFont = FontFromString(repo["MainFont"]);
         }
 
@@ -23,6 +25,7 @@ namespace SlepoffStore.Tools
         {
             using var repo = new Repository();
             repo["StartWithWindows"] = StartWithWindows.ToString().ToLower();
+            repo["AlarmRingtone"] = AlarmRingtone;
             repo["MainFont"] = MainFont != null ? FontToString(MainFont) : null;
         }
 

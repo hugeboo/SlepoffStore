@@ -30,6 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.alarmButton = new System.Windows.Forms.Button();
+            this.alarmTextBox = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.startCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.fontButton = new System.Windows.Forms.Button();
@@ -38,21 +41,51 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.fontDialog = new System.Windows.Forms.FontDialog();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.alarmOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.alarmButton);
+            this.groupBox1.Controls.Add(this.alarmTextBox);
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.startCheckBox);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(4, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(451, 80);
+            this.groupBox1.Size = new System.Drawing.Size(451, 118);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "System";
+            // 
+            // alarmButton
+            // 
+            this.alarmButton.Location = new System.Drawing.Point(400, 70);
+            this.alarmButton.Name = "alarmButton";
+            this.alarmButton.Size = new System.Drawing.Size(34, 28);
+            this.alarmButton.TabIndex = 5;
+            this.alarmButton.Text = "...";
+            this.alarmButton.UseVisualStyleBackColor = true;
+            this.alarmButton.Click += new System.EventHandler(this.alarmButton_Click);
+            // 
+            // alarmTextBox
+            // 
+            this.alarmTextBox.Location = new System.Drawing.Point(107, 71);
+            this.alarmTextBox.Name = "alarmTextBox";
+            this.alarmTextBox.Size = new System.Drawing.Size(287, 26);
+            this.alarmTextBox.TabIndex = 4;
+            this.alarmTextBox.WordWrap = false;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(20, 74);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 20);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Alarm";
             // 
             // startCheckBox
             // 
@@ -71,7 +104,7 @@
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.groupBox2.Location = new System.Drawing.Point(4, 90);
+            this.groupBox2.Location = new System.Drawing.Point(4, 128);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(451, 80);
             this.groupBox2.TabIndex = 1;
@@ -128,11 +161,10 @@
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             // 
-            // openFileDialog
+            // alarmOpenFileDialog
             // 
-            this.openFileDialog.CheckFileExists = false;
-            this.openFileDialog.Filter = "SQLite files|*.db|All files|*.*";
-            this.openFileDialog.Title = "SQLite Database";
+            this.alarmOpenFileDialog.Filter = "Wav files|*.wav|All files|*.*";
+            this.alarmOpenFileDialog.Title = "Alarm Ringtone";
             // 
             // SettingsForm
             // 
@@ -141,9 +173,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(459, 400);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -173,6 +205,9 @@
         private Button cancelButton;
         private Button okButton;
         private FontDialog fontDialog;
-        private OpenFileDialog openFileDialog;
+        private OpenFileDialog alarmOpenFileDialog;
+        private Button alarmButton;
+        private TextBox alarmTextBox;
+        private Label label2;
     }
 }

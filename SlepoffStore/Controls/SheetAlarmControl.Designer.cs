@@ -40,6 +40,7 @@
             this.imageLabel.Name = "imageLabel";
             this.imageLabel.Size = new System.Drawing.Size(30, 71);
             this.imageLabel.TabIndex = 0;
+            this.imageLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.imageLabel_MouseDown);
             // 
             // textLabel
             // 
@@ -51,6 +52,7 @@
             this.textLabel.TabIndex = 1;
             this.textLabel.Text = "label2";
             this.textLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.textLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.textLabel_MouseDown);
             // 
             // SheetAlarmControl
             // 

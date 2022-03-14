@@ -14,6 +14,9 @@ namespace SlepoffStore
 {
     public partial class SheetForm : BorderLessForm
     {
+        private EntryColor _currentColor;
+        private bool _prevAlarmActivted;
+
         public UISheet UISheet { get; private set; }
         public Entry Entry { get; private set; }
 
@@ -26,6 +29,8 @@ namespace SlepoffStore
             }
         }
 
+        public bool AlarmActivated => sheetAlarmControl.AlarmActivated;
+
         public SheetForm()
         {
             InitializeComponent();
@@ -37,15 +42,17 @@ namespace SlepoffStore
             UISheet = uiSheet;
             this.Text = Entry.Caption;
             textBox.Text = Entry.Text;
-            UpadateColors();
+            _currentColor = Entry.Color;
+            RestoreColors();
             sheetAlarmControl.Init(Entry);
+            this.Invalidate();
         }
 
-        private void UpadateColors()
+        private void RestoreColors()
         {
-            this.BackColor = Entry.Color.ToColor();
-            textBox.BackColor = Entry.Color.ToColor();
-            textBox.ForeColor = Entry.Color.GetForeColor();
+            this.BackColor = _currentColor.ToColor();
+            textBox.BackColor = _currentColor.ToColor();
+            textBox.ForeColor = _currentColor.GetForeColor();
         }
 
         private void SheetForm_Activated(object sender, EventArgs e)
@@ -95,7 +102,7 @@ namespace SlepoffStore
 
             if (Entry != null)
             {
-                using var brush = new SolidBrush(Entry.Color.GetForeColor());
+                using var brush = new SolidBrush(_currentColor.GetForeColor());
                 var sf = new StringFormat(StringFormatFlags.NoWrap) 
                 {
                     Alignment = StringAlignment.Center,
@@ -115,12 +122,14 @@ namespace SlepoffStore
 
         private void colorsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Entry?.Color.ToString() != colorsToolStripComboBox.Text)
+            if (Entry == null) return;
+            if (Entry.Color.ToString() != colorsToolStripComboBox.Text)
             {
                 Entry.Color = EntryColor.Parse<EntryColor>(colorsToolStripComboBox.Text);
                 using var repo = new Repository();
                 repo.UpdateEntry(Entry);
-                UpadateColors();
+                _currentColor = Entry.Color;
+                RestoreColors();
                 sheetAlarmControl.Init(Entry);
                 this.Invalidate();
             }
@@ -136,7 +145,8 @@ namespace SlepoffStore
 
         private void contextMenuStrip_Closing(object sender, ToolStripDropDownClosingEventArgs e)
         {
-            if (Entry?.Caption != captionToolStripTextBox.Text)
+            if (Entry == null) return;
+            if (Entry.Caption != captionToolStripTextBox.Text)
             {
                 Entry.Caption = captionToolStripTextBox.Text;
                 using var repo = new Repository();
@@ -166,6 +176,26 @@ namespace SlepoffStore
                 repo.UpdateEntry(Entry);
                 sheetAlarmControl.Init(Entry);
             }
+        }
+
+        private void flashTimer_Tick(object sender, EventArgs e)
+        {
+            if (AlarmActivated)
+            {
+                _currentColor = _currentColor == EntryColor.White ? EntryColor.Black : EntryColor.White;
+                RestoreColors();
+                this.Invalidate();
+            }
+            else
+            {
+                if (_prevAlarmActivted)
+                {
+                    _currentColor = Entry.Color;
+                    RestoreColors();
+                    this.Invalidate();
+                }
+            }
+            _prevAlarmActivted = AlarmActivated;
         }
     }
 

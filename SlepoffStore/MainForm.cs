@@ -78,6 +78,7 @@ namespace SlepoffStore
             if (form.ShowDialog(this) == DialogResult.OK)
             {
                 Settings.StartWithWindows = form.StartWithWindows;
+                Settings.AlarmRingtone = form.AlarmRingtone;
                 Settings.MainFont = form.MainFont;
                 Settings.Save();
                 Settings.ActualizeStartWithWindows();

@@ -1,5 +1,6 @@
 ﻿using SlepoffStore.Model;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SlepoffStore.Tools
 {
-    public sealed class SheetsManager
+    public sealed class SheetsManager : IDisposable
     {
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
@@ -20,79 +21,109 @@ namespace SlepoffStore.Tools
         private const string CATEGORY_FOR_NEW = "New";
 
         private readonly List<SheetForm> _sheets = new List<SheetForm>();
+        private readonly AlarmManager _alarmManger;
+
+        public SheetsManager()
+        {
+            _alarmManger = new AlarmManager(this);
+        }
+
+        public SheetForm[] Sheets
+        {
+            get
+            {
+                lock (_sheets) return _sheets.ToArray();
+            }
+        }
+
+        public bool Collapsed { get; private set; }
 
         public void CollapseAllSheets()
         {
-            foreach (var sheet in _sheets)
+            lock (_sheets)
             {
-                sheet.FormClosed -= Form_FormClosed;
-                sheet.Close();
+                foreach (var sheet in _sheets)
+                {
+                    sheet.FormClosed -= Form_FormClosed;
+                    sheet.Close();
+                }
+                _sheets.Clear();
+                Collapsed = true;
             }
-            _sheets.Clear();
         }
 
         public void RestoreAllSheets()
         {
-            using var repo = new Repository();
-            var uiSheets = repo.GetUISheets();
-
-            var focus = GetForegroundWindow();
-            
-            foreach (var uiSheet in uiSheets)
+            lock (_sheets)
             {
-                if (!_sheets.Any(s => s.UISheet.Id == uiSheet.Id))
-                {
-                    var form = CreateSheetForm();
-                    form.Size = new Size(uiSheet.Width, uiSheet.Height);
-                    form.Location = new Point(uiSheet.PosX, uiSheet.PosY);
-                    form.Show();
-                    form.Init(repo.GetEntryById(uiSheet.EntryId), uiSheet);
-                    _sheets.Add(form);
-                }
-            }
+                using var repo = new Repository();
+                var uiSheets = repo.GetUISheets();
 
-            SetForegroundWindow(focus);
+                var focus = GetForegroundWindow();
+
+                foreach (var uiSheet in uiSheets)
+                {
+                    if (!_sheets.Any(s => s.UISheet.Id == uiSheet.Id))
+                    {
+                        var form = CreateSheetForm();
+                        form.Size = new Size(uiSheet.Width, uiSheet.Height);
+                        form.Location = new Point(uiSheet.PosX, uiSheet.PosY);
+                        form.Show();
+                        form.Init(repo.GetEntryById(uiSheet.EntryId), uiSheet);
+                        _sheets.Add(form);
+                    }
+                }
+
+                SetForegroundWindow(focus);
+                Collapsed = false;
+            }
         }
 
         private void Form_FormClosed(object? sender, FormClosedEventArgs e)
         {
-            _sheets.Remove(sender as SheetForm);
+            lock (_sheets) _sheets.Remove(sender as SheetForm);
         }
 
         public void ShowSheet(Entry entry)
         {
-            if (entry == null || _sheets.Any(s => s.Entry.Id == entry.Id)) 
-                return;
-
-            var form = CreateSheetForm();
-            form.StartPosition = FormStartPosition.WindowsDefaultLocation;
-            form.Show();
-
-            using var repo = new Repository();
-            var uiSheet = new UISheet
+            lock (_sheets)
             {
-                EntryId = entry.Id,
-                PosX = form.Location.X,
-                PosY = form.Location.Y,
-                Width = form.Width,
-                Height = form.Height
-            };
-            uiSheet.Id = repo.InsertUISheet(uiSheet);
+                if (entry == null || _sheets.Any(s => s.Entry.Id == entry.Id))
+                    return;
 
-            form.Init(entry, uiSheet);
+                var form = CreateSheetForm();
+                form.StartPosition = FormStartPosition.WindowsDefaultLocation;
+                form.Show();
 
-            _sheets.Add(form);
+                using var repo = new Repository();
+                var uiSheet = new UISheet
+                {
+                    EntryId = entry.Id,
+                    PosX = form.Location.X,
+                    PosY = form.Location.Y,
+                    Width = form.Width,
+                    Height = form.Height
+                };
+                uiSheet.Id = repo.InsertUISheet(uiSheet);
+
+                form.Init(entry, uiSheet);
+
+                _sheets.Add(form);
+            }
         }
 
         public void CloseSheet(Entry entry)
         {
-            if (entry == null || !_sheets.Any(s => s.Entry.Id == entry.Id))
-                return;
+            lock (_sheets)
+            {
+                if (entry == null || !_sheets.Any(s => s.Entry.Id == entry.Id))
+                    return;
 
-            var form = _sheets.First(s => s.Entry.Id == entry.Id);
-            using var repo = new Repository();
-            repo.DeleteUISheet(form.UISheet);
-            form.Close();
+                var form = _sheets.First(s => s.Entry.Id == entry.Id);
+                using var repo = new Repository();
+                repo.DeleteUISheet(form.UISheet);
+                form.Close();
+            }
         }
 
         public void AddNew()
@@ -126,15 +157,18 @@ namespace SlepoffStore.Tools
             form.Focus();
             form.BringToFront();
 
-            _sheets.Add(form);
+            lock (_sheets) _sheets.Add(form);
         }
 
         public void RefreshAllSheets()
         {
-            foreach (var sheet in _sheets)
+            lock (_sheets)
             {
-                sheet.MainFont = Settings.MainFont;
-                sheet.Refresh();
+                foreach (var sheet in _sheets)
+                {
+                    sheet.MainFont = Settings.MainFont;
+                    sheet.Refresh();
+                }
             }
         }
 
@@ -162,6 +196,11 @@ namespace SlepoffStore.Tools
             form.FormClosed += Form_FormClosed;
             form.MainFont = Settings.MainFont;
             return form;
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

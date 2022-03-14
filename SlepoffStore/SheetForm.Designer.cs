@@ -39,6 +39,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sheetAlarmControl = new SlepoffStore.Controls.SheetAlarmControl();
+            this.flashTimer = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,7 +52,7 @@
             this.textBox.Multiline = true;
             this.textBox.Name = "textBox";
             this.textBox.Size = new System.Drawing.Size(389, 121);
-            this.textBox.TabIndex = 0;
+            this.textBox.TabIndex = 1;
             // 
             // timer
             // 
@@ -126,10 +127,17 @@
             // 
             this.sheetAlarmControl.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.sheetAlarmControl.Location = new System.Drawing.Point(11, 161);
+            this.sheetAlarmControl.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.sheetAlarmControl.Name = "sheetAlarmControl";
             this.sheetAlarmControl.Size = new System.Drawing.Size(389, 26);
-            this.sheetAlarmControl.TabIndex = 1;
+            this.sheetAlarmControl.TabIndex = 0;
             this.sheetAlarmControl.Visible = false;
+            // 
+            // flashTimer
+            // 
+            this.flashTimer.Enabled = true;
+            this.flashTimer.Interval = 500;
+            this.flashTimer.Tick += new System.EventHandler(this.flashTimer_Tick);
             // 
             // SheetForm
             // 
@@ -169,5 +177,6 @@
         private ToolStripMenuItem setAlarmToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
         private Controls.SheetAlarmControl sheetAlarmControl;
+        private System.Windows.Forms.Timer flashTimer;
     }
 }
