@@ -30,9 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.dbButton = new System.Windows.Forms.Button();
-            this.dbTextBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.startCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.fontButton = new System.Windows.Forms.Button();
@@ -48,44 +45,14 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.dbButton);
-            this.groupBox1.Controls.Add(this.dbTextBox);
-            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.startCheckBox);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(4, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(451, 116);
+            this.groupBox1.Size = new System.Drawing.Size(451, 80);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "System";
-            // 
-            // dbButton
-            // 
-            this.dbButton.Location = new System.Drawing.Point(400, 69);
-            this.dbButton.Name = "dbButton";
-            this.dbButton.Size = new System.Drawing.Size(34, 28);
-            this.dbButton.TabIndex = 5;
-            this.dbButton.Text = "...";
-            this.dbButton.UseVisualStyleBackColor = true;
-            this.dbButton.Click += new System.EventHandler(this.dbButton_Click);
-            // 
-            // dbTextBox
-            // 
-            this.dbTextBox.Location = new System.Drawing.Point(107, 70);
-            this.dbTextBox.Name = "dbTextBox";
-            this.dbTextBox.Size = new System.Drawing.Size(287, 26);
-            this.dbTextBox.TabIndex = 4;
-            this.dbTextBox.WordWrap = false;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 73);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(81, 20);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Database";
             // 
             // startCheckBox
             // 
@@ -104,7 +71,7 @@
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.groupBox2.Location = new System.Drawing.Point(4, 126);
+            this.groupBox2.Location = new System.Drawing.Point(4, 90);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(451, 80);
             this.groupBox2.TabIndex = 1;
@@ -187,6 +154,7 @@
             this.Padding = new System.Windows.Forms.Padding(4, 10, 4, 4);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
+            this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -206,9 +174,6 @@
         private Button cancelButton;
         private Button okButton;
         private FontDialog fontDialog;
-        private Button dbButton;
-        private TextBox dbTextBox;
-        private Label label2;
         private OpenFileDialog openFileDialog;
     }
 }

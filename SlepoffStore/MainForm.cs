@@ -74,11 +74,11 @@ namespace SlepoffStore
         private void settingsToolStripButton_Click(object sender, EventArgs e)
         {
             var form = new SettingsForm();
-            form.SetSettings(null);
-            if (form.ShowDialog(this)== DialogResult.OK)
+            if (form.ShowDialog(this) == DialogResult.OK)
             {
-                var settings = form.GetSettings();
-                //...
+                Settings.StartWithWindows = form.StartWithWindows;
+                Settings.Save();
+                Settings.ActualizeStartWithWindows();
             }
         }
     }

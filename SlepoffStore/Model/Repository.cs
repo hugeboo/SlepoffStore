@@ -253,6 +253,36 @@ namespace SlepoffStore.Model
 
         #endregion
 
+        #region KeyValues
+
+        public string this[string key]
+        {
+            get 
+            {
+                using (var command = new SQLiteCommand(_connection))
+                {
+                    command.CommandText = "SELECT * FROM KeyValues WHERE Key=:key";
+                    command.Parameters.AddWithValue("key", key);
+                    var data = new DataTable();
+                    var adapter = new SQLiteDataAdapter(command);
+                    adapter.Fill(data);
+                    return data.Rows.AsEnumerable().Select(r => r.Field<string>("Value")).FirstOrDefault();
+                }
+            }
+            set 
+            {
+                using (var command = new SQLiteCommand(_connection))
+                {
+                    command.CommandText = "INSERT INTO KeyValues (Key, Value) VALUES (:key,:value) ON CONFLICT (Key) DO UPDATE SET Value = excluded.Value";
+                    command.Parameters.AddWithValue("key", key);
+                    command.Parameters.AddWithValue("value", value);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        #endregion
+
         public void Dispose()
         {
             _connection.Close();

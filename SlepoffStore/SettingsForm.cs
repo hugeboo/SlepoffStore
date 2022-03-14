@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SlepoffStore.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,19 +13,11 @@ namespace SlepoffStore
 {
     public partial class SettingsForm : Form
     {
+        public bool StartWithWindows => startCheckBox.Checked;
+
         public SettingsForm()
         {
             InitializeComponent();
-        }
-
-        public void SetSettings(Settings settings)
-        {
-
-        }
-
-        public Settings GetSettings()
-        {
-            return null;
         }
 
         private void fontButton_Click(object sender, EventArgs e)
@@ -35,12 +28,9 @@ namespace SlepoffStore
             }
         }
 
-        private void dbButton_Click(object sender, EventArgs e)
+        private void SettingsForm_Load(object sender, EventArgs e)
         {
-            if (openFileDialog.ShowDialog(this) == DialogResult.OK)
-            {
-
-            }
+            startCheckBox.Checked = Settings.StartWithWindows;
         }
     }
 }

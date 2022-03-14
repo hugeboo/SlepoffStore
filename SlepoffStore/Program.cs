@@ -14,11 +14,14 @@ namespace SlepoffStore
             var cla = new CommandLine();
             if (string.IsNullOrEmpty(cla.DatabaseName))
             {
-                MessageBox.Show("Database is unspecified!\nUse command line: slepoffstore.exe /database <db_name>",
+                MessageBox.Show("Database is unspecified!\nUse command line: slepoffstore.exe /database: <db_name>",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
             Repository.DatabaseName = cla.DatabaseName;
+
+            Settings.Load();
+            Settings.ActualizeStartWithWindows();
 
             var sm = new SheetsManager();
             sm.RestoreAllSheets();
@@ -60,7 +63,7 @@ namespace SlepoffStore
                 var args = Environment.GetCommandLineArgs();
                 for (int i = 1; i < args.Length; i++)
                 {
-                    if (args[i].ToLower() == "/database" && i < args.Length - 1)
+                    if (args[i].ToLower() == "/database:" && i < args.Length - 1)
                     {
                         DatabaseName = args[++i];
                     }
