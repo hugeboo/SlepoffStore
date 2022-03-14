@@ -95,7 +95,6 @@
             this.fontTextBox.ReadOnly = true;
             this.fontTextBox.Size = new System.Drawing.Size(287, 26);
             this.fontTextBox.TabIndex = 1;
-            this.fontTextBox.Text = "ABCDEFG abcdefg 1234567";
             this.fontTextBox.WordWrap = false;
             // 
             // label1

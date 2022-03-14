@@ -17,6 +17,15 @@ namespace SlepoffStore
         public UISheet UISheet { get; private set; }
         public Entry Entry { get; private set; }
 
+        public Font MainFont
+        {
+            get => textBox.Font;
+            set
+            {
+                if (value!=null) textBox.Font = value; ;
+            }
+        }
+
         public SheetForm()
         {
             InitializeComponent();
@@ -30,6 +39,12 @@ namespace SlepoffStore
             textBox.Text = Entry.Text;
             UpadateColors();
         }
+
+        //public override void Refresh()
+        //{
+        //    base.Refresh();
+        //    textBox.Refresh();
+        //}
 
         private void UpadateColors()
         {

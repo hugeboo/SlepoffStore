@@ -77,8 +77,10 @@ namespace SlepoffStore
             if (form.ShowDialog(this) == DialogResult.OK)
             {
                 Settings.StartWithWindows = form.StartWithWindows;
+                Settings.MainFont = form.MainFont;
                 Settings.Save();
                 Settings.ActualizeStartWithWindows();
+                _sheetsManager.RefreshAllSheets();
             }
         }
     }

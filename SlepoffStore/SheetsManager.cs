@@ -33,8 +33,7 @@ namespace SlepoffStore
             {
                 if (!_sheets.Any(s => s.UISheet.Id == uiSheet.Id))
                 {
-                    var form = new SheetForm();
-                    form.FormClosed += Form_FormClosed;
+                    var form = CreateSheetForm();
                     form.Size = new Size(uiSheet.Width, uiSheet.Height);
                     form.Location = new Point(uiSheet.PosX, uiSheet.PosY);
                     form.Show();
@@ -54,8 +53,7 @@ namespace SlepoffStore
             if (entry == null || _sheets.Any(s => s.Entry.Id == entry.Id)) 
                 return;
 
-            var form = new SheetForm();
-            form.FormClosed += Form_FormClosed;
+            var form = CreateSheetForm();
             form.StartPosition = FormStartPosition.WindowsDefaultLocation;
             form.Show();
 
@@ -99,8 +97,7 @@ namespace SlepoffStore
             };
             entry.Id = repo.InsertEntry(entry);
 
-            var form = new SheetForm();
-            form.FormClosed += Form_FormClosed;
+            var form = CreateSheetForm();
             form.StartPosition = FormStartPosition.CenterScreen;
             form.Show();
 
@@ -121,6 +118,15 @@ namespace SlepoffStore
             _sheets.Add(form);
         }
 
+        public void RefreshAllSheets()
+        {
+            foreach (var sheet in _sheets)
+            {
+                sheet.MainFont = Settings.MainFont;
+                sheet.Refresh();
+            }
+        }
+
         private Category EnsureNewCategory(Repository repo)
         {
             var sections = repo.GetSectionsEx();
@@ -137,6 +143,14 @@ namespace SlepoffStore
                 cat.Id = repo.InsertCategory(cat);
             }
             return cat;
+        }
+
+        private SheetForm CreateSheetForm()
+        {
+            var form = new SheetForm();
+            form.FormClosed += Form_FormClosed;
+            form.MainFont = Settings.MainFont;
+            return form;
         }
     }
 }

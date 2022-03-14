@@ -13,7 +13,23 @@ namespace SlepoffStore
 {
     public partial class SettingsForm : Form
     {
-        public bool StartWithWindows => startCheckBox.Checked;
+        private Font _mainFont;
+
+        public bool StartWithWindows
+        {
+            get => startCheckBox.Checked;
+            set => startCheckBox.Checked = value;
+        }
+
+        public Font MainFont
+        {
+            get { return _mainFont; }
+            set 
+            { 
+                _mainFont = value;
+                fontTextBox.Text = Settings.FontToString(value);
+            }
+        }
 
         public SettingsForm()
         {
@@ -22,15 +38,17 @@ namespace SlepoffStore
 
         private void fontButton_Click(object sender, EventArgs e)
         {
+            fontDialog.Font = MainFont;
             if (fontDialog.ShowDialog(this) == DialogResult.OK)
             {
-
+                MainFont = fontDialog.Font;
             }
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
-            startCheckBox.Checked = Settings.StartWithWindows;
+            StartWithWindows = Settings.StartWithWindows;
+            MainFont = Settings.MainFont;
         }
     }
 }
