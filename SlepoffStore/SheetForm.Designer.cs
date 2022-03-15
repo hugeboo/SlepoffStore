@@ -53,6 +53,7 @@
             this.textBox.Name = "textBox";
             this.textBox.Size = new System.Drawing.Size(389, 121);
             this.textBox.TabIndex = 1;
+            this.textBox.TabStop = false;
             // 
             // timer
             // 
@@ -136,7 +137,7 @@
             // flashTimer
             // 
             this.flashTimer.Enabled = true;
-            this.flashTimer.Interval = 500;
+            this.flashTimer.Interval = 2000;
             this.flashTimer.Tick += new System.EventHandler(this.flashTimer_Tick);
             // 
             // SheetForm

@@ -57,7 +57,7 @@ namespace SlepoffStore
 
         private void SheetForm_Activated(object sender, EventArgs e)
         {
-            this.SendToBack();
+            if (!AlarmActivated) this.SendToBack();
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -182,6 +182,12 @@ namespace SlepoffStore
         {
             if (AlarmActivated)
             {
+                if (!_prevAlarmActivted)
+                {
+                    this.Activate();
+                    this.BringToFront();
+                }
+                flashTimer.Interval = 500;
                 _currentColor = _currentColor == EntryColor.White ? EntryColor.Black : EntryColor.White;
                 RestoreColors();
                 this.Invalidate();
@@ -190,6 +196,8 @@ namespace SlepoffStore
             {
                 if (_prevAlarmActivted)
                 {
+                    this.SendToBack();
+                    flashTimer.Interval = 2000;
                     _currentColor = Entry.Color;
                     RestoreColors();
                     this.Invalidate();
