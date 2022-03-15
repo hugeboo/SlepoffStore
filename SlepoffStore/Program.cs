@@ -5,6 +5,8 @@ namespace SlepoffStore
 {
     internal static class Program
     {
+        private static MainForm _mainForm;
+
         [STAThread]
         static void Main()
         {
@@ -35,10 +37,12 @@ namespace SlepoffStore
                 {
                     new ToolStripMenuItem("Add New", null, (s, e) => sm.AddNew()),
                     new ToolStripSeparator(),
-                    new ToolStripMenuItem("Open Store...", null, (s, e) => new MainForm().Init(sm).Show()),
+                    new ToolStripMenuItem("Open Store Window...", null, (s, e) => OpenMainForm(sm, MainForm.InitMode.Normal)),
                     new ToolStripSeparator(),
                     new ToolStripMenuItem("Restore All", null, (s, e) => sm.RestoreAllSheets()),
                     new ToolStripMenuItem("Collapse All", null, (s, e) => sm.CollapseAllSheets()),
+                    new ToolStripSeparator(),
+                    new ToolStripMenuItem("Settings...", null, (s, e) => OpenMainForm(sm, MainForm.InitMode.Settings)),
                     new ToolStripSeparator(),
                     new ToolStripMenuItem("Exit", null, (s, e) => Application.Exit()),
                 });
@@ -47,6 +51,20 @@ namespace SlepoffStore
 
                 Application.Run();
                 icon.Visible = false;
+            }
+        }
+
+        private static void OpenMainForm(SheetsManager sm, MainForm.InitMode mode)
+        {
+            if (_mainForm == null || _mainForm.IsDisposed)
+            {
+                _mainForm = new MainForm().Init(sm, mode);
+                _mainForm.Show();
+                _mainForm.BringToFront();
+            }
+            else
+            {
+                _mainForm.Activate();
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using SlepoffStore.Model;
+using SlepoffStore.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -51,6 +52,16 @@ namespace SlepoffStore
         private void RestoreColors()
         {
             this.BackColor = _currentColor.ToColor();
+            if (AlarmActivated)
+            {
+                this.HeaderBackColor = Color.Transparent;
+            }
+            else
+            {
+                this.HeaderBackColor = ColorUtils.AdjustLightness(this.BackColor,
+                    _currentColor.IsDark() ? 1.2 : 0.8);
+            }
+
             textBox.BackColor = _currentColor.ToColor();
             textBox.ForeColor = _currentColor.GetForeColor();
         }

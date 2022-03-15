@@ -57,6 +57,10 @@ namespace SlepoffStore
             StartWithWindows = Settings.StartWithWindows;
             AlarmRingtone = Settings.AlarmRingtone;
             MainFont = Settings.MainFont;
+            pathTextBox.Text = Settings.ApplicationPath;
+
+            toolTip.SetToolTip(pathTextBox, pathTextBox.Text);
+            toolTip.SetToolTip(alarmTextBox, alarmTextBox.Text);
         }
 
         private void alarmButton_Click(object sender, EventArgs e)

@@ -13,6 +13,8 @@ namespace SlepoffStore.Tools
         public static string AlarmRingtone { get; set; }
         public static Font MainFont { get; set; }
 
+        public static string ApplicationPath => Application.ExecutablePath;
+
         public static void Load()
         {
             using var repo = new Repository();

@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.pathTextBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.alarmButton = new System.Windows.Forms.Button();
             this.alarmTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -42,12 +45,15 @@
             this.okButton = new System.Windows.Forms.Button();
             this.fontDialog = new System.Windows.Forms.FontDialog();
             this.alarmOpenFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.pathTextBox);
+            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.alarmButton);
             this.groupBox1.Controls.Add(this.alarmTextBox);
             this.groupBox1.Controls.Add(this.label2);
@@ -55,14 +61,32 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(4, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(451, 118);
+            this.groupBox1.Size = new System.Drawing.Size(451, 146);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "System";
             // 
+            // pathTextBox
+            // 
+            this.pathTextBox.Location = new System.Drawing.Point(107, 67);
+            this.pathTextBox.Name = "pathTextBox";
+            this.pathTextBox.ReadOnly = true;
+            this.pathTextBox.Size = new System.Drawing.Size(287, 26);
+            this.pathTextBox.TabIndex = 7;
+            this.pathTextBox.WordWrap = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(20, 70);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(43, 20);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Path";
+            // 
             // alarmButton
             // 
-            this.alarmButton.Location = new System.Drawing.Point(400, 70);
+            this.alarmButton.Location = new System.Drawing.Point(400, 98);
             this.alarmButton.Name = "alarmButton";
             this.alarmButton.Size = new System.Drawing.Size(34, 28);
             this.alarmButton.TabIndex = 5;
@@ -72,7 +96,7 @@
             // 
             // alarmTextBox
             // 
-            this.alarmTextBox.Location = new System.Drawing.Point(107, 71);
+            this.alarmTextBox.Location = new System.Drawing.Point(107, 99);
             this.alarmTextBox.Name = "alarmTextBox";
             this.alarmTextBox.Size = new System.Drawing.Size(287, 26);
             this.alarmTextBox.TabIndex = 4;
@@ -81,7 +105,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 74);
+            this.label2.Location = new System.Drawing.Point(20, 102);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 20);
             this.label2.TabIndex = 3;
@@ -104,7 +128,7 @@
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.groupBox2.Location = new System.Drawing.Point(4, 128);
+            this.groupBox2.Location = new System.Drawing.Point(4, 156);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(451, 80);
             this.groupBox2.TabIndex = 1;
@@ -209,5 +233,8 @@
         private Button alarmButton;
         private TextBox alarmTextBox;
         private Label label2;
+        private TextBox pathTextBox;
+        private Label label3;
+        private ToolTip toolTip;
     }
 }

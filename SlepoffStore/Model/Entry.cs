@@ -70,6 +70,17 @@ namespace SlepoffStore.Model
             }
         }
 
+        public static bool IsDark(this EntryColor ec)
+        {
+            switch (ec)
+            {
+                case EntryColor.Black:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         public static Color GetForeColor(this EntryColor ec)
         {
             switch (ec)

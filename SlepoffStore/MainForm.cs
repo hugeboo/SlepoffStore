@@ -6,6 +6,13 @@ namespace SlepoffStore
     public partial class MainForm : Form
     {
         private SheetsManager _sheetsManager;
+        private InitMode _initMode;
+
+        public enum InitMode
+        {
+            Normal,
+            Settings
+        }
 
         public MainForm()
         {
@@ -14,9 +21,10 @@ namespace SlepoffStore
             sectionsTreeViewControl.SectionSelected += SectionsTreeViewControl_SectionSelected;
         }
 
-        public MainForm Init(SheetsManager sm)
+        public MainForm Init(SheetsManager sm, InitMode initMode)
         {
             _sheetsManager = sm;
+            _initMode = initMode;
             return this;
         }
 
@@ -43,6 +51,14 @@ namespace SlepoffStore
         private void MainForm_Load(object sender, EventArgs e)
         {
             sectionsTreeViewControl.Init();
+        }
+
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            if (_initMode == InitMode.Settings)
+            {
+                settingsToolStripButton_Click(this, EventArgs.Empty);
+            }
         }
 
         private void dataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)

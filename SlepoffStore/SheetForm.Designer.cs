@@ -29,31 +29,19 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.textBox = new System.Windows.Forms.TextBox();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.setAlarmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.colorsToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.captionToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.setAlarmToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sheetAlarmControl = new SlepoffStore.Controls.SheetAlarmControl();
             this.flashTimer = new System.Windows.Forms.Timer(this.components);
+            this.textBox = new System.Windows.Forms.RichTextBox();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // textBox
-            // 
-            this.textBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBox.Location = new System.Drawing.Point(11, 40);
-            this.textBox.Multiline = true;
-            this.textBox.Name = "textBox";
-            this.textBox.Size = new System.Drawing.Size(389, 121);
-            this.textBox.TabIndex = 1;
-            this.textBox.TabStop = false;
             // 
             // timer
             // 
@@ -65,17 +53,29 @@
             // 
             this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setAlarmToolStripMenuItem,
+            this.toolStripSeparator1,
             this.colorsToolStripComboBox,
             this.captionToolStripTextBox,
             this.toolStripSeparator,
-            this.setAlarmToolStripMenuItem,
-            this.toolStripSeparator1,
             this.closeToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.contextMenuStrip.Size = new System.Drawing.Size(411, 154);
             this.contextMenuStrip.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.contextMenuStrip_Closing);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
+            // 
+            // setAlarmToolStripMenuItem
+            // 
+            this.setAlarmToolStripMenuItem.Name = "setAlarmToolStripMenuItem";
+            this.setAlarmToolStripMenuItem.Size = new System.Drawing.Size(410, 32);
+            this.setAlarmToolStripMenuItem.Text = "Set Alarm...";
+            this.setAlarmToolStripMenuItem.Click += new System.EventHandler(this.setAlarmToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(407, 6);
             // 
             // colorsToolStripComboBox
             // 
@@ -105,18 +105,6 @@
             this.toolStripSeparator.Name = "toolStripSeparator";
             this.toolStripSeparator.Size = new System.Drawing.Size(407, 6);
             // 
-            // setAlarmToolStripMenuItem
-            // 
-            this.setAlarmToolStripMenuItem.Name = "setAlarmToolStripMenuItem";
-            this.setAlarmToolStripMenuItem.Size = new System.Drawing.Size(410, 32);
-            this.setAlarmToolStripMenuItem.Text = "Set Alarm...";
-            this.setAlarmToolStripMenuItem.Click += new System.EventHandler(this.setAlarmToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(407, 6);
-            // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
@@ -140,13 +128,24 @@
             this.flashTimer.Interval = 2000;
             this.flashTimer.Tick += new System.EventHandler(this.flashTimer_Tick);
             // 
+            // textBox
+            // 
+            this.textBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox.Location = new System.Drawing.Point(11, 40);
+            this.textBox.Name = "textBox";
+            this.textBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.textBox.Size = new System.Drawing.Size(389, 121);
+            this.textBox.TabIndex = 1;
+            this.textBox.TabStop = false;
+            this.textBox.Text = "";
+            // 
             // SheetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(411, 197);
             this.ContextMenuStrip = this.contextMenuStrip;
-            this.ControlBox = false;
             this.Controls.Add(this.textBox);
             this.Controls.Add(this.sheetAlarmControl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
@@ -155,6 +154,7 @@
             this.Name = "SheetForm";
             this.Padding = new System.Windows.Forms.Padding(11, 40, 11, 10);
             this.ResizeHandleSize = 6;
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "SheetForm";
@@ -162,13 +162,10 @@
             this.contextMenuStrip.ResumeLayout(false);
             this.contextMenuStrip.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private TextBox textBox;
         private System.Windows.Forms.Timer timer;
         private ContextMenuStrip contextMenuStrip;
         private ToolStripMenuItem closeToolStripMenuItem;
@@ -179,5 +176,6 @@
         private ToolStripSeparator toolStripSeparator1;
         private Controls.SheetAlarmControl sheetAlarmControl;
         private System.Windows.Forms.Timer flashTimer;
+        private RichTextBox textBox;
     }
 }
