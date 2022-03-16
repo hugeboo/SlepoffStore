@@ -35,6 +35,12 @@ namespace SlepoffStore.Core
         string this[string key] { get; set; }
     }
 
+    public sealed class KeyValue
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
+    }
+
     internal static class RepositoryExtensions
     {
         public static IEnumerable<DataRow> AsEnumerable(this DataRowCollection rows)

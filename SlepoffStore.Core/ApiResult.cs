@@ -13,7 +13,7 @@ namespace SlepoffStore.Core
     public sealed class ApiResult<T> : ApiResult
     {
         public T Data { get; set; }
-   }
+    }
 
     public enum ApiResultStatus
     {

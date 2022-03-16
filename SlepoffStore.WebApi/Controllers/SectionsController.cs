@@ -31,6 +31,14 @@ namespace SlepoffStore.WebApi.Controllers
             return new ApiResult<SectionEx[]> { Data = _repository.GetSectionsEx().ToArray() };
         }
 
+        // GET: api/sections/{sectionId}/entries
+        [HttpGet]
+        [Route("{sectionId}/entries")]
+        public ApiResult<Entry[]> GetEntries(long sectionId)
+        {
+            return new ApiResult<Entry[]> { Data = _repository.GetEntriesBySectionId(sectionId) };
+        }
+
         // POST: api/sections
         [HttpPost]
         public ApiResult<long> Insert([FromBody] Section section)
