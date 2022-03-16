@@ -16,7 +16,7 @@ namespace SlepoffStore.WebApi.Controllers
             _repository = repository;
         }
 
-        // GET: api/keyvalues
+        // GET: api/keyvalues?key={key}
         [HttpGet]
         public ApiResult<string> Get([FromQuery] string key)
         {

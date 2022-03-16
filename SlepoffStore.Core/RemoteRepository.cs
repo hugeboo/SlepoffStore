@@ -37,7 +37,8 @@ namespace SlepoffStore.Core
 
         public long InsertSection(Section section)
         {
-            throw new NotImplementedException();
+            var rr = new RestRequest(API_PATH + "sections").AddJsonBody(section);
+            return _restClient.PostAsync<ApiResult<long>>(rr).Result?.Data ?? 0L;
         }
 
         public Section[] GetSections()
@@ -48,69 +49,103 @@ namespace SlepoffStore.Core
 
         public IEnumerable<SectionEx> GetSectionsEx()
         {
-            throw new NotImplementedException();
+            var rr = new RestRequest(API_PATH + "sections/extended");
+            return _restClient.GetAsync<ApiResult<SectionEx[]>>(rr).Result?.Data;
         }
 
         #endregion
 
-        public string this[string key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #region Categories
+
+        public long InsertCategory(Category category)
+        {
+            var rr = new RestRequest(API_PATH + "categories").AddJsonBody(category);
+            return _restClient.PostAsync<ApiResult<long>>(rr).Result?.Data ?? 0L;
+        }
+
+        public Category[] GetCategories()
+        {
+            var rr = new RestRequest(API_PATH + "categories");
+            return _restClient.GetAsync<ApiResult<Category[]>>(rr).Result?.Data;
+        }
+
+        #endregion
+
+        #region Entries
+
+        public long InsertEntry(Entry entry)
+        {
+            var rr = new RestRequest(API_PATH + "entries").AddJsonBody(entry);
+            return _restClient.PostAsync<ApiResult<long>>(rr).Result?.Data ?? 0L;
+        }
+
+        public Entry GetEntry(long id)
+        {
+            var rr = new RestRequest(API_PATH + $"entries/{id}");
+            return _restClient.GetAsync<ApiResult<Entry>>(rr).Result?.Data;
+        }
+
+        public Entry[] GetEntriesByCategoryId(long categoryId)
+        {
+            var rr = new RestRequest(API_PATH + $"categories/{categoryId}/entries");
+            return _restClient.GetAsync<ApiResult<Entry[]>>(rr).Result?.Data;
+        }
+
+        public Entry[] GetEntriesBySectionId(long sectionId)
+        {
+            var rr = new RestRequest(API_PATH + $"sections/{sectionId}/entries");
+            return _restClient.GetAsync<ApiResult<Entry[]>>(rr).Result?.Data;
+        }
+
+        public void UpdateEntry(Entry entry)
+        {
+            var rr = new RestRequest(API_PATH + "entries/update").AddJsonBody(entry);
+            var res = _restClient.PostAsync<ApiResult>(rr).Result;
+        }
+
+        #endregion
+
+        #region KeyValues
+
+        public string this[string key] 
+        {
+            get
+            {
+                var rr = new RestRequest(API_PATH + $"keyvalues?key={key}");
+                return _restClient.GetAsync<ApiResult<string>>(rr).Result?.Data;
+            }
+            set
+            {
+                var rr = new RestRequest(API_PATH + "keyvalues").AddJsonBody(new KeyValue { Key = key, Value = value });
+                var res = _restClient.PostAsync<ApiResult>(rr).Result;
+            }
+        }
+
+        #endregion
+
+        #region UISheets
+
+        public long InsertUISheet(UISheet sheet)
+        {
+            throw new NotImplementedException();
+        }
+ 
+        public UISheet[] GetUISheets()
+        {
+            throw new NotImplementedException();
+        }
+ 
+        public void UpdateUISheet(UISheet sheet)
+        {
+            throw new NotImplementedException();
+        }
 
         public void DeleteUISheet(UISheet sheet)
         {
             throw new NotImplementedException();
         }
 
-        public Category[] GetCategories()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Entry[] GetEntriesByCategoryId(long categoryId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Entry[] GetEntriesBySectionId(long sectionId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Entry GetEntry(long entryId)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public UISheet[] GetUISheets()
-        {
-            throw new NotImplementedException();
-        }
-
-        public long InsertCategory(Category category)
-        {
-            throw new NotImplementedException();
-        }
-
-        public long InsertEntry(Entry entry)
-        {
-            throw new NotImplementedException();
-        }
-
- 
-        public long InsertUISheet(UISheet sheet)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateEntry(Entry entry)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateUISheet(UISheet sheet)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
 
         public void Dispose()
         {
