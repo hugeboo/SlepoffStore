@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SlepoffStore.Core;
 
 namespace SlepoffStore.Tests
 {
@@ -12,6 +13,8 @@ namespace SlepoffStore.Tests
         [Test]
         public void Test1()
         {
+            using var repository = new RemoteRepository("http://localhost:5000");
+            var res = repository.GetSections();
             Assert.Pass();
         }
     }

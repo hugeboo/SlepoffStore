@@ -15,6 +15,11 @@ namespace SlepoffStore.Core
         public T Data { get; set; }
     }
 
+    public sealed class SectionApiResult : ApiResult
+    {
+        public Section[] Data { get; set; }
+    }
+
     public enum ApiResultStatus
     {
         OK,
