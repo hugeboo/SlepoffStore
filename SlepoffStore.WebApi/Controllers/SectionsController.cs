@@ -6,7 +6,7 @@ using System.Net;
 namespace SlepoffStore.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/sections")]
     public class SectionsController : Controller
     {
         private readonly IRepository _repository;
@@ -18,34 +18,28 @@ namespace SlepoffStore.WebApi.Controllers
 
         // GET: api/sections
         [HttpGet]
-        public SectionsApiResult Get()
+        public ApiResult<Section[]> Get()
         {
-            try
-            {
-                return new SectionsApiResult { Sections = _repository.GetSections() };
-            }
-            catch (Exception ex)
-            {
-                return new SectionsApiResult { Status = ApiResultStatus.Error, Text = ex.Message };
-            }
+            return new ApiResult<Section[]> { Data = _repository.GetSections() };
+        }
+
+        // GET: api/sections/extended
+        [HttpGet]
+        [Route("extended")]
+        public ApiResult<SectionEx[]> GetEx()
+        {
+            return new ApiResult<SectionEx[]> { Data = _repository.GetSectionsEx().ToArray() };
         }
 
         // POST: api/sections
         [HttpPost]
-        public IdApiResult Insert([FromBody] Section section)
+        public ApiResult<long> Insert([FromBody] Section section)
         {
-            try
+            return new ApiResult<long>
             {
-                return new IdApiResult
-                {
-                    Status = ApiResultStatus.OK,
-                    Id = _repository.InsertSection(section)
-                };
-            }
-            catch (Exception ex)
-            {
-                return new IdApiResult { Status = ApiResultStatus.Error, Text = ex.Message };
-            }
+                Status = ApiResultStatus.OK,
+                Data = _repository.InsertSection(section)
+            };
         }
     }
 }

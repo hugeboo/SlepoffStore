@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using SlepoffStore.Core;
+using SlepoffStore.WebApi.Middleware;
 
 namespace SlepoffStore.WebApi
 {
@@ -34,7 +35,7 @@ namespace SlepoffStore.WebApi
                 .AddControllers()
                 .AddJsonOptions(j =>
                 {
-                    j.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    j.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.CamelCase));
                     j.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 });
 
@@ -77,6 +78,8 @@ namespace SlepoffStore.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseExceptionHandlerMiddleware();
 
             app.UseRouting();
 
