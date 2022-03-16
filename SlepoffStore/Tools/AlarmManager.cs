@@ -1,4 +1,4 @@
-﻿using SlepoffStore.Model;
+﻿using SlepoffStore.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +42,7 @@ namespace SlepoffStore.Tools
 
         private void StartAlarm()
         {
-            using var repo = new Repository();
+            using var repo = Program.CreateRepository();
             var wav = repo["AlarmRingtone"];
             if (!string.IsNullOrWhiteSpace(wav))
             {

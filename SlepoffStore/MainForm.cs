@@ -1,4 +1,4 @@
-using SlepoffStore.Model;
+using SlepoffStore.Core;
 using SlepoffStore.Tools;
 
 namespace SlepoffStore
@@ -30,7 +30,7 @@ namespace SlepoffStore
 
         private void SectionsTreeViewControl_SectionSelected(object? sender, GenericEventArgs<SectionEx> e)
         {
-            using var repo = new Repository();
+            using var repo = Program.CreateRepository();
             var uiSheets = repo.GetUISheets();
             var items = repo.GetEntriesBySectionId(e.Data.Id)
                 .Select(e => new EntryGridItem(e) { Displayed = uiSheets.Any(it => it.EntryId == e.Id) })
@@ -40,7 +40,7 @@ namespace SlepoffStore
 
         private void SectionsTreeViewControl_CategorySelected(object? sender, GenericEventArgs<Category> e)
         {
-            using var repo = new Repository();
+            using var repo = Program.CreateRepository();
             var uiSheets = repo.GetUISheets();
             var items = repo.GetEntriesByCategoryId(e.Data.Id)
                 .Select(e => new EntryGridItem(e) { Displayed = uiSheets.Any(it => it.EntryId == e.Id) })

@@ -159,6 +159,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "SheetForm";
             this.Activated += new System.EventHandler(this.SheetForm_Activated);
+            this.Load += new System.EventHandler(this.SheetForm_Load);
             this.contextMenuStrip.ResumeLayout(false);
             this.contextMenuStrip.PerformLayout();
             this.ResumeLayout(false);

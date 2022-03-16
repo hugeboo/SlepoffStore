@@ -1,4 +1,4 @@
-﻿using SlepoffStore.Model;
+﻿using SlepoffStore.Core;
 using SlepoffStore.Tools;
 using System;
 using System.Collections.Generic;
@@ -68,7 +68,8 @@ namespace SlepoffStore
 
         private void SheetForm_Activated(object sender, EventArgs e)
         {
-            if (!AlarmActivated) this.SendToBack();
+            // без этого вроде лучше...
+            //if (!AlarmActivated) this.SendToBack();
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -78,7 +79,7 @@ namespace SlepoffStore
                 this.Location.X != UISheet.PosX || this.Location.Y != UISheet.PosY ||
                 this.Width != UISheet.Width || this.Height != UISheet.Height))
             {
-                using var repo = new Repository();
+                using var repo = Program.CreateRepository();
                 if (textBox.Text != Entry.Text)
                 {
                     Entry.Text = textBox.Text;
@@ -101,7 +102,7 @@ namespace SlepoffStore
             if (MessageBox.Show(this, "The note will be hidden, but the entry will remain in the database. Proceed?", "Slepoff Store", 
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                using var repo = new Repository();
+                using var repo = Program.CreateRepository();
                 repo.DeleteUISheet(UISheet);
                 this.Close();
             }
@@ -137,7 +138,7 @@ namespace SlepoffStore
             if (Entry.Color.ToString() != colorsToolStripComboBox.Text)
             {
                 Entry.Color = EntryColor.Parse<EntryColor>(colorsToolStripComboBox.Text);
-                using var repo = new Repository();
+                using var repo = Program.CreateRepository();
                 repo.UpdateEntry(Entry);
                 _currentColor = Entry.Color;
                 RestoreColors();
@@ -160,7 +161,7 @@ namespace SlepoffStore
             if (Entry.Caption != captionToolStripTextBox.Text)
             {
                 Entry.Caption = captionToolStripTextBox.Text;
-                using var repo = new Repository();
+                using var repo = Program.CreateRepository();
                 repo.UpdateEntry(Entry);
                 this.Invalidate();
             }
@@ -181,7 +182,7 @@ namespace SlepoffStore
             }
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                using var repo = new Repository();
+                using var repo = Program.CreateRepository();
                 Entry.Alarm = form.AlarmDateTime;
                 Entry.AlarmIsOn = form.AlarmEnabled;
                 repo.UpdateEntry(Entry);
@@ -215,6 +216,11 @@ namespace SlepoffStore
                 }
             }
             _prevAlarmActivted = AlarmActivated;
+        }
+
+        private void SheetForm_Load(object sender, EventArgs e)
+        {
+            this.SendToBack();
         }
     }
 

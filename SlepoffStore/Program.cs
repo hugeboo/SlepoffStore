@@ -1,4 +1,4 @@
-using SlepoffStore.Model;
+using SlepoffStore.Core;
 using SlepoffStore.Tools;
 
 namespace SlepoffStore
@@ -6,6 +6,8 @@ namespace SlepoffStore
     internal static class Program
     {
         private static MainForm _mainForm;
+
+        public static string DatabaseName { get; private set; }
 
         [STAThread]
         static void Main()
@@ -21,7 +23,7 @@ namespace SlepoffStore
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-            Repository.DatabaseName = cla.DatabaseName;
+            DatabaseName = cla.DatabaseName;
 
             Settings.Load();
             Settings.ActualizeStartWithWindows();
@@ -52,6 +54,11 @@ namespace SlepoffStore
                 Application.Run();
                 icon.Visible = false;
             }
+        }
+
+        public static IWinFormsRepository CreateRepository()
+        {
+            return new SQLiteRepository(DatabaseName);
         }
 
         private static void OpenMainForm(SheetsManager sm, MainForm.InitMode mode)

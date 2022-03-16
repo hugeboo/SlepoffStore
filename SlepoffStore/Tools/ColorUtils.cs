@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SlepoffStore.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -97,6 +98,71 @@ namespace SlepoffStore.Tools
             if (hue < 180) return q2;
             if (hue < 240) return q1 + (q2 - q1) * (240 - hue) / 60;
             return q1;
+        }
+
+        public static Color ToColor(this EntryColor ec)
+        {
+            switch (ec)
+            {
+                case EntryColor.Black:
+                    return Color.Black;
+
+                case EntryColor.Blue:
+                    return Color.Blue;
+
+                case EntryColor.Green:
+                    return Color.Green;
+
+                case EntryColor.Cyan:
+                    return Color.Cyan;
+
+                case EntryColor.Red:
+                    return Color.Red;
+
+                case EntryColor.Magenta:
+                    return Color.Magenta;
+
+                case EntryColor.Yellow:
+                    return Color.Yellow;
+
+                case EntryColor.White:
+                    return Color.White;
+
+                default:
+                    throw new Exception("Unknown color");
+            }
+        }
+
+        public static bool IsDark(this EntryColor ec)
+        {
+            switch (ec)
+            {
+                case EntryColor.Black:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static Color GetForeColor(this EntryColor ec)
+        {
+            switch (ec)
+            {
+                case EntryColor.Black:
+                case EntryColor.Blue:
+                case EntryColor.Green:
+                case EntryColor.Red:
+                    return Color.White;
+
+                case EntryColor.Cyan:
+                case EntryColor.Magenta:
+                case EntryColor.Yellow:
+                case EntryColor.White:
+                    return Color.Black;
+
+                default:
+                    throw new Exception("Unknown color");
+            }
         }
     }
 }

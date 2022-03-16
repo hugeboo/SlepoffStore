@@ -1,4 +1,4 @@
-﻿using SlepoffStore.Model;
+﻿using SlepoffStore.Core;
 using SlepoffStore.Tools;
 using System;
 using System.Collections.Generic;
@@ -32,10 +32,8 @@ namespace SlepoffStore.Controls
         private void Fill()
         {
             IEnumerable<SectionEx> sections;
-            using(var repo = new Repository())
-            {
-                sections = repo.GetSectionsEx();
-            }
+            using var repo = Program.CreateRepository();
+            sections = repo.GetSectionsEx();
 
             treeView.Nodes.Clear();
             foreach(var section in sections)

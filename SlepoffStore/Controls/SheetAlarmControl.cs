@@ -1,4 +1,4 @@
-﻿using SlepoffStore.Model;
+﻿using SlepoffStore.Core;
 using SlepoffStore.Tools;
 using System;
 using System.Collections.Generic;
@@ -49,7 +49,7 @@ namespace SlepoffStore.Controls
         {
             if (AlarmActivated && e.Button == MouseButtons.Left)
             {
-                using var repo = new Repository();
+                using var repo = Program.CreateRepository();
                 _entry.AlarmIsOn = false;
                 repo.UpdateEntry(_entry);
                 this.Visible = false;

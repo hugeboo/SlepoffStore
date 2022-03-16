@@ -1,4 +1,4 @@
-﻿using SlepoffStore.Model;
+﻿using SlepoffStore.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace SlepoffStore.Tools
 
         public static void Load()
         {
-            using var repo = new Repository();
+            using var repo = Program.CreateRepository(); ;
             StartWithWindows = repo["StartWithWindows"] == "true";
             AlarmRingtone = repo["AlarmRingtone"];
             MainFont = FontFromString(repo["MainFont"]);
@@ -25,7 +25,7 @@ namespace SlepoffStore.Tools
 
         public static void Save()
         {
-            using var repo = new Repository();
+            using var repo = Program.CreateRepository();
             repo["StartWithWindows"] = StartWithWindows.ToString().ToLower();
             repo["AlarmRingtone"] = AlarmRingtone;
             repo["MainFont"] = MainFont != null ? FontToString(MainFont) : null;
@@ -42,7 +42,7 @@ namespace SlepoffStore.Tools
 
             if (StartWithWindows)
             {
-                var autorunCommandLine = $"{Application.ExecutablePath} /database: \"{Repository.DatabaseName}\"";
+                var autorunCommandLine = $"{Application.ExecutablePath} /database: \"{Program.DatabaseName}\"";
                 if (regValue != autorunCommandLine) reg.SetValue(regKey, autorunCommandLine);
             }
             else

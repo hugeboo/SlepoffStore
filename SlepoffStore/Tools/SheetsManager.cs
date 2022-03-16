@@ -1,4 +1,4 @@
-﻿using SlepoffStore.Model;
+﻿using SlepoffStore.Core;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -56,7 +56,7 @@ namespace SlepoffStore.Tools
         {
             lock (_sheets)
             {
-                using var repo = new Repository();
+                using var repo = Program.CreateRepository();
                 var uiSheets = repo.GetUISheets();
 
                 var focus = GetForegroundWindow();
@@ -69,7 +69,7 @@ namespace SlepoffStore.Tools
                         form.Size = new Size(uiSheet.Width, uiSheet.Height);
                         form.Location = new Point(uiSheet.PosX, uiSheet.PosY);
                         form.Show();
-                        form.Init(repo.GetEntryById(uiSheet.EntryId), uiSheet);
+                        form.Init(repo.GetEntry(uiSheet.EntryId), uiSheet);
                         _sheets.Add(form);
                     }
                 }
@@ -95,7 +95,7 @@ namespace SlepoffStore.Tools
                 form.StartPosition = FormStartPosition.WindowsDefaultLocation;
                 form.Show();
 
-                using var repo = new Repository();
+                using var repo = Program.CreateRepository();
                 var uiSheet = new UISheet
                 {
                     EntryId = entry.Id,
@@ -120,7 +120,7 @@ namespace SlepoffStore.Tools
                     return;
 
                 var form = _sheets.First(s => s.Entry.Id == entry.Id);
-                using var repo = new Repository();
+                using var repo = Program.CreateRepository();
                 repo.DeleteUISheet(form.UISheet);
                 form.Close();
             }
@@ -128,7 +128,7 @@ namespace SlepoffStore.Tools
 
         public void AddNew()
         {
-            using var repo = new Repository();
+            using var repo = Program.CreateRepository();
             var cat = EnsureNewCategory(repo);
             var entry = new Entry 
             { 
@@ -172,7 +172,7 @@ namespace SlepoffStore.Tools
             }
         }
 
-        private Category EnsureNewCategory(Repository repo)
+        private Category EnsureNewCategory(IWinFormsRepository repo)
         {
             var sections = repo.GetSectionsEx();
             var sec = sections.FirstOrDefault(s => s.Name == SECTION_FOR_NEW);

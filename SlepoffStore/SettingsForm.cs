@@ -1,4 +1,4 @@
-﻿using SlepoffStore.Model;
+﻿using SlepoffStore.Core;
 using SlepoffStore.Tools;
 using System;
 using System.Collections.Generic;
