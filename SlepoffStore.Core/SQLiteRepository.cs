@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SlepoffStore.Core
 {
-    public sealed class SQLiteRepository : IWinFormsRepository
+    public sealed class SQLiteRepository : IRepository
     {
         private readonly SQLiteConnection _connection;
 

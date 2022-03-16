@@ -56,7 +56,7 @@ namespace SlepoffStore
             }
         }
 
-        public static IWinFormsRepository CreateRepository()
+        public static IRepository CreateRepository()
         {
             return new SQLiteRepository(DatabaseName);
         }

@@ -27,6 +27,11 @@ namespace SlepoffStore.Core
         void UpdateEntry(Entry entry);
         //void DeleteEntry(long entryId);
 
+        long InsertUISheet(UISheet sheet);
+        UISheet[] GetUISheets();
+        void UpdateUISheet(UISheet sheet);
+        void DeleteUISheet(UISheet sheet);
+
         string this[string key] { get; set; }
     }
 

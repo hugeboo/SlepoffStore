@@ -172,7 +172,7 @@ namespace SlepoffStore.Tools
             }
         }
 
-        private Category EnsureNewCategory(IWinFormsRepository repo)
+        private Category EnsureNewCategory(IRepository repo)
         {
             var sections = repo.GetSectionsEx();
             var sec = sections.FirstOrDefault(s => s.Name == SECTION_FOR_NEW);
