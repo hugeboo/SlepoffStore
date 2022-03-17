@@ -268,9 +268,9 @@ namespace SlepoffStore.Core
             using var command = new SQLiteCommand(_connection);
             command.CommandText =
                 "INSERT INTO UISheets (EntryId,DeviceId,PosX,PosY,Width,Height) " +
-                "(SELECT :entryId,Devices.Id,:posX,:posY,:width,:height FROM Devices " +
-                "INNER JOIN Users ON Devices.UserId = Users.Id AND Users.Name = :userName AND Devices.Name=:deviceName" +
-                "LIMIT 1)";
+                "SELECT :entryId,Devices.Id,:posX,:posY,:width,:height FROM Devices " +
+                "INNER JOIN Users ON Devices.UserId = Users.Id AND Users.Name = :userName AND Devices.Name=:deviceName " +
+                "LIMIT 1";
             command.Parameters.AddWithValue("entryId", sheet.EntryId);
             command.Parameters.AddWithValue("deviceName", deviceName != null ? deviceName : _deviceName);
             command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);

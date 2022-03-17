@@ -42,8 +42,16 @@ namespace SlepoffStore.Tools
 
             if (StartWithWindows)
             {
-                var autorunCommandLine = $"{Application.ExecutablePath} /database: \"{Program.DatabaseName}\"";
-                if (regValue != autorunCommandLine) reg.SetValue(regKey, autorunCommandLine);
+                if (Program.Source == Program.SourceType.SQLiteFile)
+                {
+                    var autorunCommandLine = $"{Application.ExecutablePath} /database: \"{Program.SourceUrl}\" /username: \"{Program.UserName}\"";
+                    if (regValue != autorunCommandLine) reg.SetValue(regKey, autorunCommandLine);
+                }
+                else if (Program.Source == Program.SourceType.WebService)
+                {
+                    var autorunCommandLine = $"{Application.ExecutablePath} /server: \"{Program.SourceUrl}\" /username: \"{Program.UserName}\"";
+                    if (regValue != autorunCommandLine) reg.SetValue(regKey, autorunCommandLine);
+                }
             }
             else
             {

@@ -7,7 +7,15 @@ namespace SlepoffStore
     {
         private static MainForm _mainForm;
 
-        public static string DatabaseName { get; private set; }
+        public enum SourceType
+        {
+            SQLiteFile,
+            WebService
+        }
+
+        public static SourceType Source { get;private set; }
+        public static string SourceUrl { get; private set; }
+        public static string UserName { get; private set; }
 
         [STAThread]
         static void Main()
@@ -17,13 +25,11 @@ namespace SlepoffStore
             ApplicationConfiguration.Initialize();
 
             var cla = new CommandLine();
-            if (string.IsNullOrEmpty(cla.DatabaseName))
-            {
-                MessageBox.Show("Database is unspecified!\nUse command line: slepoffstore.exe /database: <db_name>",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                return;
-            }
-            DatabaseName = cla.DatabaseName;
+            if (!cla.IsOK) return;
+
+            Source = cla.Source.Value;
+            SourceUrl = cla.SourceUrl;
+            UserName = cla.UserName;
 
             Settings.Load();
             Settings.ActualizeStartWithWindows();
@@ -58,7 +64,18 @@ namespace SlepoffStore
 
         public static IRepository CreateRepository()
         {
-            return new SQLiteRepository(DatabaseName, "root", "LAPTOP-SSV");
+            if (Source == SourceType.SQLiteFile)
+            {
+                return new SQLiteRepository(SourceUrl, UserName, Environment.MachineName);
+            }
+            else if (Source == SourceType.WebService)
+            {
+                return new RemoteRepository(SourceUrl, UserName, Environment.MachineName);
+            }
+            else
+            {
+                throw new Exception("Unknown SourceType");
+            }
         }
 
         private static void OpenMainForm(SheetsManager sm, MainForm.InitMode mode)
@@ -77,23 +94,75 @@ namespace SlepoffStore
 
         internal sealed class CommandLine
         {
-            public string DatabaseName { get; set; }
+            private const string ErrorMessage1 = 
+                "Database is unspecified!\n\n" +
+                "Use command line:\n\n" +
+                "slepoffstore /database: <filename> /username: <username>\n" +
+                "or\n" +
+                "slepoffstore /server: <url> /username: <username>";
+
+            private const string ErrorMessage2 =
+                "UserName is unspecified!\n\n" +
+                "Use command line:\n\n" +
+                "slepoffstore.exe /database: <filename> /username: <username>\n" +
+                "or\n" +
+                "slepoffstore.exe /server: <url> /username: <username>";
+
+            public SourceType? Source { get; private set; }
+            public string SourceUrl { get; private set; }
+            public string UserName { get; private set; }
+
+            public bool IsOK { get; private set; }
 
             public CommandLine()
             {
-                Parse();
+                IsOK = Parse();
             }
 
-            private void Parse()
+            private bool Parse()
             {
                 var args = Environment.GetCommandLineArgs();
                 for (int i = 1; i < args.Length; i++)
                 {
                     if (args[i].ToLower() == "/database:" && i < args.Length - 1)
                     {
-                        DatabaseName = args[++i];
+                        if (Source.HasValue && Source == SourceType.WebService)
+                        {
+                            MessageBox.Show(ErrorMessage1, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            return false;
+                        }
+                        Source = SourceType.SQLiteFile;
+                        SourceUrl = args[++i];
+                    }
+                    else if (args[i].ToLower() == "/server:" && i < args.Length - 1)
+                    {
+                        if (Source.HasValue && Source == SourceType.SQLiteFile)
+                        {
+                            MessageBox.Show(ErrorMessage1, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            return false;
+                        }
+                        Source = SourceType.WebService;
+                        SourceUrl = args[++i];
+                    }
+                    else if (args[i].ToLower() == "/username:" && i < args.Length - 1)
+                    {
+                        UserName = args[++i];
                     }
                 }
+
+                if (!Source.HasValue || string.IsNullOrWhiteSpace(SourceUrl))
+                {
+                    MessageBox.Show(ErrorMessage1, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(UserName))
+                {
+                    MessageBox.Show(ErrorMessage2, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return false;
+                }
+
+                return true;
             }
         }
     }

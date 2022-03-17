@@ -135,7 +135,8 @@ namespace SlepoffStore.Tools
                 CategoryId = cat.Id, 
                 CreationDate = DateTime.Now,
                 Color = EntryColor.Yellow,
-                Caption = DateTime.Now.ToString() 
+                Caption = DateTime.Now.ToString(),
+                //Text = string.Empty //не знаю почему, но asp.net не принимает null !!!!!
             };
             entry.Id = repo.InsertEntry(entry);
 

@@ -41,7 +41,7 @@ namespace SlepoffStore.Core
     public sealed class KeyValue
     {
         public string Key { get; set; }
-        public string Value { get; set; }
+        public string? Value { get; set; }
     }
 
     internal static class RepositoryExtensions

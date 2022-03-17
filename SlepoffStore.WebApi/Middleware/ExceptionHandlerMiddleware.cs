@@ -17,7 +17,7 @@ namespace SlepoffStore.WebApi.Middleware
         {
             try
             {
-                await _next.Invoke(context);
+                 await _next.Invoke(context);
             }
             catch (Exception ex)
             {

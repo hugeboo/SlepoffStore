@@ -2,7 +2,7 @@
   "profiles": {
     "SlepoffStore": {
       "commandName": "Project",
-      "commandLineArgs": "/database: \"c:/temp/SlepoffStore.db\""
+      "commandLineArgs": "/server: \"http://localhost:5000\" /username: root"
     }
   }
 }

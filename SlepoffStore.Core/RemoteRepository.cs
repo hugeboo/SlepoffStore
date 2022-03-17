@@ -24,7 +24,7 @@ namespace SlepoffStore.Core
             var options = new RestClientOptions(url)
             {
                 ThrowOnAnyError = true,
-                Timeout = 5000
+                Timeout = 50000
             };
 
             _restClient = new RestClient(options);
