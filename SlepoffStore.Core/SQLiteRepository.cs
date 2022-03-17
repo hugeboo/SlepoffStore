@@ -167,7 +167,7 @@ namespace SlepoffStore.Core
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText = "SELECT Entries.* FROM Entries " +
-                "INNER JOIN Categories ON Categories.Id = Entries.CategoryId AND CategoriesId = :categoryId " +
+                "INNER JOIN Categories ON Categories.Id = Entries.CategoryId AND Categories.Id = :categoryId " +
                 "INNER JOIN Sections ON Sections.Id = Categories.SectionId " +
                 "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
             command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);

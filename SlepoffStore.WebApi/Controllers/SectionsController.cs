@@ -44,7 +44,7 @@ namespace SlepoffStore.WebApi.Controllers
         [Route("{sectionId}/entries")]
         public ApiResult<Entry[]> GetEntries(long sectionId, [UserFromHeader] string userName)
         {
-            return new ApiResult<Entry[]> { Data = _repository.GetEntriesBySectionId(sectionId) };
+            return new ApiResult<Entry[]> { Data = _repository.GetEntriesBySectionId(sectionId, userName) };
         }
 
         // POST: api/sections

@@ -19,28 +19,28 @@ namespace SlepoffStore.WebApi.Controllers
         // GET: api/entries/{id}
         [HttpGet]
         [Route("{id}")]
-        public ApiResult<Entry> Get(long id)
+        public ApiResult<Entry> Get(long id, [UserFromHeader] string userName)
         {
-            return new ApiResult<Entry> { Data = _repository.GetEntry(id) };
+            return new ApiResult<Entry> { Data = _repository.GetEntry(id, userName) };
         }
 
         // POST: api/entries
         [HttpPost]
-        public ApiResult<long> Insert([FromBody] Entry entry)
+        public ApiResult<long> Insert([FromBody] Entry entry, [UserFromHeader] string userName)
         {
             return new ApiResult<long>
             {
                 Status = ApiResultStatus.OK,
-                Data = _repository.InsertEntry(entry)
+                Data = _repository.InsertEntry(entry, userName)
             };
         }
 
         // POST: api/entries/update
         [HttpPost]
         [Route("update")]
-        public ApiResult Update([FromBody] Entry entry)
+        public ApiResult Update([FromBody] Entry entry, [UserFromHeader] string userName)
         {
-            _repository.UpdateEntry(entry);
+            _repository.UpdateEntry(entry, userName);
             return new ApiResult
             {
                 Status = ApiResultStatus.OK
