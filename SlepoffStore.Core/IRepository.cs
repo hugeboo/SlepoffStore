@@ -9,30 +9,33 @@ namespace SlepoffStore.Core
 {
     public interface IRepository : IDisposable
     {
-        long InsertSection(Section section);
-        Section[] GetSections();
-        IEnumerable<SectionEx> GetSectionsEx();
+        long InsertSection(Section section, string userName = null);
+        Section GetSection(long id, string userName = null);
+        Section[] GetSections(string userName = null);
+        IEnumerable<SectionEx> GetSectionsEx(string userName = null);
         //void UpdateSection(Section section);
         //void DeleteSection(long sectionId);
 
-        long InsertCategory(Category category);
-        Category[] GetCategories();
+        long InsertCategory(Category category, string userName = null);
+        Category GetCategory(long id, string userName = null);
+        Category[] GetCategories(string userName = null);
         //void UpdateCategory(Category category);
         //void DeleteCategory(long categoryId);
 
-        long InsertEntry(Entry entry);
-        Entry[] GetEntriesByCategoryId(long categoryId);
-        Entry[] GetEntriesBySectionId(long sectionId);
-        Entry GetEntry(long entryId);
-        void UpdateEntry(Entry entry);
+        long InsertEntry(Entry entry, string userName = null);
+        Entry[] GetEntriesByCategoryId(long categoryId, string userName = null);
+        Entry[] GetEntriesBySectionId(long sectionId, string userName = null);
+        Entry GetEntry(long entryId, string userName = null);
+        void UpdateEntry(Entry entry, string userName = null);
         //void DeleteEntry(long entryId);
 
-        long InsertUISheet(UISheet sheet);
-        UISheet[] GetUISheets();
-        void UpdateUISheet(UISheet sheet);
-        void DeleteUISheet(UISheet sheet);
+        long InsertUISheet(UISheet sheet, string userName = null, string deviceName = null);
+        UISheet[] GetUISheets(string userName = null, string deviceName = null);
+        void UpdateUISheet(UISheet sheet, string userName = null);
+        void DeleteUISheet(UISheet sheet, string userName = null);
 
-        string this[string key] { get; set; }
+        void SetValue(string key, string value, string userName = null);
+        string GetValue(string key, string userName = null);
     }
 
     public sealed class KeyValue

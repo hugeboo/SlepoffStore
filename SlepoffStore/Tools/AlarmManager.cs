@@ -43,7 +43,7 @@ namespace SlepoffStore.Tools
         private void StartAlarm()
         {
             using var repo = Program.CreateRepository();
-            var wav = repo["AlarmRingtone"];
+            var wav = repo.GetValue("AlarmRingtone");
             if (!string.IsNullOrWhiteSpace(wav))
             {
                 _player = new SoundPlayer(wav);

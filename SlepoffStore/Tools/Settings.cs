@@ -18,17 +18,17 @@ namespace SlepoffStore.Tools
         public static void Load()
         {
             using var repo = Program.CreateRepository(); ;
-            StartWithWindows = repo["StartWithWindows"] == "true";
-            AlarmRingtone = repo["AlarmRingtone"];
-            MainFont = FontFromString(repo["MainFont"]);
+            StartWithWindows = repo.GetValue("StartWithWindows") == "true";
+            AlarmRingtone = repo.GetValue("AlarmRingtone");
+            MainFont = FontFromString(repo.GetValue("MainFont"));
         }
 
         public static void Save()
         {
             using var repo = Program.CreateRepository();
-            repo["StartWithWindows"] = StartWithWindows.ToString().ToLower();
-            repo["AlarmRingtone"] = AlarmRingtone;
-            repo["MainFont"] = MainFont != null ? FontToString(MainFont) : null;
+            repo.SetValue("StartWithWindows", StartWithWindows.ToString().ToLower());
+            repo.SetValue("AlarmRingtone", AlarmRingtone);
+            repo.SetValue("MainFont", MainFont != null ? FontToString(MainFont) : null);
         }
 
         public static void ActualizeStartWithWindows()

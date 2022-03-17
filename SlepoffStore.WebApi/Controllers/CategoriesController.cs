@@ -18,27 +18,27 @@ namespace SlepoffStore.WebApi.Controllers
 
         // GET: api/categories
         [HttpGet]
-        public ApiResult<Category[]> Get()
+        public ApiResult<Category[]> Get([UserFromHeader] string userName)
         {
-            return new ApiResult<Category[]> { Data = _repository.GetCategories() };
+            return new ApiResult<Category[]> { Data = _repository.GetCategories(userName) };
         }
 
         // GET: api/categories/{categoryId}/entries
         [HttpGet]
         [Route("{categoryId}/entries")]
-        public ApiResult<Entry[]> GetEntries(long categoryId)
+        public ApiResult<Entry[]> GetEntries(long categoryId, [UserFromHeader] string userName)
         {
             return new ApiResult<Entry[]> { Data = _repository.GetEntriesByCategoryId(categoryId) };
         }
 
         // POST: api/categories
         [HttpPost]
-        public ApiResult<long> Insert([FromBody] Category category)
+        public ApiResult<long> Insert([FromBody] Category category, [UserFromHeader] string userName)
         {
             return new ApiResult<long>
             {
                 Status = ApiResultStatus.OK,
-                Data = _repository.InsertCategory(category)
+                Data = _repository.InsertCategory(category, userName)
             };
         }
     }

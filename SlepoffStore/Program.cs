@@ -58,7 +58,7 @@ namespace SlepoffStore
 
         public static IRepository CreateRepository()
         {
-            return new SQLiteRepository(DatabaseName);
+            return new SQLiteRepository(DatabaseName, "root", "LAPTOP-SSV");
         }
 
         private static void OpenMainForm(SheetsManager sm, MainForm.InitMode mode)
