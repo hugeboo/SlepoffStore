@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using SlepoffStore.Core;
 using SlepoffStore.WebApi.Middleware;
+using SlepoffStore.WebApi.Services;
 
 namespace SlepoffStore.WebApi
 {
@@ -41,12 +42,16 @@ namespace SlepoffStore.WebApi
 
             if (dbms == "SQLite")
             {
-                services.AddScoped<IRepository>(s => new SQLiteRepository(connectionString));
+                services
+                    .AddScoped<IRepository>(s => new SQLiteRepository(connectionString))
+                    .AddScoped<IUserRepository>(s => new SQLiteRepository(connectionString));
             }
             else
             {
                 throw new Exception("Invalid DBMS");
             }
+
+            services.AddScoped<IUserService, UserService>();
 
             services.AddSwaggerGen(c =>
             {
@@ -83,7 +88,7 @@ namespace SlepoffStore.WebApi
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseBasicAuthMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

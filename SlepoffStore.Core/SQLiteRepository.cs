@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SlepoffStore.Core
 {
-    public sealed class SQLiteRepository : IRepository
+    public sealed class SQLiteRepository : IRepository, IUserRepository
     {
         private readonly SQLiteConnection _connection;
         private string _userName;
@@ -369,6 +369,23 @@ namespace SlepoffStore.Core
         public void Dispose()
         {
             _connection.Close();
+        }
+
+        public User GetUser(string username)
+        {
+            using var command = new SQLiteCommand(_connection);
+            command.CommandText = "SELECT * FROM Users WHERE Name=:name";
+            command.Parameters.AddWithValue("name", username);
+            var data = new DataTable();
+            using var adapter = new SQLiteDataAdapter(command);
+            adapter.Fill(data);
+            return data.Rows.AsEnumerable().Select(r => new User 
+            {
+                Id = r.Field<long>("Id"),
+                Name = r.Field<string>("Name"),
+                Password = r.Field<string>("Password"),
+                Comments = r.Field<string>("Comments"),
+            }).FirstOrDefault();
         }
     }
 }
