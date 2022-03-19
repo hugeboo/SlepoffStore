@@ -14,6 +14,8 @@ namespace SlepoffStore
             Settings
         }
 
+        public bool ForceClose { get; set; }
+
         public MainForm()
         {
             InitializeComponent();
@@ -100,6 +102,15 @@ namespace SlepoffStore
                 Settings.Save();
                 Settings.ActualizeStartWithWindows();
                 _sheetsManager.RefreshAllSheets();
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!ForceClose)
+            {
+                this.WindowState = FormWindowState.Minimized;
+                e.Cancel = true;
             }
         }
     }

@@ -52,12 +52,20 @@ namespace SlepoffStore
             {
                     new ToolStripMenuItem("Add New", null, (s, e) => sm.AddNew()),
                     new ToolStripSeparator(),
-                    new ToolStripMenuItem("Open Store Window...", null, (s, e) => mainForm.Activate()),
+                    new ToolStripMenuItem("Open Store Window...", null, (s, e) =>
+                    {
+                        mainForm.WindowState = FormWindowState.Normal;
+                        mainForm.Activate();
+                    }),
                     new ToolStripSeparator(),
                     new ToolStripMenuItem("Restore All", null, async (s, e) => await sm.RestoreAllSheets()),
                     new ToolStripMenuItem("Collapse All", null, (s, e) => sm.CollapseAllSheets()),
                     new ToolStripSeparator(),
-                    new ToolStripMenuItem("Exit", null, (s, e) => Application.Exit()),
+                    new ToolStripMenuItem("Exit", null, (s, e) => 
+                    {
+                        mainForm.ForceClose = true;
+                        mainForm.Close(); 
+                    })
             });
             icon.ContextMenuStrip = menu;
             icon.Visible = true;

@@ -11,12 +11,17 @@
     <ApplicationUseCompatibleTextRendering>false</ApplicationUseCompatibleTextRendering>
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
     <ApplicationDefaultFont>Microsoft Sans Serif, 8.25pt</ApplicationDefaultFont>
+    <ApplicationIcon>icons8-биологическая-опасность-96.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Model\**" />
     <EmbeddedResource Remove="Model\**" />
     <None Remove="Model\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="icons8-биологическая-опасность-96.ico" />
   </ItemGroup>
 
   <ItemGroup>
