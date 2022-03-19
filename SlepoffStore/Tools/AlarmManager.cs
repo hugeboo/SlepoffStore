@@ -40,10 +40,10 @@ namespace SlepoffStore.Tools
             _player = null;
         }
 
-        private void StartAlarm()
+        private async void StartAlarm()
         {
             using var repo = Program.CreateRepository();
-            var wav = repo.GetValue("AlarmRingtone");
+            var wav = await repo.GetValue("AlarmRingtone");
             if (!string.IsNullOrWhiteSpace(wav))
             {
                 _player = new SoundPlayer(wav);
@@ -63,7 +63,7 @@ namespace SlepoffStore.Tools
             {
                 try
                 {
-                    var alarm = _sheetsManager.Sheets.Any(sheet => sheet.AlarmActivated);
+                    var alarm = _sheetsManager.IsAlarm;
 
                     if (AlarmActivated)
                     {

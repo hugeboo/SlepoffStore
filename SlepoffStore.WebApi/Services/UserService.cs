@@ -6,7 +6,7 @@ namespace SlepoffStore.WebApi.Services
 {
     public interface IUserService
     {
-        bool CheckCredentials(string username, string password);
+        Task<bool> CheckCredentials(string username, string password);
     }
 
     internal sealed class UserService : IUserService
@@ -18,9 +18,9 @@ namespace SlepoffStore.WebApi.Services
             _repository = repository;
         }
 
-        public bool CheckCredentials(string username, string password)
+        public async Task<bool> CheckCredentials(string username, string password)
         {
-            var user = _repository.GetUser(username);
+            var user = await _repository.GetUser(username);
             if (user == null) return false;
             var pwd = ComputeSha256Hash(password);
             return user.Password == pwd;

@@ -22,18 +22,18 @@ namespace SlepoffStore.Controls
             InitializeComponent();
         }
 
-        public void Init()
+        public async Task Init()
         {
-            Fill();
+            await Fill();
             treeView.ExpandAll();
             if (treeView.SelectedNode == null && treeView.Nodes.Count > 0) treeView.SelectedNode = treeView.Nodes[0];
         }
 
-        private void Fill()
+        private async Task Fill()
         {
             IEnumerable<SectionEx> sections;
             using var repo = Program.CreateRepository();
-            sections = repo.GetSectionsEx();
+            sections = await repo.GetSectionsEx();
 
             treeView.Nodes.Clear();
             foreach(var section in sections)

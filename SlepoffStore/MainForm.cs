@@ -28,29 +28,30 @@ namespace SlepoffStore
             return this;
         }
 
-        private void SectionsTreeViewControl_SectionSelected(object? sender, GenericEventArgs<SectionEx> e)
+        private async void SectionsTreeViewControl_SectionSelected(object? sender, GenericEventArgs<SectionEx> e)
         {
             using var repo = Program.CreateRepository();
-            var uiSheets = repo.GetUISheets();
-            var items = repo.GetEntriesBySectionId(e.Data.Id)
+            var uiSheets = await repo.GetUISheets();
+            var items = (await repo.GetEntriesBySectionId(e.Data.Id))
                 .Select(e => new EntryGridItem(e) { Displayed = uiSheets.Any(it => it.EntryId == e.Id) })
                 .ToArray();
             dataGridView.DataSource = items;
         }
 
-        private void SectionsTreeViewControl_CategorySelected(object? sender, GenericEventArgs<Category> e)
+        private async void SectionsTreeViewControl_CategorySelected(object? sender, GenericEventArgs<Category> e)
         {
             using var repo = Program.CreateRepository();
-            var uiSheets = repo.GetUISheets();
-            var items = repo.GetEntriesByCategoryId(e.Data.Id)
+            var uiSheets = await repo.GetUISheets();
+            var items = (await repo.GetEntriesByCategoryId(e.Data.Id))
                 .Select(e => new EntryGridItem(e) { Displayed = uiSheets.Any(it => it.EntryId == e.Id) })
                 .ToArray();
             dataGridView.DataSource = items;
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
-            sectionsTreeViewControl.Init();
+            await sectionsTreeViewControl.Init();
+            await _sheetsManager.RestoreAllSheets();
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -83,9 +84,9 @@ namespace SlepoffStore
             }
          }
 
-        private void refreshToolStripButton_Click(object sender, EventArgs e)
+        private async void refreshToolStripButton_Click(object sender, EventArgs e)
         {
-            sectionsTreeViewControl.Init();
+            await sectionsTreeViewControl.Init();
         }
 
         private void settingsToolStripButton_Click(object sender, EventArgs e)

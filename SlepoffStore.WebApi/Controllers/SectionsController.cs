@@ -18,43 +18,43 @@ namespace SlepoffStore.WebApi.Controllers
 
         // GET: api/sections
         [HttpGet]
-        public ApiResult<Section[]> Get([UserFromHeader] string userName)
+        public async Task<ApiResult<Section[]>> Get([UserFromHeader] string userName)
         {
-            return new ApiResult<Section[]> { Data = _repository.GetSections(userName) };
+            return new ApiResult<Section[]> { Data = await _repository.GetSections(userName) };
         }
 
         // GET: api/sections/{id}
         [HttpGet]
         [Route("{id}")]
-        public ApiResult<Section> GetById(long id, [UserFromHeader] string userName)
+        public async Task<ApiResult<Section>> GetById(long id, [UserFromHeader] string userName)
         {
-            return new ApiResult<Section> { Data = _repository.GetSection(id, userName) };
+            return new ApiResult<Section> { Data = await _repository.GetSection(id, userName) };
         }
 
         // GET: api/sections/extended
         [HttpGet]
         [Route("extended")]
-        public ApiResult<SectionEx[]> GetEx([UserFromHeader] string userName)
+        public async Task<ApiResult<SectionEx[]>> GetEx([UserFromHeader] string userName)
         {
-            return new ApiResult<SectionEx[]> { Data = _repository.GetSectionsEx(userName).ToArray() };
+            return new ApiResult<SectionEx[]> { Data = await _repository.GetSectionsEx(userName) };
         }
 
         // GET: api/sections/{sectionId}/entries
         [HttpGet]
         [Route("{sectionId}/entries")]
-        public ApiResult<Entry[]> GetEntries(long sectionId, [UserFromHeader] string userName)
+        public async Task<ApiResult<Entry[]>> GetEntries(long sectionId, [UserFromHeader] string userName)
         {
-            return new ApiResult<Entry[]> { Data = _repository.GetEntriesBySectionId(sectionId, userName) };
+            return new ApiResult<Entry[]> { Data = await _repository.GetEntriesBySectionId(sectionId, userName) };
         }
 
         // POST: api/sections
         [HttpPost]
-        public ApiResult<long> Insert([FromBody] Section section, [UserFromHeader] string userName)
+        public async Task<ApiResult<long>> Insert([FromBody] Section section, [UserFromHeader] string userName)
         {
             return new ApiResult<long>
             {
                 Status = ApiResultStatus.OK,
-                Data = _repository.InsertSection(section, userName)
+                Data = await _repository.InsertSection(section, userName)
             };
         }
     }

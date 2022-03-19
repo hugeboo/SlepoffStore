@@ -18,16 +18,16 @@ namespace SlepoffStore.WebApi.Controllers
 
         // GET: api/keyvalues?key={key}
         [HttpGet]
-        public ApiResult<string> Get([FromQuery] string key, [UserFromHeader] string userName)
+        public async Task<ApiResult<string>> Get([FromQuery] string key, [UserFromHeader] string userName)
         {
-            return new ApiResult<string> { Data = _repository.GetValue(key, userName) };
+            return new ApiResult<string> { Data = await _repository.GetValue(key, userName) };
         }
 
         // POST: api/keyvalues
         [HttpPost]
-        public ApiResult Insert([FromBody] KeyValue kv, [UserFromHeader] string userName)
+        public async Task<ApiResult> Insert([FromBody] KeyValue kv, [UserFromHeader] string userName)
         {
-            _repository.SetValue(kv.Key, kv.Value, userName);
+            await _repository.SetValue(kv.Key, kv.Value, userName);
             return new ApiResult
             {
                 Status = ApiResultStatus.OK

@@ -15,12 +15,12 @@ namespace SlepoffStore.Tools
 
         public static string ApplicationPath => Application.ExecutablePath;
 
-        public static void Load()
+        public static async void Load()
         {
             using var repo = Program.CreateRepository(); ;
-            StartWithWindows = repo.GetValue("StartWithWindows") == "true";
-            AlarmRingtone = repo.GetValue("AlarmRingtone");
-            MainFont = FontFromString(repo.GetValue("MainFont"));
+            StartWithWindows = await repo.GetValue("StartWithWindows") == "true";
+            AlarmRingtone = await repo.GetValue("AlarmRingtone");
+            MainFont = FontFromString(await repo.GetValue("MainFont"));
         }
 
         public static void Save()

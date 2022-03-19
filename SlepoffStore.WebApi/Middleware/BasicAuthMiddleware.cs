@@ -23,7 +23,7 @@ namespace SlepoffStore.WebApi.Middleware
                 var usernameAndPassword = encoding.GetString(Convert.FromBase64String(auth));
                 string username = usernameAndPassword.Split(new char[] { ':' })[0];
                 string password = usernameAndPassword.Split(new char[] { ':' })[1];
-                if (userService.CheckCredentials(username, password))
+                if (await userService.CheckCredentials(username, password))
                 {
                     await _next(httpContext);
                 }

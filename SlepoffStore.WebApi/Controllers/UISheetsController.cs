@@ -18,29 +18,29 @@ namespace SlepoffStore.WebApi.Controllers
 
         // POST: api/uisheets
         [HttpPost]
-        public ApiResult<long> Insert([FromBody] UISheet sheet, 
+        public async Task<ApiResult<long>> Insert([FromBody] UISheet sheet, 
             [UserFromHeader] string userName, [DeviceFromHeader] string deviceName)
         {
             return new ApiResult<long>
             {
                 Status = ApiResultStatus.OK,
-                Data = _repository.InsertUISheet(sheet, userName, deviceName)
+                Data = await _repository.InsertUISheet(sheet, userName, deviceName)
             };
         }
 
         // GET: api/uisheets
         [HttpGet]
-        public ApiResult<UISheet[]> Get([UserFromHeader] string userName, [DeviceFromHeader] string deviceName)
+        public async Task<ApiResult<UISheet[]>> Get([UserFromHeader] string userName, [DeviceFromHeader] string deviceName)
         {
-            return new ApiResult<UISheet[]> { Data = _repository.GetUISheets(userName, deviceName) };
+            return new ApiResult<UISheet[]> { Data = await _repository.GetUISheets(userName, deviceName) };
         }
 
         // POST: api/uisheets/update
         [HttpPost]
         [Route("update")]
-        public ApiResult Update([FromBody] UISheet sheet, [UserFromHeader] string userName)
+        public async Task<ApiResult> Update([FromBody] UISheet sheet, [UserFromHeader] string userName)
         {
-            _repository.UpdateUISheet(sheet, userName);
+            await _repository.UpdateUISheet(sheet, userName);
             return new ApiResult
             {
                 Status = ApiResultStatus.OK
@@ -49,9 +49,9 @@ namespace SlepoffStore.WebApi.Controllers
 
         // DELETE: api/uisheets
         [HttpDelete]
-        public ApiResult Delete([FromBody] UISheet sheet, [UserFromHeader] string userName)
+        public async Task<ApiResult> Delete([FromBody] UISheet sheet, [UserFromHeader] string userName)
         {
-            _repository.DeleteUISheet(sheet, userName);
+            await _repository.DeleteUISheet(sheet, userName);
             return new ApiResult
             {
                 Status = ApiResultStatus.OK

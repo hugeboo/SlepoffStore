@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SlepoffStore.Core
 {
     public interface IUserRepository
     {
-        User GetUser(string username);
+        Task<User> GetUser(string username);
     }
 }

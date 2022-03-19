@@ -5,8 +5,6 @@ namespace SlepoffStore
 {
     internal static class Program
     {
-        private static MainForm _mainForm;
-
         public enum SourceType
         {
             SQLiteFile,
@@ -35,7 +33,11 @@ namespace SlepoffStore
             Settings.ActualizeStartWithWindows();
 
             var sm = new SheetsManager();
-            sm.RestoreAllSheets();
+
+            var mainForm = new MainForm().Init(sm, MainForm.InitMode.Normal);
+            mainForm.ShowInTaskbar = false;
+            mainForm.WindowState = FormWindowState.Minimized;
+            mainForm.Show();
 
             using (NotifyIcon icon = new NotifyIcon())
             {
@@ -45,19 +47,17 @@ namespace SlepoffStore
                 {
                     new ToolStripMenuItem("Add New", null, (s, e) => sm.AddNew()),
                     new ToolStripSeparator(),
-                    new ToolStripMenuItem("Open Store Window...", null, (s, e) => OpenMainForm(sm, MainForm.InitMode.Normal)),
+                    new ToolStripMenuItem("Open Store Window...", null, (s, e) => mainForm.Activate()),
                     new ToolStripSeparator(),
-                    new ToolStripMenuItem("Restore All", null, (s, e) => sm.RestoreAllSheets()),
+                    new ToolStripMenuItem("Restore All", null, async (s, e) => await sm.RestoreAllSheets()),
                     new ToolStripMenuItem("Collapse All", null, (s, e) => sm.CollapseAllSheets()),
-                    new ToolStripSeparator(),
-                    new ToolStripMenuItem("Settings...", null, (s, e) => OpenMainForm(sm, MainForm.InitMode.Settings)),
                     new ToolStripSeparator(),
                     new ToolStripMenuItem("Exit", null, (s, e) => Application.Exit()),
                 });
                 icon.ContextMenuStrip = menu;
                 icon.Visible = true;
 
-                Application.Run();
+                Application.Run(mainForm);
                 icon.Visible = false;
             }
         }
@@ -75,20 +75,6 @@ namespace SlepoffStore
             else
             {
                 throw new Exception("Unknown SourceType");
-            }
-        }
-
-        private static void OpenMainForm(SheetsManager sm, MainForm.InitMode mode)
-        {
-            if (_mainForm == null || _mainForm.IsDisposed)
-            {
-                _mainForm = new MainForm().Init(sm, mode);
-                _mainForm.Show();
-                _mainForm.BringToFront();
-            }
-            else
-            {
-                _mainForm.Activate();
             }
         }
 
