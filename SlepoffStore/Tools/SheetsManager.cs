@@ -20,7 +20,7 @@ namespace SlepoffStore.Tools
         private const string SECTION_FOR_NEW = "Other";
         private const string CATEGORY_FOR_NEW = "New";
 
-        private readonly ConcurrentDictionary<long, SheetForm> _sheets = new ConcurrentDictionary<long, SheetForm>();
+        private readonly ConcurrentDictionary<long, SheetForm> _sheets = new();
         private readonly AlarmManager _alarmManger;
 
         public SheetsManager()
@@ -155,7 +155,7 @@ namespace SlepoffStore.Tools
             }
         }
 
-        private async Task<Category> EnsureNewCategory(IRepository repo)
+        private static async Task<Category> EnsureNewCategory(IRepository repo)
         {
             var sections = await repo.GetSectionsEx();
             var sec = sections.FirstOrDefault(s => s.Name == SECTION_FOR_NEW);

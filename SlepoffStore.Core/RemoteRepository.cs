@@ -16,44 +16,32 @@ namespace SlepoffStore.Core
     {
         private const string API_PATH = "api/";
         private readonly RestClient _restClient;
-        private string _userName;
-        private string _deviceName;
+        private readonly string _deviceName;
+        private readonly string _userName;
 
         /// <summary>
-        /// USE AS SINGLETON !!!
+        /// USE AS SINGLETON !!! ???
         /// </summary>
-        /// <param name="url"></param>
-        public RemoteRepository(string url)
+        public RemoteRepository(string url, string userName, string password, string deviceName)
         {
+            _deviceName = deviceName;
+            _userName = userName;
+
             var options = new RestClientOptions(url)
             {
                 ThrowOnAnyError = true,
                 Timeout = 50000,
-                //    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) =>
-                //    {
-                //        if (sslPolicyErrors == SslPolicyErrors.RemoteCertificateNameMismatch)
-                //        {
-                //            // затычка: по нормальному пока не работает почему-то....
-                //            return certificate.Subject.Contains("CN=dotkit.ru");
-                //        }
-                //        return false;
-                //    }
             };
 
-            _restClient = new RestClient(options);
-            _restClient.Authenticator = new HttpBasicAuthenticator("root", "1");
+            _restClient = new RestClient(options)
+            {
+                Authenticator = new HttpBasicAuthenticator(userName, password)
+            };
 
             var jsonOptions = new JsonSerializerOptions();
             jsonOptions.Converters.Add(new JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.CamelCase));
             jsonOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
             _restClient.UseSystemTextJson(jsonOptions);
-        }
-
-        public RemoteRepository(string url, string userName, string deviceName)
-            : this(url)
-        {
-            _userName = userName;
-            _deviceName = deviceName;
         }
 
         public void Dispose()

@@ -11,8 +11,8 @@ namespace SlepoffStore.Core
     public sealed class SQLiteRepository : IRepository, IUserRepository
     {
         private readonly SQLiteConnection _connection;
-        private string _userName;
-        private string _deviceName;
+        private readonly string _userName;
+        private readonly string _deviceName;
 
         public SQLiteRepository(string databaseName)
         {
@@ -39,7 +39,7 @@ namespace SlepoffStore.Core
             using var command = new SQLiteCommand(_connection);
             command.CommandText = 
                 "INSERT INTO Sections(Name, UserId) SELECT :name, Id FROM Users WHERE Name=:userName LIMIT 1";
-            command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
             command.Parameters.AddWithValue("name", section.Name);
             return await command.ExecuteNonQueryAsync();
         }
@@ -50,7 +50,7 @@ namespace SlepoffStore.Core
             command.CommandText =
                 "SELECT Sections.* FROM Sections " +
                 "INNER JOIN Users ON Sections.UserId = Users.Id AND Sections.Id=:id AND Users.Name = :userName";
-            command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
             command.Parameters.AddWithValue("id", id);
             var data = await command.ExecuteQueryAsync();
             return data.Rows.AsEnumerable().Select(r => new Section
@@ -66,7 +66,7 @@ namespace SlepoffStore.Core
             command.CommandText =
                 "SELECT Sections.* FROM Sections " +
                 "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
-            command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
             var data = await command.ExecuteQueryAsync();
             return data.Rows.AsEnumerable().Select(r => new Section
             {
@@ -110,7 +110,7 @@ namespace SlepoffStore.Core
                 "SELECT Categories.* FROM Categories " +
                 "INNER JOIN Sections ON Sections.Id = Categories.SectionId AND Categories.Id=:id " +
                 "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
-            command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
             command.Parameters.AddWithValue("id", id);
             var data = await command.ExecuteQueryAsync();
             return data.Rows.AsEnumerable().Select(r => new Category
@@ -128,7 +128,7 @@ namespace SlepoffStore.Core
                 "SELECT Categories.* FROM Categories " + 
                 "INNER JOIN Sections ON Sections.Id = Categories.SectionId " +
                 "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
-            command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
             var data = await command.ExecuteQueryAsync();
             return data.Rows.AsEnumerable().Select(r => new Category
             {
@@ -166,7 +166,7 @@ namespace SlepoffStore.Core
                 "INNER JOIN Categories ON Categories.Id = Entries.CategoryId AND Categories.Id = :categoryId " +
                 "INNER JOIN Sections ON Sections.Id = Categories.SectionId " +
                 "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
-            command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
             command.Parameters.AddWithValue("categoryId", categoryId);
             var data = await command.ExecuteQueryAsync();
             return data.Rows.AsEnumerable().Select(r => new Entry
@@ -184,27 +184,25 @@ namespace SlepoffStore.Core
 
         public async Task<Entry[]> GetEntriesBySectionId(long sectionId, string userName = null)
         {
-            using (var command = new SQLiteCommand(_connection))
+            using var command = new SQLiteCommand(_connection);
+            command.CommandText = "SELECT Entries.* FROM Entries " +
+                "INNER JOIN Categories ON Categories.Id = Entries.CategoryId " +
+                "INNER JOIN Sections ON Sections.Id = Categories.SectionId AND Sections.Id=:sectionId " +
+                "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
+            command.Parameters.AddWithValue("sectionId", sectionId);
+            var data = await command.ExecuteQueryAsync();
+            return data.Rows.AsEnumerable().Select(r => new Entry
             {
-                command.CommandText = "SELECT Entries.* FROM Entries " +
-                    "INNER JOIN Categories ON Categories.Id = Entries.CategoryId " +
-                    "INNER JOIN Sections ON Sections.Id = Categories.SectionId AND Sections.Id=:sectionId " +
-                    "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
-                command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
-                command.Parameters.AddWithValue("sectionId", sectionId);
-                var data = await command.ExecuteQueryAsync();
-                return data.Rows.AsEnumerable().Select(r => new Entry
-                {
-                    Id = r.Field<long>("Id"),
-                    CategoryId = r.Field<long>("CategoryId"),
-                    CreationDate = r.Field<DateTime>("CreationDate"),
-                    Color = EntryColor.Parse<EntryColor>(r.Field<string>("Color")),
-                    Caption = r.Field<string>("Caption"),
-                    Text = r.Field<string>("Text"),
-                    Alarm = r.Field<DateTime?>("Alarm"),
-                    AlarmIsOn = r.Field<bool>("AlarmIsOn"),
-                }).ToArray();
-            }
+                Id = r.Field<long>("Id"),
+                CategoryId = r.Field<long>("CategoryId"),
+                CreationDate = r.Field<DateTime>("CreationDate"),
+                Color = EntryColor.Parse<EntryColor>(r.Field<string>("Color")),
+                Caption = r.Field<string>("Caption"),
+                Text = r.Field<string>("Text"),
+                Alarm = r.Field<DateTime?>("Alarm"),
+                AlarmIsOn = r.Field<bool>("AlarmIsOn"),
+            }).ToArray();
         }
 
         public async Task<Entry> GetEntry(long id, string userName = null)
@@ -214,7 +212,7 @@ namespace SlepoffStore.Core
                 "INNER JOIN Categories ON Categories.Id = Entries.CategoryId AND Entries.Id=:id " +
                 "INNER JOIN Sections ON Sections.Id = Categories.SectionId " +
                 "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
-            command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
             command.Parameters.AddWithValue("id", id);
             var data = await command.ExecuteQueryAsync();
             return data.Rows.AsEnumerable().Select(r => new Entry
@@ -262,8 +260,8 @@ namespace SlepoffStore.Core
                 "INNER JOIN Users ON Devices.UserId = Users.Id AND Users.Name = :userName AND Devices.Name=:deviceName " +
                 "LIMIT 1";
             command.Parameters.AddWithValue("entryId", sheet.EntryId);
-            command.Parameters.AddWithValue("deviceName", deviceName != null ? deviceName : _deviceName);
-            command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
+            command.Parameters.AddWithValue("deviceName", deviceName ?? _deviceName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
             command.Parameters.AddWithValue("posX", sheet.PosX);
             command.Parameters.AddWithValue("posY", sheet.PosY);
             command.Parameters.AddWithValue("width", sheet.Width);
@@ -280,8 +278,8 @@ namespace SlepoffStore.Core
                 "INNER JOIN Sections ON Sections.Id = Categories.SectionId " +
                 "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName " +
                 "INNER JOIN Devices ON Devices.UserId = Users.Id AND Devices.Name = :deviceName";
-            command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
-            command.Parameters.AddWithValue("deviceName", deviceName != null ? deviceName : _deviceName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
+            command.Parameters.AddWithValue("deviceName", deviceName ?? _deviceName);
             var data = await command.ExecuteQueryAsync();
             return data.Rows.AsEnumerable().Select(r => new UISheet
             {
@@ -333,7 +331,7 @@ namespace SlepoffStore.Core
                 "ON CONFLICT (Key,UserId) DO UPDATE SET Value = excluded.Value";
             command.Parameters.AddWithValue("key", key);
             command.Parameters.AddWithValue("value", value);
-            command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
             await command.ExecuteNonQueryAsync();
         }
 
@@ -344,7 +342,7 @@ namespace SlepoffStore.Core
                 "SELECT KeyValues.* FROM KeyValues " +
                 "INNER JOIN Users ON KeyValues.UserId=Users.Id AND KeyValues.Key=:key AND Users.Name=:userName";
             command.Parameters.AddWithValue("key", key);
-            command.Parameters.AddWithValue("userName", userName != null ? userName : _userName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
             var data = await command.ExecuteQueryAsync();
             return data.Rows.AsEnumerable().Select(r => r.Field<string>("Value")).FirstOrDefault();
         }
@@ -381,14 +379,12 @@ namespace SlepoffStore.Core
             {
                 lock (_syncObj)
                 {
-                    using (var transaction = command.Connection.BeginTransaction())
-                    {
+                    var transaction = command.Connection.BeginTransaction();
                         command.Transaction = transaction;
                         command.ExecuteNonQuery();
                         var lastId = command.Connection.LastInsertRowId;
                         transaction.Commit();
                         return lastId;
-                    }
                 }
             });
         }
@@ -399,15 +395,13 @@ namespace SlepoffStore.Core
             {
                 lock (_syncObj)
                 {
-                    using (var transaction = command.Connection.BeginTransaction())
-                    {
-                        command.Transaction = transaction;
+                    using var transaction = command.Connection.BeginTransaction();
+                         command.Transaction = transaction;
                         var data = new DataTable();
                         using var adapter = new SQLiteDataAdapter(command);
                         adapter.Fill(data);
                         transaction.Commit();
                         return data;
-                    }
                 }
             });
         }

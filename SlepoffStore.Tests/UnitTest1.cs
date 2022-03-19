@@ -13,7 +13,7 @@ namespace SlepoffStore.Tests
         [Test]
         public void Test1()
         {
-            using var repository = new RemoteRepository("http://localhost:5000");
+            using var repository = new RemoteRepository("http://localhost:5000", "root", "1", "LAPTOP-SSV");
             var res = repository.GetSections();
             Assert.Pass();
         }
