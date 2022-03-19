@@ -1,7 +1,10 @@
 ﻿using RestSharp;
+using RestSharp.Authenticators;
 using RestSharp.Serializers.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Security;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -24,11 +27,21 @@ namespace SlepoffStore.Core
             var options = new RestClientOptions(url)
             {
                 ThrowOnAnyError = true,
-                Timeout = 50000
+                Timeout = 50000,
+            //    RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) =>
+            //    {
+            //        if (sslPolicyErrors == SslPolicyErrors.RemoteCertificateNameMismatch)
+            //        {
+            //            // затычка: по нормальному пока не работает почему-то....
+            //            return certificate.Subject.Contains("CN=dotkit.ru");
+            //        }
+            //        return false;
+            //    }
             };
 
             _restClient = new RestClient(options);
-
+            _restClient.Authenticator = new HttpBasicAuthenticator("root", "1");
+ 
             var jsonOptions = new JsonSerializerOptions();
             jsonOptions.Converters.Add(new JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.CamelCase));
             jsonOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
