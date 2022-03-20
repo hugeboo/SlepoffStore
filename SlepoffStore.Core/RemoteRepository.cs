@@ -188,7 +188,7 @@ namespace SlepoffStore.Core
 
         public async Task DeleteUISheet(UISheet sheet, string userName = null)
         {
-            var rr = new RestRequest(API_PATH + "uisheets");
+            var rr = new RestRequest(API_PATH + "uisheets").AddJsonBody(sheet);
             AddHeaders(rr, userName, null);
             var res = await _restClient.DeleteAsync<ApiResult>(rr);
         }

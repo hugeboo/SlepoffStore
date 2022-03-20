@@ -2,7 +2,7 @@
   "profiles": {
     "SlepoffStore": {
       "commandName": "Project",
-      "commandLineArgs": "/server: \"https://dotkit.ru\" /username: root"
+      "commandLineArgs": "/server: \"http://localhost:5000\" /username: root"
     }
   }
 }

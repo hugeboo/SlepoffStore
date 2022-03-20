@@ -40,7 +40,7 @@ namespace SlepoffStore.Tools
             _player = null;
         }
 
-        private async void StartAlarm()
+        private async Task StartAlarm()
         {
             using var repo = Program.CreateRepository();
             var wav = await repo.GetValue("AlarmRingtone");
@@ -57,7 +57,7 @@ namespace SlepoffStore.Tools
             _mainTimer.Change(MAIN_TIMER_ALARM_INTERVAL, MAIN_TIMER_ALARM_INTERVAL);
         }
 
-        private void MainTimerCallback(object? state)
+        private async void MainTimerCallback(object? state)
         {
             if (Monitor.TryEnter(_mainTimer))
             {
@@ -71,7 +71,7 @@ namespace SlepoffStore.Tools
                     }
                     else
                     {
-                        if (alarm) StartAlarm();
+                        if (alarm) await StartAlarm();
                     }
                 }
                 finally

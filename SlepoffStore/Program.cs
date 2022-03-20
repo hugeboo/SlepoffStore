@@ -50,7 +50,7 @@ namespace SlepoffStore
             var menu = new ContextMenuStrip();
             menu.Items.AddRange(new ToolStripItem[]
             {
-                    new ToolStripMenuItem("Add New", null, (s, e) => sm.AddNew()),
+                    new ToolStripMenuItem("Add New", null, async (s, e) => await sm.AddNew()),
                     new ToolStripSeparator(),
                     new ToolStripMenuItem("Open Store Window...", null, (s, e) =>
                     {

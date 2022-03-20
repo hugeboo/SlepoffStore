@@ -23,12 +23,12 @@ namespace SlepoffStore.Tools
             MainFont = FontFromString(await repo.GetValue("MainFont"));
         }
 
-        public static void Save()
+        public static async Task Save()
         {
             using var repo = Program.CreateRepository();
-            repo.SetValue("StartWithWindows", StartWithWindows.ToString().ToLower());
-            repo.SetValue("AlarmRingtone", AlarmRingtone);
-            repo.SetValue("MainFont", MainFont != null ? FontToString(MainFont) : null);
+            await repo.SetValue("StartWithWindows", StartWithWindows.ToString().ToLower());
+            await repo.SetValue("AlarmRingtone", AlarmRingtone);
+            await repo.SetValue("MainFont", MainFont != null ? FontToString(MainFont) : null);
         }
 
         public static void ActualizeStartWithWindows()

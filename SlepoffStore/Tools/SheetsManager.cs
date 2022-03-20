@@ -72,7 +72,7 @@ namespace SlepoffStore.Tools
             _sheets.Remove((sender as SheetForm).UISheet.Id, out _);
         }
 
-        public async void ShowSheet(Entry entry)
+        public async Task ShowSheet(Entry entry)
         {
             if (entry == null || _sheets.Any(s => s.Value.Entry.Id == entry.Id))
                 return;
@@ -97,7 +97,7 @@ namespace SlepoffStore.Tools
             _sheets[form.UISheet.Id] = form;
         }
 
-        public async void CloseSheet(Entry entry)
+        public async Task CloseSheet(Entry entry)
         {
             if (entry == null || !_sheets.Any(s => s.Value.Entry.Id == entry.Id))
                 return;
@@ -108,10 +108,10 @@ namespace SlepoffStore.Tools
             form.Value.Close();
         }
 
-        public async void AddNew()
+        public async Task AddNew()
         {
             using var repo = Program.CreateRepository();
-            var cat = EnsureNewCategory(repo);
+            var cat = await EnsureNewCategory(repo);
             var entry = new Entry
             {
                 CategoryId = cat.Id,

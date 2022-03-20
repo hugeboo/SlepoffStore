@@ -64,7 +64,7 @@ namespace SlepoffStore
             }
         }
 
-        private void dataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private async void dataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             // Displayed
             if (e.RowIndex >= 0 && e.ColumnIndex == dataGridView.Columns.IndexOf(displayedDataGridViewTextBoxColumn))
@@ -74,12 +74,12 @@ namespace SlepoffStore
                 {
                     if (item.Displayed)
                     {
-                        _sheetsManager.CloseSheet(item.Entry);
+                        await _sheetsManager.CloseSheet(item.Entry);
                         item.Displayed = false;
                     }
                     else
                     {
-                        _sheetsManager.ShowSheet(item.Entry);
+                        await _sheetsManager.ShowSheet(item.Entry);
                         item.Displayed = true;
                     }
                 }
@@ -91,7 +91,7 @@ namespace SlepoffStore
             await sectionsTreeViewControl.Init();
         }
 
-        private void settingsToolStripButton_Click(object sender, EventArgs e)
+        private async void settingsToolStripButton_Click(object sender, EventArgs e)
         {
             var form = new SettingsForm();
             if (form.ShowDialog(this) == DialogResult.OK)
@@ -99,7 +99,7 @@ namespace SlepoffStore
                 Settings.StartWithWindows = form.StartWithWindows;
                 Settings.AlarmRingtone = form.AlarmRingtone;
                 Settings.MainFont = form.MainFont;
-                Settings.Save();
+                await Settings.Save();
                 Settings.ActualizeStartWithWindows();
                 _sheetsManager.RefreshAllSheets();
             }

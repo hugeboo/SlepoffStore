@@ -72,7 +72,7 @@ namespace SlepoffStore
             //if (!AlarmActivated) this.SendToBack();
         }
 
-        private void timer_Tick(object sender, EventArgs e)
+        private async void timer_Tick(object sender, EventArgs e)
         {
             if (Entry != null && UISheet != null &&
                 (textBox.Text != Entry.Text ||
@@ -83,7 +83,7 @@ namespace SlepoffStore
                 if (textBox.Text != Entry.Text)
                 {
                     Entry.Text = textBox.Text;
-                    repo.UpdateEntry(Entry);
+                    await repo.UpdateEntry(Entry);
                 }
                 if (this.Location.X != UISheet.PosX || this.Location.Y != UISheet.PosY ||
                     this.Width != UISheet.Width || this.Height != UISheet.Height)
@@ -92,18 +92,18 @@ namespace SlepoffStore
                     UISheet.PosY = this.Location.Y;
                     UISheet.Width = this.Width;
                     UISheet.Height = this.Height;
-                    repo.UpdateUISheet(UISheet);
+                    await repo.UpdateUISheet(UISheet);
                 }
             }
         }
 
-        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show(this, "The note will be hidden, but the entry will remain in the database. Proceed?", "Slepoff Store", 
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 using var repo = Program.CreateRepository();
-                repo.DeleteUISheet(UISheet);
+                await repo.DeleteUISheet(UISheet);
                 this.Close();
             }
         }
@@ -132,14 +132,14 @@ namespace SlepoffStore
             colorsToolStripComboBox.SelectedItem = Entry?.Color.ToString();
         }
 
-        private void colorsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private async void colorsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (Entry == null) return;
             if (Entry.Color.ToString() != colorsToolStripComboBox.Text)
             {
                 Entry.Color = EntryColor.Parse<EntryColor>(colorsToolStripComboBox.Text);
                 using var repo = Program.CreateRepository();
-                repo.UpdateEntry(Entry);
+                await repo.UpdateEntry(Entry);
                 _currentColor = Entry.Color;
                 RestoreColors();
                 sheetAlarmControl.Init(Entry);
@@ -155,19 +155,19 @@ namespace SlepoffStore
             }
         }
 
-        private void contextMenuStrip_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        private async void contextMenuStrip_Closing(object sender, ToolStripDropDownClosingEventArgs e)
         {
             if (Entry == null) return;
             if (Entry.Caption != captionToolStripTextBox.Text)
             {
                 Entry.Caption = captionToolStripTextBox.Text;
                 using var repo = Program.CreateRepository();
-                repo.UpdateEntry(Entry);
+                await repo.UpdateEntry(Entry);
                 this.Invalidate();
             }
         }
 
-        private void setAlarmToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void setAlarmToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var form = new AlarmEditorForm();
             if (!Entry.Alarm.HasValue)
@@ -185,7 +185,7 @@ namespace SlepoffStore
                 using var repo = Program.CreateRepository();
                 Entry.Alarm = form.AlarmDateTime;
                 Entry.AlarmIsOn = form.AlarmEnabled;
-                repo.UpdateEntry(Entry);
+                await repo.UpdateEntry(Entry);
                 sheetAlarmControl.Init(Entry);
             }
         }

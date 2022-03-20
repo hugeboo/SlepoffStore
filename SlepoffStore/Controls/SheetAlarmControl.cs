@@ -45,25 +45,25 @@ namespace SlepoffStore.Controls
             }
         }
 
-        private void DisableAlarm(MouseEventArgs e)
+        private async Task DisableAlarm(MouseEventArgs e)
         {
             if (AlarmActivated && e.Button == MouseButtons.Left)
             {
                 using var repo = Program.CreateRepository();
                 _entry.AlarmIsOn = false;
-                repo.UpdateEntry(_entry);
+                await repo.UpdateEntry(_entry);
                 this.Visible = false;
             }
         }
 
-        private void textLabel_MouseDown(object sender, MouseEventArgs e)
+        private async void textLabel_MouseDown(object sender, MouseEventArgs e)
         {
-            DisableAlarm(e);
+            await DisableAlarm(e);
         }
 
-        private void imageLabel_MouseDown(object sender, MouseEventArgs e)
+        private async void imageLabel_MouseDown(object sender, MouseEventArgs e)
         {
-            DisableAlarm(e);
+            await DisableAlarm(e);
         }
     }
 }
