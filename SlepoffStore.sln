@@ -10,11 +10,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlepoffStore.Core", "SlepoffStore.Core\SlepoffStore.Core.csproj", "{4A0316EE-C208-4AE8-B144-975CE31F14B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlepoffStore.Core", "SlepoffStore.Core\SlepoffStore.Core.csproj", "{4A0316EE-C208-4AE8-B144-975CE31F14B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlepoffStore.WebApi", "SlepoffStore.WebApi\SlepoffStore.WebApi.csproj", "{EB924E2F-B99F-4DAC-873B-15C054E2748B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlepoffStore.WebApi", "SlepoffStore.WebApi\SlepoffStore.WebApi.csproj", "{EB924E2F-B99F-4DAC-873B-15C054E2748B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlepoffStore.Tests", "SlepoffStore.Tests\SlepoffStore.Tests.csproj", "{ADF93232-EBE2-49E5-A6BC-0062EEA1C11D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlepoffStore.Tests", "SlepoffStore.Tests\SlepoffStore.Tests.csproj", "{ADF93232-EBE2-49E5-A6BC-0062EEA1C11D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlepoffStoreApp", "SlepoffStoreApp\SlepoffStoreApp.csproj", "{2533DD8A-7C4B-4A1A-8F61-83467653C283}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,12 @@ Global
 		{ADF93232-EBE2-49E5-A6BC-0062EEA1C11D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADF93232-EBE2-49E5-A6BC-0062EEA1C11D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADF93232-EBE2-49E5-A6BC-0062EEA1C11D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
