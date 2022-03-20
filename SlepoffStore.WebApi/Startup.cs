@@ -99,7 +99,10 @@ namespace SlepoffStore.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseBasicAuthMiddleware();
+            if (bool.TryParse(Configuration["ApplicationSettings:UseAuthorization"], out bool useAuth) && useAuth)
+            {
+                app.UseBasicAuthMiddleware();
+            }
 
             app.UseRouting();
 
