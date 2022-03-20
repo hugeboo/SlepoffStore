@@ -51,18 +51,17 @@ namespace SlepoffStore
 
         private void RestoreColors()
         {
-            this.BackColor = _currentColor.ToColor();
+            this.BackColor = _currentColor.ToColor().AdjustLightnessAndSaturation(1.2, 0.8);
             if (AlarmActivated)
             {
                 this.HeaderBackColor = Color.Transparent;
             }
             else
             {
-                this.HeaderBackColor = ColorUtils.AdjustLightness(this.BackColor,
-                    _currentColor.IsDark() ? 1.2 : 0.8);
+                this.HeaderBackColor = this.BackColor.AdjustLightness(_currentColor.IsDark() ? 1.2 : 0.8);
             }
 
-            textBox.BackColor = _currentColor.ToColor();
+            textBox.BackColor = this.BackColor;
             textBox.ForeColor = _currentColor.GetForeColor();
         }
 

@@ -9,10 +9,28 @@ namespace SlepoffStore.Tools
 {
     public static class ColorUtils
     {
-        public static Color AdjustLightness(Color color, double percent)
+
+        public static Color AdjustLightnessAndSaturation(this Color color, double lightPercent, double saturPercent)
         {
             ColorUtils.RgbToHls(color.R, color.G, color.B, out double h, out double l, out double s);
-            l = (percent > 1.0 && l == 0.0) ? Math.Min(1.0, percent - 1.0) : l * percent;
+            l = Math.Min(1.0, (lightPercent > 1.0 && l == 0.0) ? lightPercent - 1.0 : l * lightPercent);
+            s = Math.Min(1.0, (saturPercent > 1.0 && s == 0.0) ? saturPercent - 1.0 : s * saturPercent);
+            ColorUtils.HlsToRgb(h, l, s, out int r, out int g, out int b);
+            return Color.FromArgb(color.A, r, g, b);
+        }
+        
+        public static Color AdjustLightness(this Color color, double percent)
+        {
+            ColorUtils.RgbToHls(color.R, color.G, color.B, out double h, out double l, out double s);
+            l = Math.Min(1.0, (percent > 1.0 && l == 0.0) ? percent - 1.0 : l * percent);
+            ColorUtils.HlsToRgb(h, l, s, out int r, out int g, out int b);
+            return Color.FromArgb(color.A, r, g, b);
+        }
+
+        public static Color AdjustSaturation(this Color color, double percent)
+        {
+            ColorUtils.RgbToHls(color.R, color.G, color.B, out double h, out double l, out double s);
+            s = Math.Min(1.0, (percent > 1.0 && s == 0.0) ? percent - 1.0 : s * percent);
             ColorUtils.HlsToRgb(h, l, s, out int r, out int g, out int b);
             return Color.FromArgb(color.A, r, g, b);
         }
