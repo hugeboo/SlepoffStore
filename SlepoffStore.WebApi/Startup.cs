@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,8 +34,8 @@ namespace SlepoffStore.WebApi
             var connectionString = Configuration["ApplicationSettings:ConnectionString"];
 
             services
-                .AddControllers()
-                .AddJsonOptions(j =>
+               .AddControllers()
+               .AddJsonOptions(j =>
                 {
                     j.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.CamelCase));
                     j.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
@@ -50,6 +51,16 @@ namespace SlepoffStore.WebApi
             {
                 throw new Exception("Invalid DBMS");
             }
+
+            services.AddHttpLogging(options =>
+            {
+                options.LoggingFields = HttpLoggingFields.RequestPropertiesAndHeaders |
+                                        HttpLoggingFields.RequestBody |
+                                        HttpLoggingFields.ResponsePropertiesAndHeaders |
+                                        HttpLoggingFields.ResponseBody;
+                options.RequestHeaders.Add("SS-UserName");
+                options.RequestHeaders.Add("SS-DeviceName");
+            });
 
             services.AddScoped<IUserService, UserService>();
 
@@ -80,6 +91,8 @@ namespace SlepoffStore.WebApi
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandlerMiddleware();
+
+            app.UseHttpLogging();
 
             if (env.IsDevelopment())
             {
