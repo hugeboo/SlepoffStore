@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SlepoffStore.Core\SlepoffStore.Core.csproj" />
+    <ProjectReference Include="..\SlepoffStore.Repository\SlepoffStore.Repository.csproj" />
   </ItemGroup>
 
 </Project>

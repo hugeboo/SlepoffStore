@@ -14,9 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlepoffStore.Core", "Slepof
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlepoffStore.WebApi", "SlepoffStore.WebApi\SlepoffStore.WebApi.csproj", "{EB924E2F-B99F-4DAC-873B-15C054E2748B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlepoffStore.Tests", "SlepoffStore.Tests\SlepoffStore.Tests.csproj", "{ADF93232-EBE2-49E5-A6BC-0062EEA1C11D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlepoffStoreApp", "SlepoffStoreApp\SlepoffStoreApp.csproj", "{2533DD8A-7C4B-4A1A-8F61-83467653C283}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlepoffStore.Repository", "SlepoffStore.Repository\SlepoffStore.Repository.csproj", "{E21E211C-06CB-4E4C-A476-7DFFF4019526}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,16 +36,16 @@ Global
 		{EB924E2F-B99F-4DAC-873B-15C054E2748B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB924E2F-B99F-4DAC-873B-15C054E2748B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB924E2F-B99F-4DAC-873B-15C054E2748B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADF93232-EBE2-49E5-A6BC-0062EEA1C11D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADF93232-EBE2-49E5-A6BC-0062EEA1C11D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADF93232-EBE2-49E5-A6BC-0062EEA1C11D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADF93232-EBE2-49E5-A6BC-0062EEA1C11D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2533DD8A-7C4B-4A1A-8F61-83467653C283}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{E21E211C-06CB-4E4C-A476-7DFFF4019526}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E21E211C-06CB-4E4C-A476-7DFFF4019526}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E21E211C-06CB-4E4C-A476-7DFFF4019526}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E21E211C-06CB-4E4C-A476-7DFFF4019526}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

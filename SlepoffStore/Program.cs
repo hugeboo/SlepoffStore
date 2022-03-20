@@ -1,4 +1,5 @@
 using SlepoffStore.Core;
+using SlepoffStore.Repository;
 using SlepoffStore.Tools;
 
 namespace SlepoffStore

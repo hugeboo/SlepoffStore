@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SlepoffStore.Core;
+using SlepoffStore.Repository;
 using System.Net;
 
 namespace SlepoffStore.WebApi.Controllers

@@ -109,6 +109,12 @@
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.0.0.1" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SlepoffStore.Core\SlepoffStore.Core.csproj">
+      <Project>{4a0316ee-c208-4ae8-b144-975ce31f14b7}</Project>
+      <Name>SlepoffStore.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
     Other similar extension points exist, see Microsoft.Common.targets.

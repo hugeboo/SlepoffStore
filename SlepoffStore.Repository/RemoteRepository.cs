@@ -1,6 +1,7 @@
 ﻿using RestSharp;
 using RestSharp.Authenticators;
 using RestSharp.Serializers.Json;
+using SlepoffStore.Core;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -10,7 +11,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace SlepoffStore.Core
+namespace SlepoffStore.Repository
 {
     public sealed class RemoteRepository : IRepository
     {

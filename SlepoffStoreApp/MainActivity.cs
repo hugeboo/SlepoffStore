@@ -7,6 +7,7 @@ using AndroidX.AppCompat.Widget;
 using AndroidX.AppCompat.App;
 using Google.Android.Material.FloatingActionButton;
 using Google.Android.Material.Snackbar;
+using SlepoffStore.Core;
 
 namespace SlepoffStoreApp
 {
@@ -24,6 +25,10 @@ namespace SlepoffStoreApp
 
             FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
             fab.Click += FabOnClick;
+
+            //var rr = new RemoteRepository("https://195.133.44.24", "root", "1", "LAPTOP-SSV");
+            //var sections = rr.GetSections().GetAwaiter().GetResult();
+            //var section = new Section();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

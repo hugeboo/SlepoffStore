@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using SlepoffStore.Core;
+using SlepoffStore.Repository;
 using SlepoffStore.WebApi.Middleware;
 using SlepoffStore.WebApi.Services;
 

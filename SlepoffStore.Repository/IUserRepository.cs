@@ -1,9 +1,10 @@
-﻿using System;
+﻿using SlepoffStore.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SlepoffStore.Core
+namespace SlepoffStore.Repository
 {
     public interface IUserRepository
     {
