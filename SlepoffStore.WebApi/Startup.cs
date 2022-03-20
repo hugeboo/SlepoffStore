@@ -79,16 +79,16 @@ namespace SlepoffStore.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseExceptionHandlerMiddleware();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseExceptionHandlerMiddleware();
+            app.UseBasicAuthMiddleware();
 
             app.UseRouting();
-
-            app.UseBasicAuthMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

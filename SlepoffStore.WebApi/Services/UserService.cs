@@ -12,18 +12,26 @@ namespace SlepoffStore.WebApi.Services
     internal sealed class UserService : IUserService
     {
         private readonly IUserRepository _repository;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(IUserRepository repository)
+        public UserService(IUserRepository repository, ILogger<UserService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<bool> CheckCredentials(string username, string password)
         {
             var user = await _repository.GetUser(username);
-            if (user == null) return false;
+            if (user == null)
+            {
+                _logger.LogTrace("User '{0}' is not found in db", username);
+                return false;
+            }
             var pwd = ComputeSha256Hash(password);
-            return user.Password == pwd;
+            var ok = user.Password == pwd;
+            if (!ok) _logger.LogTrace("User '{0}': password incorrect", username);
+            return ok;
         }
 
         private static string ComputeSha256Hash(string rawData)
