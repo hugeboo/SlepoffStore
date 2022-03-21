@@ -31,7 +31,7 @@ namespace SlepoffStore.Repository
             var options = new RestClientOptions(url)
             {
                 ThrowOnAnyError = true,
-                Timeout = 50000,
+                Timeout = 5000,
 
                 // !!! ONLY for debug
                 //RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
