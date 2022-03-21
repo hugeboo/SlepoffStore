@@ -109,7 +109,8 @@ namespace SlepoffStore
         {
             if (!ForceClose)
             {
-                this.WindowState = FormWindowState.Minimized;
+                //this.WindowState = FormWindowState.Minimized;
+                this.Hide();
                 e.Cancel = true;
             }
         }

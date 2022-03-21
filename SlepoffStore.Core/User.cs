@@ -10,5 +10,10 @@ namespace SlepoffStore.Core
         public string Name { get; set; }
         public string Password { get; set; }
         public string Comments { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id:{Id} Name:{Name}";
+        }
     }
 }

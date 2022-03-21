@@ -56,6 +56,7 @@ namespace SlepoffStore
                     new ToolStripMenuItem("Open Store Window...", null, (s, e) =>
                     {
                         mainForm.WindowState = FormWindowState.Normal;
+                        mainForm.Show();
                         mainForm.Activate();
                     }),
                     new ToolStripSeparator(),
