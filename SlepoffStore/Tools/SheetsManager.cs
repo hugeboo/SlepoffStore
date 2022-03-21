@@ -24,6 +24,8 @@ namespace SlepoffStore.Tools
         private readonly ConcurrentDictionary<long, SheetForm> _sheets = new();
         private readonly AlarmManager _alarmManger;
 
+        public event EventHandler<GenericEventArgs<SheetForm[]>> SheetsListChanged;
+
         public SheetsManager()
         {
             _alarmManger = new AlarmManager(this);
@@ -37,10 +39,11 @@ namespace SlepoffStore.Tools
         {
             foreach (var kvp in _sheets)
             {
-                kvp.Value.FormClosed -= Form_FormClosed;
+                kvp.Value.FormClosed -= SheetForm_FormClosed;
                 kvp.Value.Close();
             }
             _sheets.Clear();
+            SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
             Collapsed = true;
         }
 
@@ -66,11 +69,13 @@ namespace SlepoffStore.Tools
 
             SetForegroundWindow(focus);
             Collapsed = false;
+            SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
         }
 
-        private void Form_FormClosed(object? sender, FormClosedEventArgs e)
+        private void SheetForm_FormClosed(object? sender, FormClosedEventArgs e)
         {
             _sheets.Remove((sender as SheetForm).UISheet.Id, out _);
+            SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
         }
 
         public async Task ShowSheet(Entry entry)
@@ -96,6 +101,7 @@ namespace SlepoffStore.Tools
             form.Init(entry, uiSheet);
 
             _sheets[form.UISheet.Id] = form;
+            SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
         }
 
         public async Task CloseSheet(Entry entry)
@@ -142,17 +148,15 @@ namespace SlepoffStore.Tools
             form.BringToFront();
 
             _sheets[form.UISheet.Id] = form;
+            SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
         }
 
         public void RefreshAllSheets()
         {
-            lock (_sheets)
+            foreach (var sheet in _sheets.ToArray())
             {
-                foreach (var sheet in _sheets)
-                {
-                    sheet.Value.MainFont = Settings.MainFont;
-                    sheet.Value.Refresh();
-                }
+                sheet.Value.MainFont = Settings.MainFont;
+                sheet.Value.Refresh();
             }
         }
 
@@ -177,7 +181,7 @@ namespace SlepoffStore.Tools
         private SheetForm CreateSheetForm()
         {
             var form = new SheetForm();
-            form.FormClosed += Form_FormClosed;
+            form.FormClosed += SheetForm_FormClosed;
             form.MainFont = Settings.MainFont;
             return form;
         }

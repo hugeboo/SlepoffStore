@@ -42,9 +42,10 @@
             this.textDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.entryGridItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.addToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.refreshToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.settingsToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -185,6 +186,7 @@
             // 
             this.toolStrip.ImageScalingSize = new System.Drawing.Size(48, 48);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addToolStripButton,
             this.refreshToolStripButton,
             this.settingsToolStripButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
@@ -192,6 +194,18 @@
             this.toolStrip.Size = new System.Drawing.Size(814, 57);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
+            // 
+            // addToolStripButton
+            // 
+            this.addToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.addToolStripButton.Image = global::SlepoffStore.Properties.Resources.icons8_плюс_64;
+            this.addToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.addToolStripButton.Margin = new System.Windows.Forms.Padding(0);
+            this.addToolStripButton.Name = "addToolStripButton";
+            this.addToolStripButton.Padding = new System.Windows.Forms.Padding(0, 2, 0, 3);
+            this.addToolStripButton.Size = new System.Drawing.Size(52, 57);
+            this.addToolStripButton.Text = "Add New";
+            this.addToolStripButton.Click += new System.EventHandler(this.addToolStripButton_Click);
             // 
             // refreshToolStripButton
             // 
@@ -213,14 +227,14 @@
             this.settingsToolStripButton.Text = "Settings";
             this.settingsToolStripButton.Click += new System.EventHandler(this.settingsToolStripButton_Click);
             // 
-            // statusStrip1
+            // statusStrip
             // 
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.statusStrip1.Location = new System.Drawing.Point(0, 451);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(814, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.statusStrip.Location = new System.Drawing.Point(0, 451);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(814, 22);
+            this.statusStrip.TabIndex = 2;
+            this.statusStrip.Text = "statusStrip1";
             // 
             // MainForm
             // 
@@ -229,11 +243,12 @@
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(818, 473);
             this.Controls.Add(this.splitContainer);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MinimizeBox = false;
             this.Name = "MainForm";
             this.Padding = new System.Windows.Forms.Padding(0, 0, 4, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -263,7 +278,7 @@
         private ToolStrip toolStrip;
         private ToolStripButton refreshToolStripButton;
         private ToolStripButton settingsToolStripButton;
-        private StatusStrip statusStrip1;
+        private StatusStrip statusStrip;
         private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private DataGridViewCheckBoxColumn displayedDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn createdDataGridViewTextBoxColumn;
@@ -271,5 +286,6 @@
         private DataGridViewTextBoxColumn alarmDataGridViewTextBoxColumn;
         private DataGridViewCheckBoxColumn alarmIsOnDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
+        private ToolStripButton addToolStripButton;
     }
 }

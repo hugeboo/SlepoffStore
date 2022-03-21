@@ -2,7 +2,7 @@
   "profiles": {
     "SlepoffStore": {
       "commandName": "Project",
-      "commandLineArgs": "/server: \"https://195.133.44.24:443\" /username: root"
+      "commandLineArgs": "/server: \"https://dotkit.ru\" /username: root"
     }
   }
 }

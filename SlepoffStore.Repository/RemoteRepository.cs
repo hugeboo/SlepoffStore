@@ -34,7 +34,7 @@ namespace SlepoffStore.Repository
                 Timeout = 50000,
 
                 // !!! ONLY for debug
-                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+                //RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
             };
 
             _restClient = new RestClient(options)

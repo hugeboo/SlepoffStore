@@ -15,7 +15,7 @@ namespace SlepoffStore.Tools
 
         public static string ApplicationPath => Application.ExecutablePath;
 
-        public static async void Load()
+        public static async Task Load()
         {
             using var repo = Program.CreateRepository(); ;
             StartWithWindows = await repo.GetValue("StartWithWindows") == "true";
@@ -49,7 +49,7 @@ namespace SlepoffStore.Tools
                 }
                 else if (Program.Source == Program.SourceType.WebService)
                 {
-                    var autorunCommandLine = $"{Application.ExecutablePath} /server: \"{Program.SourceUrl}\" /username: \"{Program.UserName}\"";
+                    var autorunCommandLine = $"{Application.ExecutablePath} /server: \"{Program.SourceUrl}\" /username: \"{Program.UserName}\" /password: \"{Program.Password}\"";
                     if (regValue != autorunCommandLine) reg.SetValue(regKey, autorunCommandLine);
                 }
             }

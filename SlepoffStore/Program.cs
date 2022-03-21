@@ -18,7 +18,7 @@ namespace SlepoffStore
         public static string Password { get; private set; }
 
         [STAThread]
-        static void Main()
+        static async Task Main()
         {
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);
 
@@ -36,7 +36,7 @@ namespace SlepoffStore
 
             if (!RequestAuthInfo()) return;
 
-            Settings.Load();
+            await Settings.Load();
             Settings.ActualizeStartWithWindows();
 
             var sm = new SheetsManager();
@@ -47,6 +47,7 @@ namespace SlepoffStore
             mainForm.Show();
 
             using var icon = new NotifyIcon();
+            icon.Text = "Slepoff Store";
             icon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             var menu = new ContextMenuStrip();
             menu.Items.AddRange(new ToolStripItem[]

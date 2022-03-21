@@ -8,6 +8,11 @@ namespace SlepoffStore.Core
     {
         public ApiResultStatus Status { get; set; } = ApiResultStatus.OK;
         public string Text { get; set; }
+
+        public override string ToString()
+        {
+            return $"Status:{Status} Text:{Text}";
+        }
     }
 
     public sealed class ApiResult<T> : ApiResult

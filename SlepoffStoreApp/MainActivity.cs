@@ -8,6 +8,8 @@ using AndroidX.AppCompat.App;
 using Google.Android.Material.FloatingActionButton;
 using Google.Android.Material.Snackbar;
 using SlepoffStore.Core;
+using Xamarin.Essentials;
+using Android.Bluetooth;
 
 namespace SlepoffStoreApp
 {
@@ -26,9 +28,17 @@ namespace SlepoffStoreApp
             FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
             fab.Click += FabOnClick;
 
-            //var rr = new RemoteRepository("https://195.133.44.24", "root", "1", "LAPTOP-SSV");
-            //var sections = rr.GetSections().GetAwaiter().GetResult();
-            //var section = new Section();
+            var deviceName = DeviceInfo.Name;//dandelion
+
+            var myDevice = BluetoothAdapter.DefaultAdapter;
+            var dname = myDevice.Name;
+
+            var rr = new Repository.RemoteRepository("https://195.246.110.89", "root", "1", "LAPTOP-SSV");
+            var sections = rr.GetSections()
+                .ContinueWith(t => 
+                {
+                    var a = t.Result;
+                });
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

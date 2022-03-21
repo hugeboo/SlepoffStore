@@ -5,6 +5,8 @@ namespace SlepoffStore
 {
     public partial class MainForm : Form
     {
+        private const int WM_QUERYENDSESSION = 0x11;
+        private bool _systemShutdown;
         private SheetsManager _sheetsManager;
         private InitMode _initMode;
 
@@ -26,8 +28,30 @@ namespace SlepoffStore
         public MainForm Init(SheetsManager sm, InitMode initMode)
         {
             _sheetsManager = sm;
+            _sheetsManager.SheetsListChanged += sheetsManager_SheetsListChanged;
             _initMode = initMode;
             return this;
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == WM_QUERYENDSESSION)
+            {
+                _systemShutdown = true;
+            }
+            base.WndProc(ref m);
+        }
+
+        private async void sheetsManager_SheetsListChanged(object? sender, GenericEventArgs<SheetForm[]> e)
+        {
+            using var repo = Program.CreateRepository();
+            var uiSheets = await repo.GetUISheets();
+            var ds = dataGridView.DataSource as EntryGridItem[];
+            foreach(var item in ds)
+            {
+                item.Displayed = uiSheets.Any(it => it.EntryId == item.Id);
+            }
+            dataGridView.Invalidate();
         }
 
         private async void SectionsTreeViewControl_SectionSelected(object? sender, GenericEventArgs<SectionEx> e)
@@ -107,12 +131,16 @@ namespace SlepoffStore
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!ForceClose)
+            if (!ForceClose && !_systemShutdown)
             {
-                //this.WindowState = FormWindowState.Minimized;
                 this.Hide();
                 e.Cancel = true;
             }
+        }
+
+        private async void addToolStripButton_Click(object sender, EventArgs e)
+        {
+            await _sheetsManager.AddNew();
         }
     }
 
