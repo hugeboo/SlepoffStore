@@ -45,6 +45,7 @@
             this.addToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.refreshToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.settingsToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.deleteToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -104,7 +105,6 @@
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.GridColor = System.Drawing.SystemColors.Window;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView.MultiSelect = false;
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ReadOnly = true;
             this.dataGridView.RowHeadersVisible = false;
@@ -114,6 +114,7 @@
             this.dataGridView.Size = new System.Drawing.Size(579, 394);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView_CellMouseClick);
+            this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView_SelectionChanged);
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -188,7 +189,8 @@
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addToolStripButton,
             this.refreshToolStripButton,
-            this.settingsToolStripButton});
+            this.settingsToolStripButton,
+            this.deleteToolStripButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(814, 57);
@@ -226,6 +228,17 @@
             this.settingsToolStripButton.Size = new System.Drawing.Size(52, 52);
             this.settingsToolStripButton.Text = "Settings";
             this.settingsToolStripButton.Click += new System.EventHandler(this.settingsToolStripButton_Click);
+            // 
+            // deleteToolStripButton
+            // 
+            this.deleteToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.deleteToolStripButton.Enabled = false;
+            this.deleteToolStripButton.Image = global::SlepoffStore.Properties.Resources.icons8_удалить_64;
+            this.deleteToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.deleteToolStripButton.Name = "deleteToolStripButton";
+            this.deleteToolStripButton.Size = new System.Drawing.Size(52, 52);
+            this.deleteToolStripButton.Text = "Delete Sheet(s)";
+            this.deleteToolStripButton.Click += new System.EventHandler(this.deleteToolStripButton_Click);
             // 
             // statusStrip
             // 
@@ -287,5 +300,6 @@
         private DataGridViewCheckBoxColumn alarmIsOnDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn textDataGridViewTextBoxColumn;
         private ToolStripButton addToolStripButton;
+        private ToolStripButton deleteToolStripButton;
     }
 }

@@ -72,9 +72,28 @@ namespace SlepoffStore.Tools
             SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
         }
 
+        public async Task DeleteEntries(Entry[] entries)
+        {
+            var repo = Program.CreateRepository();
+            foreach (var entry in entries)
+            {
+                var sf = _sheets.Values.FirstOrDefault(f => f.Entry.Id == entry.Id);
+                if (sf != null)
+                {
+                    sf.FormClosed -= SheetForm_FormClosed;
+                    sf.Close();
+                    _sheets.Remove(sf.UISheet.Id, out _);
+                }
+                await repo.DeleteEntry(entry);
+            }
+            SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
+        }
+
         private void SheetForm_FormClosed(object? sender, FormClosedEventArgs e)
         {
-            _sheets.Remove((sender as SheetForm).UISheet.Id, out _);
+            var form = sender as SheetForm;
+            form.FormClosed -= SheetForm_FormClosed;
+            _sheets.Remove(form.UISheet.Id, out _);
             SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
         }
 

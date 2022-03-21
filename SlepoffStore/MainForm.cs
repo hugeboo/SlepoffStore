@@ -141,6 +141,33 @@ namespace SlepoffStore
         private async void addToolStripButton_Click(object sender, EventArgs e)
         {
             await _sheetsManager.AddNew();
+            await sectionsTreeViewControl.Init();
+        }
+
+        private async void deleteToolStripButton_Click(object sender, EventArgs e)
+        {
+            var count = dataGridView.SelectedRows.Count;
+            if (count < 1) return;
+            var s = count == 1 ? "entry" : "entries";
+
+            if (MessageBox.Show(this, 
+                $"Are you sure you want to delete the selected {count} {s}?", "Delete entries", 
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question)== DialogResult.Yes)
+            {
+                var lst = new List<Entry>();
+                foreach(DataGridViewRow row in dataGridView.SelectedRows)
+                {
+                    var item = row.DataBoundItem as EntryGridItem;
+                    if (item?.Entry != null) lst.Add(item.Entry);
+                }
+                await _sheetsManager.DeleteEntries(lst.ToArray());
+                await sectionsTreeViewControl.Init();
+            }
+        }
+
+        private void dataGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            deleteToolStripButton.Enabled = dataGridView.SelectedRows.Count > 0;
         }
     }
 

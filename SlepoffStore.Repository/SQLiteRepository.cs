@@ -94,7 +94,7 @@ namespace SlepoffStore.Repository
 
         public async Task<long> InsertCategory(Category category, string userName = null)
         {
-            var section = GetSection(category.SectionId, userName);
+            var section = await GetSection(category.SectionId, userName);
             if (section == null) throw new Exception("Category is unavailable");
 
             using var command = new SQLiteCommand(_connection);
@@ -145,12 +145,13 @@ namespace SlepoffStore.Repository
 
         public async Task<long> InsertEntry(Entry entry, string userName = null)
         {
-            var category = GetCategory(entry.CategoryId, userName);
+            var category = await GetCategory(entry.CategoryId, userName);
             if (category == null) throw new Exception("Category is unavailable");
 
             using var command = new SQLiteCommand(_connection);
-            command.CommandText = "INSERT INTO Entries (CategoryId, CreationDate, Color, Caption, Text, Alarm, AlarmIsOn) VALUES (:categoryId, :creationDate, :color, :caption, :text, :alarm, :alarmIsOn)";
+            command.CommandText = "INSERT INTO Entries (CategoryId, IsDeleted, CreationDate, Color, Caption, Text, Alarm, AlarmIsOn) VALUES (:categoryId, :isDeleted, :creationDate, :color, :caption, :text, :alarm, :alarmIsOn)";
             command.Parameters.AddWithValue("categoryId", entry.CategoryId);
+            command.Parameters.AddWithValue("isDeleted", false);
             command.Parameters.AddWithValue("creationDate", entry.CreationDate);
             command.Parameters.AddWithValue("color", entry.Color.ToString());
             command.Parameters.AddWithValue("caption", entry.Caption);
@@ -164,7 +165,7 @@ namespace SlepoffStore.Repository
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText = "SELECT Entries.* FROM Entries " +
-                "INNER JOIN Categories ON Categories.Id = Entries.CategoryId AND Categories.Id = :categoryId " +
+                "INNER JOIN Categories ON Categories.Id = Entries.CategoryId AND Categories.Id = :categoryId AND Entries.IsDeleted IS FALSE " +
                 "INNER JOIN Sections ON Sections.Id = Categories.SectionId " +
                 "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
             command.Parameters.AddWithValue("userName", userName ?? _userName);
@@ -188,7 +189,7 @@ namespace SlepoffStore.Repository
             using var command = new SQLiteCommand(_connection);
             command.CommandText = "SELECT Entries.* FROM Entries " +
                 "INNER JOIN Categories ON Categories.Id = Entries.CategoryId " +
-                "INNER JOIN Sections ON Sections.Id = Categories.SectionId AND Sections.Id=:sectionId " +
+                "INNER JOIN Sections ON Sections.Id = Categories.SectionId AND Sections.Id=:sectionId AND Entries.IsDeleted IS FALSE " +
                 "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
             command.Parameters.AddWithValue("userName", userName ?? _userName);
             command.Parameters.AddWithValue("sectionId", sectionId);
@@ -210,7 +211,7 @@ namespace SlepoffStore.Repository
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText = "SELECT Entries.* FROM Entries " +
-                "INNER JOIN Categories ON Categories.Id = Entries.CategoryId AND Entries.Id=:id " +
+                "INNER JOIN Categories ON Categories.Id = Entries.CategoryId AND Entries.Id=:id AND Entries.IsDeleted IS FALSE " +
                 "INNER JOIN Sections ON Sections.Id = Categories.SectionId " +
                 "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
             command.Parameters.AddWithValue("userName", userName ?? _userName);
@@ -231,11 +232,11 @@ namespace SlepoffStore.Repository
 
         public async Task UpdateEntry(Entry entry, string userName = null)
         {
-            var category = GetCategory(entry.CategoryId, userName);
+            var category = await GetCategory(entry.CategoryId, userName);
             if (category == null) throw new Exception("Category is unavailable");
 
             using var command = new SQLiteCommand(_connection);
-            command.CommandText = "UPDATE Entries SET Color=:color,Caption=:caption,Text=:text,Alarm=:alarm,AlarmIsOn=:alarmIsOn WHERE Id=:id";
+            command.CommandText = "UPDATE Entries SET Color=:color,Caption=:caption,Text=:text,Alarm=:alarm,AlarmIsOn=:alarmIsOn WHERE Id=:id AND Entries.IsDeleted IS FALSE";
             command.Parameters.AddWithValue("color", entry.Color.ToString());
             command.Parameters.AddWithValue("caption", entry.Caption);
             command.Parameters.AddWithValue("text", entry.Text);
@@ -245,14 +246,35 @@ namespace SlepoffStore.Repository
             await command.ExecuteMyNonQueryAsync();
         }
 
+        public async Task DeleteEntry(Entry entry, string userName = null)
+        {
+            var category = await GetCategory(entry.CategoryId, userName);
+            if (category == null) throw new Exception("Category is unavailable");
+
+            using var command = new SQLiteCommand(_connection);
+            command.CommandText = "UPDATE Entries SET IsDeleted=:isDeleted WHERE Id=:id";
+            command.Parameters.AddWithValue("isDeleted", true);
+            command.Parameters.AddWithValue("id", entry.Id);
+            await command.ExecuteMyNonQueryAsync();
+
+            using var command2 = new SQLiteCommand(_connection);
+            command2.CommandText = "DELETE FROM UISheets WHERE EntryId=:entryId";
+            command2.Parameters.AddWithValue("entryId", entry.Id);
+            await command2.ExecuteMyNonQueryAsync();
+
+        }
+
+
         #endregion
 
         #region UISheets
 
         public async Task<long> InsertUISheet(UISheet sheet, string userName = null, string deviceName = null)
         {
-            var entry = GetEntry(sheet.EntryId, userName);
+            var entry = await GetEntry(sheet.EntryId, userName);
             if (entry == null) throw new Exception("Entry is unavailable");
+
+            await EnsureDevice(deviceName, userName);
 
             using var command = new SQLiteCommand(_connection);
             command.CommandText =
@@ -274,11 +296,11 @@ namespace SlepoffStore.Repository
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText = "SELECT UISheets.* FROM UISheets " +
-                "INNER JOIN Entries ON Entries.Id = UISheets.EntryId " +
+                "INNER JOIN Devices ON Devices.UserId = Users.Id AND Devices.Name = :deviceName " +
+                "INNER JOIN Entries ON Entries.Id = UISheets.EntryId AND Devices.Id = UISheets.DeviceId " +
                 "INNER JOIN Categories ON Categories.Id = Entries.CategoryId " +
                 "INNER JOIN Sections ON Sections.Id = Categories.SectionId " +
-                "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName " +
-                "INNER JOIN Devices ON Devices.UserId = Users.Id AND Devices.Name = :deviceName";
+                "INNER JOIN Users ON Sections.UserId = Users.Id AND Users.Name = :userName";
             command.Parameters.AddWithValue("userName", userName ?? _userName);
             command.Parameters.AddWithValue("deviceName", deviceName ?? _deviceName);
             var data = await command.ExecuteMyQueryAsync();
@@ -295,7 +317,7 @@ namespace SlepoffStore.Repository
 
         public async Task UpdateUISheet(UISheet sheet, string userName = null)
         {
-            var entry = GetEntry(sheet.EntryId, userName);
+            var entry = await GetEntry(sheet.EntryId, userName);
             if (entry == null) throw new Exception("Entry is unavailable");
 
             using var command = new SQLiteCommand(_connection);
@@ -310,7 +332,7 @@ namespace SlepoffStore.Repository
 
         public async Task DeleteUISheet(UISheet sheet, string userName = null)
         {
-            var entry = GetEntry(sheet.EntryId, userName);
+            var entry = await GetEntry(sheet.EntryId, userName);
             if (entry == null) throw new Exception("Entry is unavailable");
 
             using var command = new SQLiteCommand(_connection);
@@ -365,6 +387,22 @@ namespace SlepoffStore.Repository
                 Password = r.Field<string>("Password"),
                 Comments = r.Field<string>("Comments"),
             }).FirstOrDefault();
+        }
+
+        #endregion
+
+        #region Devices
+
+        private async Task EnsureDevice(string deviceName, string userName = null)
+        {
+            using var command = new SQLiteCommand(_connection);
+            command.CommandText =
+                "INSERT INTO Devices (Name, UserId) " +
+                "SELECT :name,Id FROM Users WHERE Name=:userName LIMIT 1 " +
+                "ON CONFLICT (Name,UserId) DO NOTHING";
+            command.Parameters.AddWithValue("name", deviceName ?? _deviceName);
+            command.Parameters.AddWithValue("userName", userName ?? _userName);
+            await command.ExecuteMyNonQueryAsync();
         }
 
         #endregion

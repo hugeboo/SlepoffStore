@@ -28,7 +28,7 @@ namespace SlepoffStore.Repository
         Task<Entry[]>       GetEntriesBySectionId(long sectionId, string userName = null);
         Task<Entry>         GetEntry(long entryId, string userName = null);
         Task                UpdateEntry(Entry entry, string userName = null);
-        //void DeleteEntry(long entryId);
+        Task                DeleteEntry(Entry entry, string userName = null);
 
         Task<long>          InsertUISheet(UISheet sheet, string userName = null, string deviceName = null);
         Task<UISheet[]>     GetUISheets(string userName = null, string deviceName = null);

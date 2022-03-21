@@ -47,5 +47,17 @@ namespace SlepoffStore.WebApi.Controllers
                 Status = ApiResultStatus.OK
             };
         }
+
+        // POST: api/entries/delete
+        [HttpPost]
+        [Route("delete")]
+        public async Task<ApiResult> Delete([FromBody] Entry entry, [UserFromHeader] string userName)
+        {
+            await _repository.DeleteEntry(entry, userName);
+            return new ApiResult
+            {
+                Status = ApiResultStatus.OK
+            };
+        }
     }
 }

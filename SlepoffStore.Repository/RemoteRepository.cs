@@ -147,6 +147,13 @@ namespace SlepoffStore.Repository
             var res = await _restClient.PostAsync<ApiResult>(rr);
         }
 
+        public async Task DeleteEntry(Entry entry, string userName = null)
+        {
+            var rr = new RestRequest(API_PATH + "entries/delete").AddJsonBody(entry);
+            AddHeaders(rr, userName, null);
+            var res = await _restClient.PostAsync<ApiResult>(rr);
+        }
+
         #endregion
 
         #region KeyValues
