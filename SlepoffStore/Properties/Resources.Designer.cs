@@ -93,6 +93,26 @@ namespace SlepoffStore.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_биологическая_угроза_48 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-биологическая-угроза-48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_биологическая_угроза_96 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-биологическая-угроза-96", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_будильник_24_black {
             get {
                 object obj = ResourceManager.GetObject("icons8-будильник-24-black", resourceCulture);

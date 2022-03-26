@@ -74,7 +74,7 @@ namespace SlepoffStore.Tools
 
         public async Task DeleteEntries(Entry[] entries)
         {
-            var repo = Program.CreateRepository();
+            using var repo = Program.CreateRepository();
             foreach (var entry in entries)
             {
                 var sf = _sheets.Values.FirstOrDefault(f => f.Entry.Id == entry.Id);

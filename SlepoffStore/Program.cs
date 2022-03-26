@@ -13,7 +13,7 @@ namespace SlepoffStore
         [STAThread]
         static async Task Main()
         {
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(MyHandler);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionEventHandler);
 
             //// To customize application configuration such as set high DPI settings or default font,
             //// see https://aka.ms/applicationconfiguration.
@@ -74,10 +74,17 @@ namespace SlepoffStore
             return new RemoteRepository(ServerUrl, UserName, Password, Environment.MachineName);
         }
 
-        private static void MyHandler(object sender, UnhandledExceptionEventArgs args)
+        private static void UnhandledExceptionEventHandler(object sender, UnhandledExceptionEventArgs args)
         {
             var e = args.ExceptionObject as Exception;
-            MessageBox.Show(e?.Message ?? "Unknown error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            if (e == null)
+            {
+                MessageBox.Show("Unknown error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            }
+            else
+            {
+                new ExceptionForm().Init(ExceptionForm.UNKNOWN_ERROR, e);
+            }
             Environment.Exit(1);
         }
 
