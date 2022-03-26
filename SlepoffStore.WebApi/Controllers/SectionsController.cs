@@ -21,7 +21,7 @@ namespace SlepoffStore.WebApi.Controllers
         [HttpGet]
         public async Task<ApiResult<Section[]>> Get([UserFromHeader] string userName)
         {
-            return new ApiResult<Section[]> { Data = await _repository.GetSections(userName) };
+            return new ApiResult<Section[]> { Data = await _repository.ReadSections(userName) };
         }
 
         // GET: api/sections/{id}
@@ -29,7 +29,7 @@ namespace SlepoffStore.WebApi.Controllers
         [Route("{id}")]
         public async Task<ApiResult<Section>> GetById(long id, [UserFromHeader] string userName)
         {
-            return new ApiResult<Section> { Data = await _repository.GetSection(id, userName) };
+            return new ApiResult<Section> { Data = await _repository.ReadSection(id, userName) };
         }
 
         // GET: api/sections/extended
@@ -37,7 +37,7 @@ namespace SlepoffStore.WebApi.Controllers
         [Route("extended")]
         public async Task<ApiResult<SectionEx[]>> GetEx([UserFromHeader] string userName)
         {
-            return new ApiResult<SectionEx[]> { Data = await _repository.GetSectionsEx(userName) };
+            return new ApiResult<SectionEx[]> { Data = await _repository.ReadSectionsEx(userName) };
         }
 
         // GET: api/sections/{sectionId}/entries
@@ -45,7 +45,7 @@ namespace SlepoffStore.WebApi.Controllers
         [Route("{sectionId}/entries")]
         public async Task<ApiResult<Entry[]>> GetEntries(long sectionId, [UserFromHeader] string userName)
         {
-            return new ApiResult<Entry[]> { Data = await _repository.GetEntriesBySectionId(sectionId, userName) };
+            return new ApiResult<Entry[]> { Data = await _repository.ReadEntriesBySectionId(sectionId, userName) };
         }
 
         // POST: api/sections
@@ -55,7 +55,7 @@ namespace SlepoffStore.WebApi.Controllers
             return new ApiResult<long>
             {
                 Status = ApiResultStatus.OK,
-                Data = await _repository.InsertSection(section, userName)
+                Data = await _repository.CreateSection(section, userName)
             };
         }
     }

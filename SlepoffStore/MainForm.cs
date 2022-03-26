@@ -45,7 +45,7 @@ namespace SlepoffStore
         private async void sheetsManager_SheetsListChanged(object? sender, GenericEventArgs<SheetForm[]> e)
         {
             using var repo = Program.CreateRepository();
-            var uiSheets = await repo.GetUISheets();
+            var uiSheets = await repo.ReadUISheets();
             var ds = dataGridView.DataSource as EntryGridItem[];
             foreach(var item in ds)
             {
@@ -57,8 +57,8 @@ namespace SlepoffStore
         private async void SectionsTreeViewControl_SectionSelected(object? sender, GenericEventArgs<SectionEx> e)
         {
             using var repo = Program.CreateRepository();
-            var uiSheets = await repo.GetUISheets();
-            var items = (await repo.GetEntriesBySectionId(e.Data.Id))
+            var uiSheets = await repo.ReadUISheets();
+            var items = (await repo.ReadEntriesBySectionId(e.Data.Id))
                 .Select(e => new EntryGridItem(e) { Displayed = uiSheets.Any(it => it.EntryId == e.Id) })
                 .ToArray();
             dataGridView.DataSource = items;
@@ -67,8 +67,8 @@ namespace SlepoffStore
         private async void SectionsTreeViewControl_CategorySelected(object? sender, GenericEventArgs<Category> e)
         {
             using var repo = Program.CreateRepository();
-            var uiSheets = await repo.GetUISheets();
-            var items = (await repo.GetEntriesByCategoryId(e.Data.Id))
+            var uiSheets = await repo.ReadUISheets();
+            var items = (await repo.ReadEntriesByCategoryId(e.Data.Id))
                 .Select(e => new EntryGridItem(e) { Displayed = uiSheets.Any(it => it.EntryId == e.Id) })
                 .ToArray();
             dataGridView.DataSource = items;

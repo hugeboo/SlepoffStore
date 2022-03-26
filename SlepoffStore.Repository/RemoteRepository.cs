@@ -55,28 +55,28 @@ namespace SlepoffStore.Repository
 
         #region Sections
 
-        public async Task<long> InsertSection(Section section, string userName = null)
+        public async Task<long> CreateSection(Section section, string userName = null)
         {
             var rr = new RestRequest(API_PATH + "sections").AddJsonBody(section);
             AddHeaders(rr, userName, null);
             return (await _restClient.PostAsync<ApiResult<long>>(rr))?.Data ?? 0L;
         }
 
-        public async Task<Section[]> GetSections(string userName = null)
+        public async Task<Section[]> ReadSections(string userName = null)
         {
             var rr = new RestRequest(API_PATH + "sections");
             AddHeaders(rr, userName, null);
             return (await _restClient.GetAsync<ApiResult<Section[]>>(rr))?.Data;
         }
 
-        public async Task<Section> GetSection(long id, string userName = null)
+        public async Task<Section> ReadSection(long id, string userName = null)
         {
             var rr = new RestRequest(API_PATH + $"sections/{id}");
             AddHeaders(rr, userName, null);
             return (await _restClient.GetAsync<ApiResult<Section>>(rr))?.Data;
         }
 
-        public async Task<SectionEx[]> GetSectionsEx(string userName = null)
+        public async Task<SectionEx[]> ReadSectionsEx(string userName = null)
         {
             var rr = new RestRequest(API_PATH + "sections/extended");
             AddHeaders(rr, userName, null);
@@ -87,21 +87,21 @@ namespace SlepoffStore.Repository
 
         #region Categories
 
-        public async Task<long> InsertCategory(Category category, string userName = null)
+        public async Task<long> CreateCategory(Category category, string userName = null)
         {
             var rr = new RestRequest(API_PATH + "categories").AddJsonBody(category);
             AddHeaders(rr, userName, null);
             return (await _restClient.PostAsync<ApiResult<long>>(rr))?.Data ?? 0L;
         }
 
-        public async Task<Category> GetCategory(long id, string userName = null)
+        public async Task<Category> ReadCategory(long id, string userName = null)
         {
             var rr = new RestRequest(API_PATH + $"categories/{id}");
             AddHeaders(rr, userName, null);
             return (await _restClient.GetAsync<ApiResult<Category>>(rr))?.Data;
         }
 
-        public async Task<Category[]> GetCategories(string userName = null)
+        public async Task<Category[]> ReadCategories(string userName = null)
         {
             var rr = new RestRequest(API_PATH + "categories");
             AddHeaders(rr, userName, null);
@@ -112,28 +112,28 @@ namespace SlepoffStore.Repository
 
         #region Entries
 
-        public async Task<long> InsertEntry(Entry entry, string userName = null)
+        public async Task<long> CreateEntry(Entry entry, string userName = null)
         {
             var rr = new RestRequest(API_PATH + "entries").AddJsonBody(entry);
             AddHeaders(rr, userName, null);
             return (await _restClient.PostAsync<ApiResult<long>>(rr))?.Data ?? 0L;
         }
 
-        public async Task<Entry> GetEntry(long id, string userName = null)
+        public async Task<Entry> ReadEntry(long id, string userName = null)
         {
             var rr = new RestRequest(API_PATH + $"entries/{id}");
             AddHeaders(rr, userName, null);
             return (await _restClient.GetAsync<ApiResult<Entry>>(rr))?.Data;
         }
 
-        public async Task<Entry[]> GetEntriesByCategoryId(long categoryId, string userName = null)
+        public async Task<Entry[]> ReadEntriesByCategoryId(long categoryId, string userName = null)
         {
             var rr = new RestRequest(API_PATH + $"categories/{categoryId}/entries");
             AddHeaders(rr, userName, null);
             return (await _restClient.GetAsync<ApiResult<Entry[]>>(rr))?.Data;
         }
 
-        public async Task<Entry[]> GetEntriesBySectionId(long sectionId, string userName = null)
+        public async Task<Entry[]> ReadEntriesBySectionId(long sectionId, string userName = null)
         {
             var rr = new RestRequest(API_PATH + $"sections/{sectionId}/entries");
             AddHeaders(rr, userName, null);
@@ -176,14 +176,14 @@ namespace SlepoffStore.Repository
 
         #region UISheets
 
-        public async Task<long> InsertUISheet(UISheet sheet, string userName = null, string deviceId = null)
+        public async Task<long> CreateUISheet(UISheet sheet, string userName = null, string deviceId = null)
         {
             var rr = new RestRequest(API_PATH + "uisheets").AddJsonBody(sheet);
             AddHeaders(rr, userName, deviceId);
             return (await _restClient.PostAsync<ApiResult<long>>(rr))?.Data ?? 0L;
         }
 
-        public async Task<UISheet[]> GetUISheets(string userName = null, string deviceId = null)
+        public async Task<UISheet[]> ReadUISheets(string userName = null, string deviceId = null)
         {
             var rr = new RestRequest(API_PATH + "uisheets");
             AddHeaders(rr, userName, deviceId);

@@ -23,7 +23,7 @@ namespace SlepoffStore.WebApi.Services
 
         public async Task<bool> CheckCredentials(string username, string password)
         {
-            var user = await _repository.GetUser(username);
+            var user = await _repository.ReadUser(username);
             if (user == null)
             {
                 _logger.LogTrace("User '{0}' is not found in db", username);

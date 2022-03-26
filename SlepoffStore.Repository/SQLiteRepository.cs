@@ -35,7 +35,7 @@ namespace SlepoffStore.Repository
 
         #region Sections
 
-        public async Task<long> InsertSection(Section section, string userName = null)
+        public async Task<long> CreateSection(Section section, string userName = null)
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText = 
@@ -45,7 +45,7 @@ namespace SlepoffStore.Repository
             return await command.ExecuteMyNonQueryAsync();
         }
 
-        public async Task<Section> GetSection(long id, string userName = null)
+        public async Task<Section> ReadSection(long id, string userName = null)
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText =
@@ -61,7 +61,7 @@ namespace SlepoffStore.Repository
             }).FirstOrDefault();
         }
 
-        public async Task<Section[]> GetSections(string userName = null)
+        public async Task<Section[]> ReadSections(string userName = null)
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText =
@@ -76,10 +76,10 @@ namespace SlepoffStore.Repository
             }).ToArray();
         }
 
-        public async Task<SectionEx[]> GetSectionsEx(string userName = null)
+        public async Task<SectionEx[]> ReadSectionsEx(string userName = null)
         {
-            var categories = await GetCategories(userName);
-            var sections = await GetSections(userName);
+            var categories = await ReadCategories(userName);
+            var sections = await ReadSections(userName);
             return sections.Select(s => new SectionEx
             {
                 Id = s.Id,
@@ -92,9 +92,9 @@ namespace SlepoffStore.Repository
 
         #region Categories
 
-        public async Task<long> InsertCategory(Category category, string userName = null)
+        public async Task<long> CreateCategory(Category category, string userName = null)
         {
-            var section = await GetSection(category.SectionId, userName);
+            var section = await ReadSection(category.SectionId, userName);
             if (section == null) throw new Exception("Category is unavailable");
 
             using var command = new SQLiteCommand(_connection);
@@ -104,7 +104,7 @@ namespace SlepoffStore.Repository
             return await command.ExecuteMyNonQueryAsync();
         }
 
-        public async Task<Category> GetCategory(long id, string userName = null)
+        public async Task<Category> ReadCategory(long id, string userName = null)
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText =
@@ -122,7 +122,7 @@ namespace SlepoffStore.Repository
             }).FirstOrDefault();
         }
 
-        public async Task<Category[]> GetCategories(string userName = null)
+        public async Task<Category[]> ReadCategories(string userName = null)
         {
             var command = new SQLiteCommand(_connection);
             command.CommandText =
@@ -143,9 +143,9 @@ namespace SlepoffStore.Repository
 
         #region Entries
 
-        public async Task<long> InsertEntry(Entry entry, string userName = null)
+        public async Task<long> CreateEntry(Entry entry, string userName = null)
         {
-            var category = await GetCategory(entry.CategoryId, userName);
+            var category = await ReadCategory(entry.CategoryId, userName);
             if (category == null) throw new Exception("Category is unavailable");
 
             using var command = new SQLiteCommand(_connection);
@@ -161,7 +161,7 @@ namespace SlepoffStore.Repository
             return await command.ExecuteMyNonQueryAsync();
         }
 
-        public async Task<Entry[]> GetEntriesByCategoryId(long categoryId, string userName = null)
+        public async Task<Entry[]> ReadEntriesByCategoryId(long categoryId, string userName = null)
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText = "SELECT Entries.* FROM Entries " +
@@ -184,7 +184,7 @@ namespace SlepoffStore.Repository
             }).ToArray();
         }
 
-        public async Task<Entry[]> GetEntriesBySectionId(long sectionId, string userName = null)
+        public async Task<Entry[]> ReadEntriesBySectionId(long sectionId, string userName = null)
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText = "SELECT Entries.* FROM Entries " +
@@ -207,7 +207,7 @@ namespace SlepoffStore.Repository
             }).ToArray();
         }
 
-        public async Task<Entry> GetEntry(long id, string userName = null)
+        public async Task<Entry> ReadEntry(long id, string userName = null)
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText = "SELECT Entries.* FROM Entries " +
@@ -232,7 +232,7 @@ namespace SlepoffStore.Repository
 
         public async Task UpdateEntry(Entry entry, string userName = null)
         {
-            var category = await GetCategory(entry.CategoryId, userName);
+            var category = await ReadCategory(entry.CategoryId, userName);
             if (category == null) throw new Exception("Category is unavailable");
 
             using var command = new SQLiteCommand(_connection);
@@ -248,7 +248,7 @@ namespace SlepoffStore.Repository
 
         public async Task DeleteEntry(Entry entry, string userName = null)
         {
-            var category = await GetCategory(entry.CategoryId, userName);
+            var category = await ReadCategory(entry.CategoryId, userName);
             if (category == null) throw new Exception("Category is unavailable");
 
             using var command = new SQLiteCommand(_connection);
@@ -269,9 +269,9 @@ namespace SlepoffStore.Repository
 
         #region UISheets
 
-        public async Task<long> InsertUISheet(UISheet sheet, string userName = null, string deviceName = null)
+        public async Task<long> CreateUISheet(UISheet sheet, string userName = null, string deviceName = null)
         {
-            var entry = await GetEntry(sheet.EntryId, userName);
+            var entry = await ReadEntry(sheet.EntryId, userName);
             if (entry == null) throw new Exception("Entry is unavailable");
 
             await EnsureDevice(deviceName, userName);
@@ -292,7 +292,7 @@ namespace SlepoffStore.Repository
             return await command.ExecuteMyNonQueryAsync();
         }
 
-        public async Task<UISheet[]> GetUISheets(string userName = null, string deviceName = null)
+        public async Task<UISheet[]> ReadUISheets(string userName = null, string deviceName = null)
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText = "SELECT UISheets.* FROM UISheets " +
@@ -317,7 +317,7 @@ namespace SlepoffStore.Repository
 
         public async Task UpdateUISheet(UISheet sheet, string userName = null)
         {
-            var entry = await GetEntry(sheet.EntryId, userName);
+            var entry = await ReadEntry(sheet.EntryId, userName);
             if (entry == null) throw new Exception("Entry is unavailable");
 
             using var command = new SQLiteCommand(_connection);
@@ -332,7 +332,7 @@ namespace SlepoffStore.Repository
 
         public async Task DeleteUISheet(UISheet sheet, string userName = null)
         {
-            var entry = await GetEntry(sheet.EntryId, userName);
+            var entry = await ReadEntry(sheet.EntryId, userName);
             if (entry == null) throw new Exception("Entry is unavailable");
 
             using var command = new SQLiteCommand(_connection);
@@ -374,7 +374,7 @@ namespace SlepoffStore.Repository
 
         #region Users
 
-        public async Task<User> GetUser(string username)
+        public async Task<User> ReadUser(string username)
         {
             using var command = new SQLiteCommand(_connection);
             command.CommandText = "SELECT * FROM Users WHERE Name=:name";

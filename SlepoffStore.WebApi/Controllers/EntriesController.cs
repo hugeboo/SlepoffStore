@@ -22,7 +22,7 @@ namespace SlepoffStore.WebApi.Controllers
         [Route("{id}")]
         public async Task<ApiResult<Entry>> Get(long id, [UserFromHeader] string userName)
         {
-            return new ApiResult<Entry> { Data = await _repository.GetEntry(id, userName) };
+            return new ApiResult<Entry> { Data = await _repository.ReadEntry(id, userName) };
         }
 
         // POST: api/entries
@@ -32,7 +32,7 @@ namespace SlepoffStore.WebApi.Controllers
             return new ApiResult<long>
             {
                 Status = ApiResultStatus.OK,
-                Data = await _repository.InsertEntry(entry, userName)
+                Data = await _repository.CreateEntry(entry, userName)
             };
         }
 

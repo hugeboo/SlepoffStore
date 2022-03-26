@@ -21,7 +21,7 @@ namespace SlepoffStore.WebApi.Controllers
         [HttpGet]
         public async Task<ApiResult<Category[]>> Get([UserFromHeader] string userName)
         {
-            return new ApiResult<Category[]> { Data = await _repository.GetCategories(userName) };
+            return new ApiResult<Category[]> { Data = await _repository.ReadCategories(userName) };
         }
 
         // GET: api/categories/{categoryId}/entries
@@ -29,7 +29,7 @@ namespace SlepoffStore.WebApi.Controllers
         [Route("{categoryId}/entries")]
         public async Task<ApiResult<Entry[]>> GetEntries(long categoryId, [UserFromHeader] string userName)
         {
-            return new ApiResult<Entry[]> { Data = await _repository.GetEntriesByCategoryId(categoryId, userName) };
+            return new ApiResult<Entry[]> { Data = await _repository.ReadEntriesByCategoryId(categoryId, userName) };
         }
 
         // POST: api/categories
@@ -39,7 +39,7 @@ namespace SlepoffStore.WebApi.Controllers
             return new ApiResult<long>
             {
                 Status = ApiResultStatus.OK,
-                Data = await _repository.InsertCategory(category, userName)
+                Data = await _repository.CreateCategory(category, userName)
             };
         }
     }

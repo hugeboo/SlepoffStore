@@ -50,7 +50,7 @@ namespace SlepoffStore.Tools
         public async Task RestoreAllSheets()
         {
             using var repo = Program.CreateRepository();
-            var uiSheets = await repo.GetUISheets();
+            var uiSheets = await repo.ReadUISheets();
 
             var focus = GetForegroundWindow();
 
@@ -62,7 +62,7 @@ namespace SlepoffStore.Tools
                     form.Size = new Size(uiSheet.Width, uiSheet.Height);
                     form.Location = new Point(uiSheet.PosX, uiSheet.PosY);
                     form.Show();
-                    form.Init(await repo.GetEntry(uiSheet.EntryId), uiSheet);
+                    form.Init(await repo.ReadEntry(uiSheet.EntryId), uiSheet);
                     _sheets[form.UISheet.Id] = form;
                 }
             }
@@ -115,7 +115,7 @@ namespace SlepoffStore.Tools
                 Width = form.Width,
                 Height = form.Height
             };
-            uiSheet.Id = await repo.InsertUISheet(uiSheet);
+            uiSheet.Id = await repo.CreateUISheet(uiSheet);
 
             form.Init(entry, uiSheet);
 
@@ -146,7 +146,7 @@ namespace SlepoffStore.Tools
                 Caption = DateTime.Now.ToString(),
                 //Text = string.Empty //не знаю почему, но asp.net не принимает null !!!!!
             };
-            entry.Id = await repo.InsertEntry(entry);
+            entry.Id = await repo.CreateEntry(entry);
 
             var form = CreateSheetForm();
             form.StartPosition = FormStartPosition.CenterScreen;
@@ -160,7 +160,7 @@ namespace SlepoffStore.Tools
                 Width = form.Width,
                 Height = form.Height
             };
-            uiSheet.Id = await repo.InsertUISheet(uiSheet);
+            uiSheet.Id = await repo.CreateUISheet(uiSheet);
 
             form.Init(entry, uiSheet);
             form.Focus();
@@ -181,18 +181,18 @@ namespace SlepoffStore.Tools
 
         private static async Task<Category> EnsureNewCategory(IRepository repo)
         {
-            var sections = await repo.GetSectionsEx();
+            var sections = await repo.ReadSectionsEx();
             var sec = sections.FirstOrDefault(s => s.Name == SECTION_FOR_NEW);
             if (sec == null)
             {
                 sec = new SectionEx { Name = SECTION_FOR_NEW };
-                sec.Id = await repo.InsertSection(sec);
+                sec.Id = await repo.CreateSection(sec);
             }
             var cat = sec.Categories.FirstOrDefault(c => c.Name == CATEGORY_FOR_NEW);
             if (cat == null)
             {
                 cat = new Category { SectionId = sec.Id, Name = CATEGORY_FOR_NEW };
-                cat.Id = await repo.InsertCategory(cat);
+                cat.Id = await repo.CreateCategory(cat);
             }
             return cat;
         }

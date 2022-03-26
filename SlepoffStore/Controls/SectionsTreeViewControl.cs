@@ -33,7 +33,7 @@ namespace SlepoffStore.Controls
         {
             IEnumerable<SectionEx> sections;
             using var repo = Program.CreateRepository();
-            sections = await repo.GetSectionsEx();
+            sections = await repo.ReadSectionsEx();
 
             treeView.Nodes.Clear();
             foreach(var section in sections)

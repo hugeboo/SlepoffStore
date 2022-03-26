@@ -25,7 +25,7 @@ namespace SlepoffStore.WebApi.Controllers
             return new ApiResult<long>
             {
                 Status = ApiResultStatus.OK,
-                Data = await _repository.InsertUISheet(sheet, userName, deviceName)
+                Data = await _repository.CreateUISheet(sheet, userName, deviceName)
             };
         }
 
@@ -33,7 +33,7 @@ namespace SlepoffStore.WebApi.Controllers
         [HttpGet]
         public async Task<ApiResult<UISheet[]>> Get([UserFromHeader] string userName, [DeviceFromHeader] string deviceName)
         {
-            return new ApiResult<UISheet[]> { Data = await _repository.GetUISheets(userName, deviceName) };
+            return new ApiResult<UISheet[]> { Data = await _repository.ReadUISheets(userName, deviceName) };
         }
 
         // POST: api/uisheets/update

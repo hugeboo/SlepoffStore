@@ -8,6 +8,6 @@ namespace SlepoffStore.Repository
 {
     public interface IUserRepository
     {
-        Task<User> GetUser(string username);
+        Task<User> ReadUser(string username);
     }
 }

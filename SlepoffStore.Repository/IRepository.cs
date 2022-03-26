@@ -10,28 +10,28 @@ namespace SlepoffStore.Repository
 {
     public interface IRepository : IDisposable
     {
-        Task<long>          InsertSection(Section section, string userName = null);
-        Task<Section>       GetSection(long id, string userName = null);
-        Task<Section[]>     GetSections(string userName = null);
-        Task<SectionEx[]>   GetSectionsEx(string userName = null);
+        Task<long>          CreateSection(Section section, string userName = null);
+        Task<Section>       ReadSection(long id, string userName = null);
+        Task<Section[]>     ReadSections(string userName = null);
+        Task<SectionEx[]>   ReadSectionsEx(string userName = null);
         //void UpdateSection(Section section);
         //void DeleteSection(long sectionId);
 
-        Task<long>          InsertCategory(Category category, string userName = null);
-        Task<Category>      GetCategory(long id, string userName = null);
-        Task<Category[]>    GetCategories(string userName = null);
+        Task<long>          CreateCategory(Category category, string userName = null);
+        Task<Category>      ReadCategory(long id, string userName = null);
+        Task<Category[]>    ReadCategories(string userName = null);
         //void UpdateCategory(Category category);
         //void DeleteCategory(long categoryId);
 
-        Task<long>          InsertEntry(Entry entry, string userName = null);
-        Task<Entry[]>       GetEntriesByCategoryId(long categoryId, string userName = null);
-        Task<Entry[]>       GetEntriesBySectionId(long sectionId, string userName = null);
-        Task<Entry>         GetEntry(long entryId, string userName = null);
+        Task<long>          CreateEntry(Entry entry, string userName = null);
+        Task<Entry[]>       ReadEntriesByCategoryId(long categoryId, string userName = null);
+        Task<Entry[]>       ReadEntriesBySectionId(long sectionId, string userName = null);
+        Task<Entry>         ReadEntry(long entryId, string userName = null);
         Task                UpdateEntry(Entry entry, string userName = null);
         Task                DeleteEntry(Entry entry, string userName = null);
 
-        Task<long>          InsertUISheet(UISheet sheet, string userName = null, string deviceName = null);
-        Task<UISheet[]>     GetUISheets(string userName = null, string deviceName = null);
+        Task<long>          CreateUISheet(UISheet sheet, string userName = null, string deviceName = null);
+        Task<UISheet[]>     ReadUISheets(string userName = null, string deviceName = null);
         Task                UpdateUISheet(UISheet sheet, string userName = null);
         Task                DeleteUISheet(UISheet sheet, string userName = null);
 
