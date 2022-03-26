@@ -73,22 +73,26 @@ namespace SlepoffStore
         }
 
         private static bool _timerTickExceptionVisible;
+        private bool _timerTickDataSaved = true;
         private async void timer_Tick(object sender, EventArgs e)
         {
             if (Entry != null && UISheet != null &&
-                (textBox.Text != Entry.Text ||
+                (!_timerTickDataSaved ||
+                textBox.Text != Entry.Text ||
                 this.Location.X != UISheet.PosX || this.Location.Y != UISheet.PosY ||
                 this.Width != UISheet.Width || this.Height != UISheet.Height))
             {
                 try
                 {
                     using var repo = Program.CreateRepository();
-                    if (textBox.Text != Entry.Text)
+                    if (!_timerTickDataSaved || 
+                        textBox.Text != Entry.Text)
                     {
                         Entry.Text = textBox.Text;
                         await repo.UpdateEntry(Entry);
                     }
-                    if (this.Location.X != UISheet.PosX || this.Location.Y != UISheet.PosY ||
+                    if (!_timerTickDataSaved || 
+                        this.Location.X != UISheet.PosX || this.Location.Y != UISheet.PosY ||
                         this.Width != UISheet.Width || this.Height != UISheet.Height)
                     {
                         UISheet.PosX = this.Location.X;
@@ -97,14 +101,18 @@ namespace SlepoffStore
                         UISheet.Height = this.Height;
                         await repo.UpdateUISheet(UISheet);
                     }
+                    _timerTickDataSaved = true;
+                    this.Opacity = 1.0;
                 }
                 catch (RemoteException ex)
                 {
-                    if (!_timerTickExceptionVisible)
+                    if (!_timerTickExceptionVisible && _timerTickDataSaved)
                     {
                         _timerTickExceptionVisible = true;
                         ExceptionForm.ShowConnectingError(ex, () => _timerTickExceptionVisible = false);
                     }
+                    _timerTickDataSaved = false;
+                    this.Opacity = 0.5;
                 }
             }
         }

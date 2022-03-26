@@ -44,7 +44,7 @@ partial class ExceptionForm
             this.label1.Location = new System.Drawing.Point(20, 20);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(100, 100);
-            this.label1.TabIndex = 0;
+            this.label1.TabIndex = 4;
             // 
             // errorLabel
             // 
@@ -54,7 +54,7 @@ partial class ExceptionForm
             this.errorLabel.Location = new System.Drawing.Point(126, 20);
             this.errorLabel.Name = "errorLabel";
             this.errorLabel.Size = new System.Drawing.Size(442, 100);
-            this.errorLabel.TabIndex = 1;
+            this.errorLabel.TabIndex = 3;
             this.errorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // richTextBox
@@ -76,7 +76,7 @@ partial class ExceptionForm
             this.detailsButton.Location = new System.Drawing.Point(338, 420);
             this.detailsButton.Name = "detailsButton";
             this.detailsButton.Size = new System.Drawing.Size(112, 34);
-            this.detailsButton.TabIndex = 3;
+            this.detailsButton.TabIndex = 1;
             this.detailsButton.Text = "Details...";
             this.detailsButton.UseVisualStyleBackColor = true;
             this.detailsButton.Click += new System.EventHandler(this.detailsButton_Click);
@@ -88,7 +88,7 @@ partial class ExceptionForm
             this.okButton.Location = new System.Drawing.Point(456, 420);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(112, 34);
-            this.okButton.TabIndex = 4;
+            this.okButton.TabIndex = 0;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             // 
@@ -103,6 +103,7 @@ partial class ExceptionForm
             this.Controls.Add(this.richTextBox);
             this.Controls.Add(this.errorLabel);
             this.Controls.Add(this.label1);
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
