@@ -41,20 +41,18 @@ namespace SlepoffStore.Tools
             _player = null;
         }
 
-        private async Task StartAlarm()
+        private void StartAlarm()
         {
             try
             {
-                using var repo = Program.CreateRepository();
-                var wav = await repo.GetValue("AlarmRingtone");
-                if (!string.IsNullOrWhiteSpace(wav))
+                if (!string.IsNullOrWhiteSpace(Settings.AlarmRingtone))
                 {
-                    _player = new SoundPlayer(wav);
-                    _player.Load();
+                    _player = new SoundPlayer(Settings.AlarmRingtone);
                 }
                 else
                 {
                     _player = new SoundPlayer(Properties.Resources.Sound_19655);
+                    _player.Load();
                 }
                 _player.PlayLooping();
                 _mainTimer.Change(MAIN_TIMER_ALARM_INTERVAL, MAIN_TIMER_ALARM_INTERVAL);
@@ -65,7 +63,7 @@ namespace SlepoffStore.Tools
             }
         }
 
-        private async void MainTimerCallback(object? state)
+        private void MainTimerCallback(object? state)
         {
             if (Monitor.TryEnter(_mainTimer))
             {
@@ -79,7 +77,7 @@ namespace SlepoffStore.Tools
                     }
                     else
                     {
-                        if (alarm) await StartAlarm();
+                        if (alarm) StartAlarm();
                     }
                 }
                 finally
