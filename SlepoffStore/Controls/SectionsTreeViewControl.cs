@@ -1,4 +1,5 @@
 ﻿using SlepoffStore.Core;
+using SlepoffStore.Repository;
 using SlepoffStore.Tools;
 using System;
 using System.Collections.Generic;
@@ -31,20 +32,27 @@ namespace SlepoffStore.Controls
 
         private async Task Fill()
         {
-            IEnumerable<SectionEx> sections;
-            using var repo = Program.CreateRepository();
-            sections = await repo.ReadSectionsEx();
-
-            treeView.Nodes.Clear();
-            foreach(var section in sections)
+            try
             {
-                var secNode = new TreeNode(section.Name) { Tag = section };
-                treeView.Nodes.Add(secNode);
-                foreach(var category in section.Categories)
+                IEnumerable<SectionEx> sections;
+                using var repo = Program.CreateRepository();
+                sections = await repo.ReadSectionsEx();
+
+                treeView.Nodes.Clear();
+                foreach (var section in sections)
                 {
-                    var catNode = new TreeNode(category.Name) { Tag = category };
-                    secNode.Nodes.Add(catNode);
+                    var secNode = new TreeNode(section.Name) { Tag = section };
+                    treeView.Nodes.Add(secNode);
+                    foreach (var category in section.Categories)
+                    {
+                        var catNode = new TreeNode(category.Name) { Tag = category };
+                        secNode.Nodes.Add(catNode);
+                    }
                 }
+            }
+            catch (RemoteException ex)
+            {
+                ExceptionForm.ShowConnectingError(ex);
             }
         }
 

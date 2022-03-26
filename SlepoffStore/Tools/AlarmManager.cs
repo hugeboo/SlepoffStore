@@ -1,4 +1,5 @@
 ﻿using SlepoffStore.Core;
+using SlepoffStore.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,19 +43,26 @@ namespace SlepoffStore.Tools
 
         private async Task StartAlarm()
         {
-            using var repo = Program.CreateRepository();
-            var wav = await repo.GetValue("AlarmRingtone");
-            if (!string.IsNullOrWhiteSpace(wav))
+            try
             {
-                _player = new SoundPlayer(wav);
-                _player.Load();
+                using var repo = Program.CreateRepository();
+                var wav = await repo.GetValue("AlarmRingtone");
+                if (!string.IsNullOrWhiteSpace(wav))
+                {
+                    _player = new SoundPlayer(wav);
+                    _player.Load();
+                }
+                else
+                {
+                    _player = new SoundPlayer(Properties.Resources.Sound_19655);
+                }
+                _player.PlayLooping();
+                _mainTimer.Change(MAIN_TIMER_ALARM_INTERVAL, MAIN_TIMER_ALARM_INTERVAL);
             }
-            else
+            catch (RemoteException ex)
             {
-                _player = new SoundPlayer(Properties.Resources.Sound_19655);
+                ExceptionForm.ShowConnectingError(ex);
             }
-             _player.PlayLooping();
-            _mainTimer.Change(MAIN_TIMER_ALARM_INTERVAL, MAIN_TIMER_ALARM_INTERVAL);
         }
 
         private async void MainTimerCallback(object? state)

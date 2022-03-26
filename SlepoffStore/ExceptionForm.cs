@@ -11,6 +11,7 @@ public partial class ExceptionForm : Form
 
     private bool _expanded = true;
     private readonly int _exceptionLabelHeight;
+    private Action _onClosedAction;
 
     public bool Expanded
     {
@@ -28,6 +29,19 @@ public partial class ExceptionForm : Form
         }
     }
 
+    public static ExceptionForm ShowConnectingError(Exception ex, Action onClosed = null)
+    {
+        var message = SERVER_CONNECTING_ERROR;
+        if (ex.InnerException is TimeoutException te)
+        {
+            message += ".\nThe server didn't respond in time";
+            ex = ex.InnerException;
+        }
+        var form = new ExceptionForm();
+        form.Init(message, ex, onClosed).ShowDialog();
+        return form;
+    }
+
     public ExceptionForm()
     {
         InitializeComponent();
@@ -35,15 +49,21 @@ public partial class ExceptionForm : Form
         Expanded = false;
     }
 
-    public ExceptionForm Init(string errorMessage, Exception ex)
+    public ExceptionForm Init(string errorMessage, Exception ex, Action onClosed = null)
     {
         errorLabel.Text = errorMessage;
         richTextBox.Text = ex.ToDetailedString();
+        _onClosedAction = onClosed;
         return this;
     }
 
     private void detailsButton_Click(object sender, EventArgs e)
     {
         Expanded = !Expanded;
+    }
+
+    private void ExceptionForm_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        _onClosedAction?.Invoke();
     }
 }

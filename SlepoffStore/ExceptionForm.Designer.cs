@@ -53,7 +53,7 @@ partial class ExceptionForm
             this.errorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.errorLabel.Location = new System.Drawing.Point(126, 20);
             this.errorLabel.Name = "errorLabel";
-            this.errorLabel.Size = new System.Drawing.Size(365, 100);
+            this.errorLabel.Size = new System.Drawing.Size(442, 100);
             this.errorLabel.TabIndex = 1;
             this.errorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -66,14 +66,14 @@ partial class ExceptionForm
             this.richTextBox.Location = new System.Drawing.Point(20, 137);
             this.richTextBox.Name = "richTextBox";
             this.richTextBox.ReadOnly = true;
-            this.richTextBox.Size = new System.Drawing.Size(471, 223);
+            this.richTextBox.Size = new System.Drawing.Size(548, 263);
             this.richTextBox.TabIndex = 2;
             this.richTextBox.Text = "";
             // 
             // detailsButton
             // 
             this.detailsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.detailsButton.Location = new System.Drawing.Point(261, 380);
+            this.detailsButton.Location = new System.Drawing.Point(338, 420);
             this.detailsButton.Name = "detailsButton";
             this.detailsButton.Size = new System.Drawing.Size(112, 34);
             this.detailsButton.TabIndex = 3;
@@ -84,7 +84,8 @@ partial class ExceptionForm
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(379, 380);
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.okButton.Location = new System.Drawing.Point(456, 420);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(112, 34);
             this.okButton.TabIndex = 4;
@@ -96,19 +97,21 @@ partial class ExceptionForm
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(512, 433);
+            this.ClientSize = new System.Drawing.Size(589, 473);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.detailsButton);
             this.Controls.Add(this.richTextBox);
             this.Controls.Add(this.errorLabel);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ExceptionForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Exception";
+            this.Text = "Slepoff Store - Exception";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ExceptionForm_FormClosed);
             this.ResumeLayout(false);
 
     }

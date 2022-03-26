@@ -1,4 +1,5 @@
 ﻿using SlepoffStore.Core;
+using SlepoffStore.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,21 +16,36 @@ namespace SlepoffStore.Tools
 
         public static string ApplicationPath => Application.ExecutablePath;
 
-        public static async Task Load()
+        public static async Task<bool> Load()
         {
-            using var repo = Program.CreateRepository();
-            ;
-            StartWithWindows = await repo.GetValue("StartWithWindows") == "true";
-            AlarmRingtone = await repo.GetValue("AlarmRingtone");
-            MainFont = FontFromString(await repo.GetValue("MainFont"));
+            try
+            {
+                using var repo = Program.CreateRepository();
+                StartWithWindows = await repo.GetValue("StartWithWindows") == "true";
+                AlarmRingtone = await repo.GetValue("AlarmRingtone");
+                MainFont = FontFromString(await repo.GetValue("MainFont"));
+                return true;
+            }
+            catch (RemoteException ex)
+            {
+                ExceptionForm.ShowConnectingError(ex);
+                return false;
+            }
         }
 
         public static async Task Save()
         {
-            using var repo = Program.CreateRepository();
-            await repo.SetValue("StartWithWindows", StartWithWindows.ToString().ToLower());
-            await repo.SetValue("AlarmRingtone", AlarmRingtone);
-            await repo.SetValue("MainFont", MainFont != null ? FontToString(MainFont) : null);
+            try
+            {
+                using var repo = Program.CreateRepository();
+                await repo.SetValue("StartWithWindows", StartWithWindows.ToString().ToLower());
+                await repo.SetValue("AlarmRingtone", AlarmRingtone);
+                await repo.SetValue("MainFont", MainFont != null ? FontToString(MainFont) : null);
+            }
+            catch (RemoteException ex)
+            {
+                ExceptionForm.ShowConnectingError(ex);
+            }
         }
 
         public static void ActualizeStartWithWindows()

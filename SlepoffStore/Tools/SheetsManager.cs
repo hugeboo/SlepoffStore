@@ -49,44 +49,58 @@ namespace SlepoffStore.Tools
 
         public async Task RestoreAllSheets()
         {
-            using var repo = Program.CreateRepository();
-            var uiSheets = await repo.ReadUISheets();
-
-            var focus = GetForegroundWindow();
-
-            foreach (var uiSheet in uiSheets)
+            try
             {
-                if (!_sheets.Any(s => s.Value.UISheet.Id == uiSheet.Id))
-                {
-                    var form = CreateSheetForm();
-                    form.Size = new Size(uiSheet.Width, uiSheet.Height);
-                    form.Location = new Point(uiSheet.PosX, uiSheet.PosY);
-                    form.Show();
-                    form.Init(await repo.ReadEntry(uiSheet.EntryId), uiSheet);
-                    _sheets[form.UISheet.Id] = form;
-                }
-            }
+                using var repo = Program.CreateRepository();
+                var uiSheets = await repo.ReadUISheets();
 
-            SetForegroundWindow(focus);
-            Collapsed = false;
-            SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
+                var focus = GetForegroundWindow();
+
+                foreach (var uiSheet in uiSheets)
+                {
+                    if (!_sheets.Any(s => s.Value.UISheet.Id == uiSheet.Id))
+                    {
+                        var form = CreateSheetForm();
+                        form.Size = new Size(uiSheet.Width, uiSheet.Height);
+                        form.Location = new Point(uiSheet.PosX, uiSheet.PosY);
+                        form.Show();
+                        form.Init(await repo.ReadEntry(uiSheet.EntryId), uiSheet);
+                        _sheets[form.UISheet.Id] = form;
+                    }
+                }
+
+                SetForegroundWindow(focus);
+                Collapsed = false;
+                SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
+            }
+            catch (RemoteException ex)
+            {
+                ExceptionForm.ShowConnectingError(ex);
+            }
         }
 
         public async Task DeleteEntries(Entry[] entries)
         {
-            using var repo = Program.CreateRepository();
-            foreach (var entry in entries)
+            try
             {
-                var sf = _sheets.Values.FirstOrDefault(f => f.Entry.Id == entry.Id);
-                if (sf != null)
+                using var repo = Program.CreateRepository();
+                foreach (var entry in entries)
                 {
-                    sf.FormClosed -= SheetForm_FormClosed;
-                    sf.Close();
-                    _sheets.Remove(sf.UISheet.Id, out _);
+                    var sf = _sheets.Values.FirstOrDefault(f => f.Entry.Id == entry.Id);
+                    if (sf != null)
+                    {
+                        sf.FormClosed -= SheetForm_FormClosed;
+                        sf.Close();
+                        _sheets.Remove(sf.UISheet.Id, out _);
+                    }
+                    await repo.DeleteEntry(entry);
                 }
-                await repo.DeleteEntry(entry);
+                SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
             }
-            SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
+            catch (RemoteException ex)
+            {
+                ExceptionForm.ShowConnectingError(ex);
+            }
         }
 
         private void SheetForm_FormClosed(object? sender, FormClosedEventArgs e)
@@ -102,25 +116,34 @@ namespace SlepoffStore.Tools
             if (entry == null || _sheets.Any(s => s.Value.Entry.Id == entry.Id))
                 return;
 
-            var form = CreateSheetForm();
-            form.StartPosition = FormStartPosition.WindowsDefaultLocation;
-            form.Show();
-
-            using var repo = Program.CreateRepository();
-            var uiSheet = new UISheet
+            SheetForm form = null;
+            try
             {
-                EntryId = entry.Id,
-                PosX = form.Location.X,
-                PosY = form.Location.Y,
-                Width = form.Width,
-                Height = form.Height
-            };
-            uiSheet.Id = await repo.CreateUISheet(uiSheet);
+                form = CreateSheetForm();
+                form.StartPosition = FormStartPosition.WindowsDefaultLocation;
+                form.Show();
 
-            form.Init(entry, uiSheet);
+                using var repo = Program.CreateRepository();
+                var uiSheet = new UISheet
+                {
+                    EntryId = entry.Id,
+                    PosX = form.Location.X,
+                    PosY = form.Location.Y,
+                    Width = form.Width,
+                    Height = form.Height
+                };
+                uiSheet.Id = await repo.CreateUISheet(uiSheet);
 
-            _sheets[form.UISheet.Id] = form;
-            SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
+                form.Init(entry, uiSheet);
+
+                _sheets[form.UISheet.Id] = form;
+                SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
+            }
+            catch (RemoteException ex)
+            {
+                form?.Close();
+                ExceptionForm.ShowConnectingError(ex);
+            }
         }
 
         public async Task CloseSheet(Entry entry)
@@ -129,45 +152,61 @@ namespace SlepoffStore.Tools
                 return;
 
             var form = _sheets.First(s => s.Value.Entry.Id == entry.Id);
-            using var repo = Program.CreateRepository();
-            await repo.DeleteUISheet(form.Value.UISheet);
-            form.Value.Close();
+            try
+            {
+                using var repo = Program.CreateRepository();
+                await repo.DeleteUISheet(form.Value.UISheet);
+                form.Value.Close();
+            }
+            catch (RemoteException ex)
+            {
+                ExceptionForm.ShowConnectingError(ex);
+            }
         }
 
         public async Task AddNew()
         {
-            using var repo = Program.CreateRepository();
-            var cat = await EnsureNewCategory(repo);
-            var entry = new Entry
+            SheetForm form = null;
+            try
             {
-                CategoryId = cat.Id,
-                CreationDate = DateTime.Now,
-                Color = EntryColor.Yellow,
-                Caption = DateTime.Now.ToString(),
-                //Text = string.Empty //не знаю почему, но asp.net не принимает null !!!!!
-            };
-            entry.Id = await repo.CreateEntry(entry);
+                using var repo = Program.CreateRepository();
+                var cat = await EnsureNewCategory(repo);
+                var entry = new Entry
+                {
+                    CategoryId = cat.Id,
+                    CreationDate = DateTime.Now,
+                    Color = EntryColor.Yellow,
+                    Caption = DateTime.Now.ToString(),
+                    //Text = string.Empty //не знаю почему, но asp.net не принимает null !!!!!
+                };
+                entry.Id = await repo.CreateEntry(entry);
 
-            var form = CreateSheetForm();
-            form.StartPosition = FormStartPosition.CenterScreen;
-            form.Show();
+                form = CreateSheetForm();
+                form.StartPosition = FormStartPosition.CenterScreen;
+                form.Show();
 
-            var uiSheet = new UISheet
+                var uiSheet = new UISheet
+                {
+                    EntryId = entry.Id,
+                    PosX = form.Location.X,
+                    PosY = form.Location.Y,
+                    Width = form.Width,
+                    Height = form.Height
+                };
+                uiSheet.Id = await repo.CreateUISheet(uiSheet);
+
+                form.Init(entry, uiSheet);
+                form.Focus();
+                form.BringToFront();
+
+                _sheets[form.UISheet.Id] = form;
+                SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
+            }
+            catch (RemoteException ex)
             {
-                EntryId = entry.Id,
-                PosX = form.Location.X,
-                PosY = form.Location.Y,
-                Width = form.Width,
-                Height = form.Height
-            };
-            uiSheet.Id = await repo.CreateUISheet(uiSheet);
-
-            form.Init(entry, uiSheet);
-            form.Focus();
-            form.BringToFront();
-
-            _sheets[form.UISheet.Id] = form;
-            SheetsListChanged?.Invoke(this, new GenericEventArgs<SheetForm[]>(_sheets.Values.ToArray()));
+                form?.Close();
+                ExceptionForm.ShowConnectingError(ex);
+            }
         }
 
         public void RefreshAllSheets()

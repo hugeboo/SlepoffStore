@@ -28,7 +28,7 @@ namespace SlepoffStore
 
             if (!RequestAuthInfo()) return;
 
-            await Settings.Load();
+            if (!await Settings.Load()) return;
             Settings.ActualizeStartWithWindows();
 
             var sm = new SheetsManager();

@@ -1,4 +1,5 @@
 ﻿using SlepoffStore.Core;
+using SlepoffStore.Repository;
 using SlepoffStore.Tools;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace SlepoffStore
             get => textBox.Font;
             set
             {
-                if (value!=null) textBox.Font = value; ;
+                if (value != null) textBox.Font = value; ;
             }
         }
 
@@ -71,6 +72,7 @@ namespace SlepoffStore
             //if (!AlarmActivated) this.SendToBack();
         }
 
+        private static bool _timerTickExceptionVisible;
         private async void timer_Tick(object sender, EventArgs e)
         {
             if (Entry != null && UISheet != null &&
@@ -78,32 +80,51 @@ namespace SlepoffStore
                 this.Location.X != UISheet.PosX || this.Location.Y != UISheet.PosY ||
                 this.Width != UISheet.Width || this.Height != UISheet.Height))
             {
-                using var repo = Program.CreateRepository();
-                if (textBox.Text != Entry.Text)
+                try
                 {
-                    Entry.Text = textBox.Text;
-                    await repo.UpdateEntry(Entry);
+                    using var repo = Program.CreateRepository();
+                    if (textBox.Text != Entry.Text)
+                    {
+                        Entry.Text = textBox.Text;
+                        await repo.UpdateEntry(Entry);
+                    }
+                    if (this.Location.X != UISheet.PosX || this.Location.Y != UISheet.PosY ||
+                        this.Width != UISheet.Width || this.Height != UISheet.Height)
+                    {
+                        UISheet.PosX = this.Location.X;
+                        UISheet.PosY = this.Location.Y;
+                        UISheet.Width = this.Width;
+                        UISheet.Height = this.Height;
+                        await repo.UpdateUISheet(UISheet);
+                    }
                 }
-                if (this.Location.X != UISheet.PosX || this.Location.Y != UISheet.PosY ||
-                    this.Width != UISheet.Width || this.Height != UISheet.Height)
+                catch (RemoteException ex)
                 {
-                    UISheet.PosX = this.Location.X;
-                    UISheet.PosY = this.Location.Y;
-                    UISheet.Width = this.Width;
-                    UISheet.Height = this.Height;
-                    await repo.UpdateUISheet(UISheet);
+                    if (!_timerTickExceptionVisible)
+                    {
+                        _timerTickExceptionVisible = true;
+                        ExceptionForm.ShowConnectingError(ex, () => _timerTickExceptionVisible = false);
+                    }
                 }
             }
         }
 
         private async void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(this, "The note will be hidden, but the entry will remain in the database. Proceed?", "Slepoff Store", 
+            if (MessageBox.Show(this, "The note will be hidden, but the entry will remain in the database. Proceed?", "Slepoff Store",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                using var repo = Program.CreateRepository();
-                await repo.DeleteUISheet(UISheet);
-                this.Close();
+                try
+                {
+                    using var repo = Program.CreateRepository();
+                    await repo.DeleteUISheet(UISheet);
+                    this.Close();
+                }
+                catch (RemoteException ex)
+                {
+                    ExceptionForm.ShowConnectingError(ex);
+                }
+
             }
         }
 
@@ -114,13 +135,13 @@ namespace SlepoffStore
             if (Entry != null)
             {
                 using var brush = new SolidBrush(_currentColor.GetForeColor());
-                var sf = new StringFormat(StringFormatFlags.NoWrap) 
+                var sf = new StringFormat(StringFormatFlags.NoWrap)
                 {
                     Alignment = StringAlignment.Center,
                     LineAlignment = StringAlignment.Center,
                     Trimming = StringTrimming.EllipsisCharacter
                 };
-                e.Graphics.DrawString(Entry.Caption, this.Font, brush, 
+                e.Graphics.DrawString(Entry.Caption, this.Font, brush,
                     new Rectangle(0, 0, this.Width, HeaderHeight), sf);
             }
         }
@@ -136,13 +157,20 @@ namespace SlepoffStore
             if (Entry == null) return;
             if (Entry.Color.ToString() != colorsToolStripComboBox.Text)
             {
-                Entry.Color = EntryColor.Parse<EntryColor>(colorsToolStripComboBox.Text);
-                using var repo = Program.CreateRepository();
-                await repo.UpdateEntry(Entry);
-                _currentColor = Entry.Color;
-                RestoreColors();
-                sheetAlarmControl.Init(Entry);
-                this.Invalidate();
+                try
+                {
+                    Entry.Color = EntryColor.Parse<EntryColor>(colorsToolStripComboBox.Text);
+                    using var repo = Program.CreateRepository();
+                    await repo.UpdateEntry(Entry);
+                    _currentColor = Entry.Color;
+                    RestoreColors();
+                    sheetAlarmControl.Init(Entry);
+                    this.Invalidate();
+                }
+                catch (RemoteException ex)
+                {
+                    ExceptionForm.ShowConnectingError(ex);
+                }
             }
         }
 
@@ -159,10 +187,17 @@ namespace SlepoffStore
             if (Entry == null) return;
             if (Entry.Caption != captionToolStripTextBox.Text)
             {
-                Entry.Caption = captionToolStripTextBox.Text;
-                using var repo = Program.CreateRepository();
-                await repo.UpdateEntry(Entry);
-                this.Invalidate();
+                try
+                {
+                    Entry.Caption = captionToolStripTextBox.Text;
+                    using var repo = Program.CreateRepository();
+                    await repo.UpdateEntry(Entry);
+                    this.Invalidate();
+                }
+                catch (RemoteException ex)
+                {
+                    ExceptionForm.ShowConnectingError(ex);
+                }
             }
         }
 

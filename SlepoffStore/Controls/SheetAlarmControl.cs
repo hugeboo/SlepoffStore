@@ -1,4 +1,5 @@
 ﻿using SlepoffStore.Core;
+using SlepoffStore.Repository;
 using SlepoffStore.Tools;
 using System;
 using System.Collections.Generic;
@@ -47,12 +48,19 @@ namespace SlepoffStore.Controls
 
         private async Task DisableAlarm(MouseEventArgs e)
         {
-            if (AlarmActivated && e.Button == MouseButtons.Left)
+            try
             {
-                using var repo = Program.CreateRepository();
-                _entry.AlarmIsOn = false;
-                await repo.UpdateEntry(_entry);
-                this.Visible = false;
+                if (AlarmActivated && e.Button == MouseButtons.Left)
+                {
+                    using var repo = Program.CreateRepository();
+                    _entry.AlarmIsOn = false;
+                    await repo.UpdateEntry(_entry);
+                    this.Visible = false;
+                }
+            }
+            catch (RemoteException ex)
+            {
+                ExceptionForm.ShowConnectingError(ex);
             }
         }
 

@@ -1,4 +1,5 @@
 using SlepoffStore.Core;
+using SlepoffStore.Repository;
 using SlepoffStore.Tools;
 
 namespace SlepoffStore
@@ -44,34 +45,55 @@ namespace SlepoffStore
 
         private async void sheetsManager_SheetsListChanged(object? sender, GenericEventArgs<SheetForm[]> e)
         {
-            using var repo = Program.CreateRepository();
-            var uiSheets = await repo.ReadUISheets();
-            var ds = dataGridView.DataSource as EntryGridItem[];
-            foreach(var item in ds)
+            try
             {
-                item.Displayed = uiSheets.Any(it => it.EntryId == item.Id);
+                using var repo = Program.CreateRepository();
+                var uiSheets = await repo.ReadUISheets();
+                var ds = dataGridView.DataSource as EntryGridItem[];
+                foreach (var item in ds)
+                {
+                    item.Displayed = uiSheets.Any(it => it.EntryId == item.Id);
+                }
+                dataGridView.Invalidate();
             }
-            dataGridView.Invalidate();
+            catch (RemoteException ex)
+            {
+                ExceptionForm.ShowConnectingError(ex);
+            }
         }
 
         private async void SectionsTreeViewControl_SectionSelected(object? sender, GenericEventArgs<SectionEx> e)
         {
-            using var repo = Program.CreateRepository();
-            var uiSheets = await repo.ReadUISheets();
-            var items = (await repo.ReadEntriesBySectionId(e.Data.Id))
-                .Select(e => new EntryGridItem(e) { Displayed = uiSheets.Any(it => it.EntryId == e.Id) })
-                .ToArray();
-            dataGridView.DataSource = items;
+            try
+            {
+                using var repo = Program.CreateRepository();
+                var uiSheets = await repo.ReadUISheets();
+                var items = (await repo.ReadEntriesBySectionId(e.Data.Id))
+                    .Select(e => new EntryGridItem(e) { Displayed = uiSheets.Any(it => it.EntryId == e.Id) })
+                    .ToArray();
+                dataGridView.DataSource = items;
+            }
+            catch (RemoteException ex)
+            {
+                ExceptionForm.ShowConnectingError(ex);
+            }
         }
 
         private async void SectionsTreeViewControl_CategorySelected(object? sender, GenericEventArgs<Category> e)
         {
-            using var repo = Program.CreateRepository();
-            var uiSheets = await repo.ReadUISheets();
-            var items = (await repo.ReadEntriesByCategoryId(e.Data.Id))
-                .Select(e => new EntryGridItem(e) { Displayed = uiSheets.Any(it => it.EntryId == e.Id) })
-                .ToArray();
-            dataGridView.DataSource = items;
+            try
+            {
+                using var repo = Program.CreateRepository();
+                var uiSheets = await repo.ReadUISheets();
+                var items = (await repo.ReadEntriesByCategoryId(e.Data.Id))
+                    .Select(e => new EntryGridItem(e) { Displayed = uiSheets.Any(it => it.EntryId == e.Id) })
+                    .ToArray();
+                dataGridView.DataSource = items;
+            }
+            catch (RemoteException ex)
+            {
+                ExceptionForm.ShowConnectingError(ex);
+            }
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
@@ -108,7 +130,7 @@ namespace SlepoffStore
                     }
                 }
             }
-         }
+        }
 
         private async void refreshToolStripButton_Click(object sender, EventArgs e)
         {
@@ -150,12 +172,12 @@ namespace SlepoffStore
             if (count < 1) return;
             var s = count == 1 ? "entry" : "entries";
 
-            if (MessageBox.Show(this, 
-                $"Are you sure you want to delete the selected {count} {s}?", "Delete entries", 
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question)== DialogResult.Yes)
+            if (MessageBox.Show(this,
+                $"Are you sure you want to delete the selected {count} {s}?", "Delete entries",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 var lst = new List<Entry>();
-                foreach(DataGridViewRow row in dataGridView.SelectedRows)
+                foreach (DataGridViewRow row in dataGridView.SelectedRows)
                 {
                     var item = row.DataBoundItem as EntryGridItem;
                     if (item?.Entry != null) lst.Add(item.Entry);
