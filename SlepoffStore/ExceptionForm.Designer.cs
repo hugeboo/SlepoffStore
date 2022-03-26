@@ -113,6 +113,7 @@ partial class ExceptionForm
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Slepoff Store - Exception";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ExceptionForm_FormClosed);
+            this.Shown += new System.EventHandler(this.ExceptionForm_Shown);
             this.ResumeLayout(false);
 
     }

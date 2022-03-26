@@ -40,7 +40,9 @@
             this.sheetAlarmControl = new SlepoffStore.Controls.SheetAlarmControl();
             this.flashTimer = new System.Windows.Forms.Timer(this.components);
             this.textBox = new System.Windows.Forms.RichTextBox();
+            this.loadingPictureBox = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loadingPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // timer
@@ -140,12 +142,25 @@
             this.textBox.TabStop = false;
             this.textBox.Text = "";
             // 
+            // loadingPictureBox
+            // 
+            this.loadingPictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.loadingPictureBox.Image = global::SlepoffStore.Properties.Resources.loading_25;
+            this.loadingPictureBox.Location = new System.Drawing.Point(10, 10);
+            this.loadingPictureBox.Name = "loadingPictureBox";
+            this.loadingPictureBox.Size = new System.Drawing.Size(22, 22);
+            this.loadingPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.loadingPictureBox.TabIndex = 2;
+            this.loadingPictureBox.TabStop = false;
+            this.loadingPictureBox.Visible = false;
+            // 
             // SheetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(411, 197);
             this.ContextMenuStrip = this.contextMenuStrip;
+            this.Controls.Add(this.loadingPictureBox);
             this.Controls.Add(this.textBox);
             this.Controls.Add(this.sheetAlarmControl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
@@ -162,6 +177,7 @@
             this.Load += new System.EventHandler(this.SheetForm_Load);
             this.contextMenuStrip.ResumeLayout(false);
             this.contextMenuStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loadingPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -178,5 +194,6 @@
         private Controls.SheetAlarmControl sheetAlarmControl;
         private System.Windows.Forms.Timer flashTimer;
         private RichTextBox textBox;
+        private PictureBox loadingPictureBox;
     }
 }

@@ -1,5 +1,6 @@
 using SlepoffStore.Tools;
 using System.ComponentModel;
+using System.Media;
 using System.Windows.Forms;
 
 namespace SlepoffStore;
@@ -65,5 +66,10 @@ public partial class ExceptionForm : Form
     private void ExceptionForm_FormClosed(object sender, FormClosedEventArgs e)
     {
         _onClosedAction?.Invoke();
+    }
+
+    private void ExceptionForm_Shown(object sender, EventArgs e)
+    {
+        SystemSounds.Exclamation.Play();
     }
 }

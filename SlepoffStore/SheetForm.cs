@@ -18,6 +18,8 @@ namespace SlepoffStore
     {
         private EntryColor _currentColor;
         private bool _prevAlarmActivted;
+        private static bool _timerTickExceptionVisible;
+        private bool _timerTickDataSaved = true;
 
         public UISheet UISheet { get; private set; }
         public Entry Entry { get; private set; }
@@ -32,6 +34,12 @@ namespace SlepoffStore
         }
 
         public bool AlarmActivated => sheetAlarmControl.AlarmActivated;
+
+        public bool WaitMode
+        {
+            get => loadingPictureBox.Visible;
+            set => loadingPictureBox.Visible = value;
+        }
 
         public SheetForm()
         {
@@ -72,8 +80,6 @@ namespace SlepoffStore
             //if (!AlarmActivated) this.SendToBack();
         }
 
-        private static bool _timerTickExceptionVisible;
-        private bool _timerTickDataSaved = true;
         private async void timer_Tick(object sender, EventArgs e)
         {
             if (Entry != null && UISheet != null &&
@@ -82,6 +88,7 @@ namespace SlepoffStore
                 this.Location.X != UISheet.PosX || this.Location.Y != UISheet.PosY ||
                 this.Width != UISheet.Width || this.Height != UISheet.Height))
             {
+                WaitMode = true;
                 try
                 {
                     using var repo = Program.CreateRepository();
@@ -112,7 +119,11 @@ namespace SlepoffStore
                         ExceptionForm.ShowConnectingError(ex, () => _timerTickExceptionVisible = false);
                     }
                     _timerTickDataSaved = false;
-                    this.Opacity = 0.5;
+                    this.Opacity = 0.3;
+                }
+                finally
+                {
+                    WaitMode = false;
                 }
             }
         }
@@ -122,6 +133,7 @@ namespace SlepoffStore
             if (MessageBox.Show(this, "The note will be hidden, but the entry will remain in the database. Proceed?", "Slepoff Store",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
+                WaitMode = true;
                 try
                 {
                     using var repo = Program.CreateRepository();
@@ -132,7 +144,10 @@ namespace SlepoffStore
                 {
                     ExceptionForm.ShowConnectingError(ex);
                 }
-
+                finally
+                {
+                    WaitMode = false;
+                }
             }
         }
 
@@ -150,7 +165,7 @@ namespace SlepoffStore
                     Trimming = StringTrimming.EllipsisCharacter
                 };
                 e.Graphics.DrawString(Entry.Caption, this.Font, brush,
-                    new Rectangle(0, 0, this.Width, HeaderHeight), sf);
+                    new Rectangle(10 + 22, 0, this.Width - (10 + 22) * 2, HeaderHeight), sf);
             }
         }
 
@@ -165,6 +180,8 @@ namespace SlepoffStore
             if (Entry == null) return;
             if (Entry.Color.ToString() != colorsToolStripComboBox.Text)
             {
+                var oldColor = Entry.Color;
+                WaitMode = true;
                 try
                 {
                     Entry.Color = EntryColor.Parse<EntryColor>(colorsToolStripComboBox.Text);
@@ -177,7 +194,12 @@ namespace SlepoffStore
                 }
                 catch (RemoteException ex)
                 {
+                    Entry.Color = oldColor;
                     ExceptionForm.ShowConnectingError(ex);
+                }
+                finally
+                {
+                    WaitMode = false;
                 }
             }
         }
@@ -195,6 +217,8 @@ namespace SlepoffStore
             if (Entry == null) return;
             if (Entry.Caption != captionToolStripTextBox.Text)
             {
+                var oldCaption = Entry.Caption;
+                WaitMode = true;
                 try
                 {
                     Entry.Caption = captionToolStripTextBox.Text;
@@ -204,7 +228,12 @@ namespace SlepoffStore
                 }
                 catch (RemoteException ex)
                 {
+                    Entry.Caption = oldCaption;
                     ExceptionForm.ShowConnectingError(ex);
+                }
+                finally
+                {
+                    WaitMode = false;
                 }
             }
         }
@@ -224,11 +253,27 @@ namespace SlepoffStore
             }
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                using var repo = Program.CreateRepository();
-                Entry.Alarm = form.AlarmDateTime;
-                Entry.AlarmIsOn = form.AlarmEnabled;
-                await repo.UpdateEntry(Entry);
-                sheetAlarmControl.Init(Entry);
+                var oldAlarm = Entry.Alarm;
+                var oldAlarmIsOn = Entry.AlarmIsOn;
+                WaitMode = true;
+                try
+                {
+                    using var repo = Program.CreateRepository();
+                    Entry.Alarm = form.AlarmDateTime;
+                    Entry.AlarmIsOn = form.AlarmEnabled;
+                    await repo.UpdateEntry(Entry);
+                    sheetAlarmControl.Init(Entry);
+                }
+                catch (RemoteException ex)
+                {
+                    Entry.Alarm = oldAlarm;
+                    Entry.AlarmIsOn = oldAlarmIsOn;
+                    ExceptionForm.ShowConnectingError(ex);
+                }
+                finally
+                {
+                    WaitMode = false;
+                }
             }
         }
 
