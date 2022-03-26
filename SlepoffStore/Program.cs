@@ -6,14 +6,7 @@ namespace SlepoffStore
 {
     internal static class Program
     {
-        public enum SourceType
-        {
-            SQLiteFile,
-            WebService
-        }
-
-        public static SourceType Source { get;private set; }
-        public static string SourceUrl { get; private set; }
+        public static string ServerUrl { get; private set; }
         public static string UserName { get; private set; }
         public static string Password { get; private set; }
 
@@ -29,8 +22,7 @@ namespace SlepoffStore
             var cla = new CommandLine();
             if (!cla.IsOK) return;
 
-            Source = cla.Source.Value;
-            SourceUrl = cla.SourceUrl;
+            ServerUrl = cla.ServerUrl;
             UserName = cla.UserName;
             Password = cla.Password;
 
@@ -52,23 +44,23 @@ namespace SlepoffStore
             var menu = new ContextMenuStrip();
             menu.Items.AddRange(new ToolStripItem[]
             {
-                    new ToolStripMenuItem("Add New", null, async (s, e) => await sm.AddNew()),
-                    new ToolStripSeparator(),
-                    new ToolStripMenuItem("Open Store Window...", null, (s, e) =>
-                    {
-                        mainForm.WindowState = FormWindowState.Normal;
-                        mainForm.Show();
-                        mainForm.Activate();
-                    }),
-                    new ToolStripSeparator(),
-                    new ToolStripMenuItem("Restore All", null, async (s, e) => await sm.RestoreAllSheets()),
-                    new ToolStripMenuItem("Collapse All", null, (s, e) => sm.CollapseAllSheets()),
-                    new ToolStripSeparator(),
-                    new ToolStripMenuItem("Exit", null, (s, e) => 
-                    {
-                        mainForm.ForceClose = true;
-                        mainForm.Close(); 
-                    })
+                new ToolStripMenuItem("Add New", null, async (s, e) => await sm.AddNew()),
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("Open Store Window...", null, (s, e) =>
+                {
+                    mainForm.WindowState = FormWindowState.Normal;
+                    mainForm.Show();
+                    mainForm.Activate();
+                }),
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("Restore All", null, async (s, e) => await sm.RestoreAllSheets()),
+                new ToolStripMenuItem("Collapse All", null, (s, e) => sm.CollapseAllSheets()),
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("Exit", null, (s, e) =>
+                {
+                    mainForm.ForceClose = true;
+                    mainForm.Close();
+                })
             });
             icon.ContextMenuStrip = menu;
             icon.Visible = true;
@@ -79,18 +71,7 @@ namespace SlepoffStore
 
         public static IRepository CreateRepository()
         {
-            if (Source == SourceType.SQLiteFile)
-            {
-                return new SQLiteRepository(SourceUrl, UserName, Environment.MachineName);
-            }
-            else if (Source == SourceType.WebService)
-            {
-                return new RemoteRepository(SourceUrl, UserName, Password, Environment.MachineName);
-            }
-            else
-            {
-                throw new Exception("Unknown SourceType");
-            }
+            return new RemoteRepository(ServerUrl, UserName, Password, Environment.MachineName);
         }
 
         private static void MyHandler(object sender, UnhandledExceptionEventArgs args)
@@ -102,65 +83,36 @@ namespace SlepoffStore
 
         private static bool RequestAuthInfo()
         {
-            if (Source == SourceType.SQLiteFile)
+            if (string.IsNullOrWhiteSpace(UserName) || string.IsNullOrWhiteSpace(Password))
             {
-                if (string.IsNullOrWhiteSpace(UserName))
+                var form = new LogonForm
                 {
-                    var form = new LogonForm
-                    {
-                        UserName = null,
-                        Password = null,
-                        PasswordEnabled = false
-                    };
-                    if (form.ShowDialog() == DialogResult.OK)
-                    {
-                        UserName = form.UserName;
-                        return !string.IsNullOrWhiteSpace(UserName);
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            else if (Source == SourceType.WebService)
-            {
-                if (string.IsNullOrWhiteSpace(UserName) || string.IsNullOrWhiteSpace(Password))
+                    UserName = UserName,
+                    Password = Password,
+                    PasswordEnabled = true
+                };
+                if (form.ShowDialog() == DialogResult.OK)
                 {
-                    var form = new LogonForm
-                    {
-                        UserName = UserName,
-                        Password = Password,
-                        PasswordEnabled = true
-                    };
-                    if (form.ShowDialog() == DialogResult.OK)
-                    {
-                        UserName = form.UserName;
-                        Password = form.Password;
-                        return !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password);
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    UserName = form.UserName;
+                    Password = form.Password;
+                    return !string.IsNullOrWhiteSpace(UserName) && !string.IsNullOrWhiteSpace(Password);
                 }
-                return true;
+                else
+                {
+                    return false;
+                }
             }
-            return false;
+
+            return true;
         }
 
         internal sealed class CommandLine
         {
             private const string ErrorMessage1 =
                 "Database is unspecified!\n\n" +
-                "Use command line:\n\n" +
-                "slepoffstore /database: <filename>\n" +
-                "or\n" +
-                "slepoffstore /server: <url>";
+                "Use command line: slepoffstore /server: <url>";
 
-            public SourceType? Source { get; private set; }
-            public string SourceUrl { get; private set; }
+            public string ServerUrl { get; private set; }
             public string UserName { get; private set; }
             public string Password { get; private set; }
 
@@ -176,25 +128,9 @@ namespace SlepoffStore
                 var args = Environment.GetCommandLineArgs();
                 for (int i = 1; i < args.Length; i++)
                 {
-                    if (args[i].ToLower() == "/database:" && i < args.Length - 1)
+                    if (args[i].ToLower() == "/server:" && i < args.Length - 1)
                     {
-                        if (Source.HasValue && Source == SourceType.WebService)
-                        {
-                            MessageBox.Show(ErrorMessage1, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                            return false;
-                        }
-                        Source = SourceType.SQLiteFile;
-                        SourceUrl = args[++i];
-                    }
-                    else if (args[i].ToLower() == "/server:" && i < args.Length - 1)
-                    {
-                        if (Source.HasValue && Source == SourceType.SQLiteFile)
-                        {
-                            MessageBox.Show(ErrorMessage1, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                            return false;
-                        }
-                        Source = SourceType.WebService;
-                        SourceUrl = args[++i];
+                        ServerUrl = args[++i];
                     }
                     else if (args[i].ToLower() == "/username:" && i < args.Length - 1)
                     {
@@ -206,7 +142,7 @@ namespace SlepoffStore
                     }
                 }
 
-                if (!Source.HasValue || string.IsNullOrWhiteSpace(SourceUrl))
+                if (string.IsNullOrWhiteSpace(ServerUrl))
                 {
                     MessageBox.Show(ErrorMessage1, "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return false;

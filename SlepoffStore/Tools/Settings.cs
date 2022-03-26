@@ -17,7 +17,8 @@ namespace SlepoffStore.Tools
 
         public static async Task Load()
         {
-            using var repo = Program.CreateRepository(); ;
+            using var repo = Program.CreateRepository();
+            ;
             StartWithWindows = await repo.GetValue("StartWithWindows") == "true";
             AlarmRingtone = await repo.GetValue("AlarmRingtone");
             MainFont = FontFromString(await repo.GetValue("MainFont"));
@@ -42,16 +43,9 @@ namespace SlepoffStore.Tools
 
             if (StartWithWindows)
             {
-                if (Program.Source == Program.SourceType.SQLiteFile)
-                {
-                    var autorunCommandLine = $"{Application.ExecutablePath} /database: \"{Program.SourceUrl}\" /username: \"{Program.UserName}\"";
-                    if (regValue != autorunCommandLine) reg.SetValue(regKey, autorunCommandLine);
-                }
-                else if (Program.Source == Program.SourceType.WebService)
-                {
-                    var autorunCommandLine = $"{Application.ExecutablePath} /server: \"{Program.SourceUrl}\" /username: \"{Program.UserName}\" /password: \"{Program.Password}\"";
-                    if (regValue != autorunCommandLine) reg.SetValue(regKey, autorunCommandLine);
-                }
+                var autorunCommandLine =
+                    $"{Application.ExecutablePath} /server: \"{Program.ServerUrl}\" /username: \"{Program.UserName}\" /password: \"{Program.Password}\"";
+                if (regValue != autorunCommandLine) reg.SetValue(regKey, autorunCommandLine);
             }
             else
             {

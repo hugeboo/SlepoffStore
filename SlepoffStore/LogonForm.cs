@@ -37,7 +37,7 @@ namespace SlepoffStore
 
         private void LogonForm_Load(object sender, EventArgs e)
         {
-            this.Text = $"Slepoff Store - {Program.SourceUrl}";
+            this.Text = $"Slepoff Store - {Program.ServerUrl}";
         }
     }
 }
