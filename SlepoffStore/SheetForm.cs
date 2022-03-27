@@ -21,8 +21,15 @@ namespace SlepoffStore
         private static bool _timerTickExceptionVisible;
         private bool _timerTickDataSaved = true;
 
+        public enum FlashMode
+        {
+            AllSheet,
+            SmallAlarmImage
+        }
+
         public UISheet UISheet { get; private set; }
         public Entry Entry { get; private set; }
+        public FlashMode AlarmFlashMode { get; set; } = FlashMode.SmallAlarmImage;
 
         public Font MainFont
         {
@@ -285,11 +292,18 @@ namespace SlepoffStore
                 {
                     this.Activate();
                     this.BringToFront();
+                    flashTimer.Interval = 500;
                 }
-                flashTimer.Interval = 500;
-                _currentColor = _currentColor == EntryColor.White ? EntryColor.Black : EntryColor.White;
-                RestoreColors();
-                this.Invalidate();
+                if (AlarmFlashMode == FlashMode.AllSheet)
+                {
+                    _currentColor = _currentColor == EntryColor.White ? EntryColor.Black : EntryColor.White;
+                    RestoreColors();
+                    this.Invalidate();
+                }
+                else if (AlarmFlashMode == FlashMode.SmallAlarmImage)
+                {
+                    sheetAlarmControl.ToggleAlarmImage();
+                }
             }
             else
             {
@@ -297,9 +311,16 @@ namespace SlepoffStore
                 {
                     this.SendToBack();
                     flashTimer.Interval = 2000;
-                    _currentColor = Entry.Color;
-                    RestoreColors();
-                    this.Invalidate();
+                    if (AlarmFlashMode == FlashMode.AllSheet)
+                    {
+                        _currentColor = Entry.Color;
+                        RestoreColors();
+                        this.Invalidate();
+                    }
+                    else if (AlarmFlashMode == FlashMode.SmallAlarmImage)
+                    {
+                        sheetAlarmControl.Init(Entry);
+                    }
                 }
             }
             _prevAlarmActivted = AlarmActivated;

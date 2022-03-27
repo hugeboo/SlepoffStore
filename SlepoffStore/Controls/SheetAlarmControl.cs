@@ -16,6 +16,7 @@ namespace SlepoffStore.Controls
     public partial class SheetAlarmControl : UserControl
     {
         private Entry _entry;
+        private bool _isWhiteAlarmImage;
 
         public bool AlarmActivated => _entry != null &&
             _entry.AlarmIsOn && _entry.Alarm.HasValue && _entry.Alarm.Value < DateTime.Now;
@@ -30,11 +31,11 @@ namespace SlepoffStore.Controls
             _entry = entry;
             if (entry.Alarm.HasValue && entry.AlarmIsOn)
             {
-                imageLabel.BackColor = entry.Color.ToColor();
-                imageLabel.Image = entry.Color.GetForeColor() == Color.White ?
-                    Properties.Resources.icons8_будильник_24_white : Properties.Resources.icons8_будильник_24_black;
+                var backColor = entry.Color.ToColor().AdjustLightnessAndSaturation(1.2, 0.8);
+                imageLabel.BackColor = backColor;
+                if ( entry.Color.GetForeColor() == Color.White) SetWhiteAlarmImage(); else SetBlackAlarmImage();
 
-                textLabel.BackColor = entry.Color.ToColor();
+                textLabel.BackColor = backColor;
                 textLabel.ForeColor = entry.Color.GetForeColor();
                 textLabel.Text = entry.Alarm.Value.ToString("f");
 
@@ -44,6 +45,23 @@ namespace SlepoffStore.Controls
             {
                 this.Visible = false;
             }
+        }
+
+        public void ToggleAlarmImage()
+        {
+            if (_isWhiteAlarmImage) SetBlackAlarmImage(); else SetWhiteAlarmImage();
+        }
+
+        private void SetWhiteAlarmImage()
+        {
+            imageLabel.Image = Properties.Resources.icons8_будильник_24_white;
+            _isWhiteAlarmImage = true;
+        }
+
+        private void SetBlackAlarmImage()
+        {
+            imageLabel.Image = Properties.Resources.icons8_будильник_24_black;
+            _isWhiteAlarmImage = false;
         }
 
         private async Task DisableAlarm(MouseEventArgs e)

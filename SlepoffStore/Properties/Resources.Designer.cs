@@ -133,6 +133,26 @@ namespace SlepoffStore.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_будильник_black_100 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-будильник-black-100", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_будильник_white_100 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-будильник-white-100", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_настройки_64 {
             get {
                 object obj = ResourceManager.GetObject("icons8-настройки-64", resourceCulture);
