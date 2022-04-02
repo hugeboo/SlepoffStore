@@ -103,7 +103,7 @@ namespace SlepoffStore.Tools
             }
         }
 
-        private void SheetForm_FormClosed(object? sender, FormClosedEventArgs e)
+        private void SheetForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             var form = sender as SheetForm;
             form.FormClosed -= SheetForm_FormClosed;

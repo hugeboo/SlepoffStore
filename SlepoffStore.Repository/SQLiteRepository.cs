@@ -33,6 +33,15 @@ namespace SlepoffStore.Repository
             _connection.Close();
         }
 
+        #region
+
+        public async Task<bool> Ping()
+        {
+            return await Task.FromResult(true);
+        }
+
+        #endregion
+
         #region Sections
 
         public async Task<long> CreateSection(Section section, string userName = null)

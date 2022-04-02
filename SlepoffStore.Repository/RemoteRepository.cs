@@ -60,6 +60,23 @@ namespace SlepoffStore.Repository
             _restClient.Dispose();
         }
 
+        #region Ping
+
+        public async Task<bool> Ping()
+        {
+            try
+            {
+                var rr = new RestRequest(API_PATH + "ping");
+                return (await _restClient.GetAsync<ApiResult>(rr))?.Status == ApiResultStatus.OK;
+            }
+            catch (Exception)
+            {
+                return await Task.FromResult(false);
+            }
+        }
+
+        #endregion
+
         #region Sections
 
         public async Task<long> CreateSection(Section section, string userName = null)

@@ -43,7 +43,7 @@ namespace SlepoffStore
             base.WndProc(ref m);
         }
 
-        private async void sheetsManager_SheetsListChanged(object? sender, GenericEventArgs<SheetForm[]> e)
+        private async void sheetsManager_SheetsListChanged(object sender, GenericEventArgs<SheetForm[]> e)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace SlepoffStore
             }
         }
 
-        private async void SectionsTreeViewControl_SectionSelected(object? sender, GenericEventArgs<SectionEx> e)
+        private async void SectionsTreeViewControl_SectionSelected(object sender, GenericEventArgs<SectionEx> e)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace SlepoffStore
             }
         }
 
-        private async void SectionsTreeViewControl_CategorySelected(object? sender, GenericEventArgs<Category> e)
+        private async void SectionsTreeViewControl_CategorySelected(object sender, GenericEventArgs<Category> e)
         {
             try
             {

@@ -63,7 +63,7 @@ namespace SlepoffStore.Tools
             }
         }
 
-        private void MainTimerCallback(object? state)
+        private void MainTimerCallback(object state)
         {
             if (Monitor.TryEnter(_mainTimer))
             {

@@ -10,6 +10,8 @@ namespace SlepoffStore.Repository
 {
     public interface IRepository : IDisposable
     {
+        Task<bool>          Ping();
+
         Task<long>          CreateSection(Section section, string userName = null);
         Task<Section>       ReadSection(long id, string userName = null);
         Task<Section[]>     ReadSections(string userName = null);
@@ -42,7 +44,7 @@ namespace SlepoffStore.Repository
     public sealed class KeyValue
     {
         public string Key { get; set; }
-        public string? Value { get; set; }
+        public string Value { get; set; }
     }
 
     internal static class RepositoryExtensions

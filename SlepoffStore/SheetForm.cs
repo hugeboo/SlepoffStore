@@ -16,10 +16,14 @@ namespace SlepoffStore
 {
     public partial class SheetForm : BorderLessForm
     {
+        private const double OPACITY_OK = 1.0;
+        private const double OPACITY_ERROR = 0.3;
+
         private EntryColor _currentColor;
         private bool _prevAlarmActivted;
         private static bool _timerTickExceptionVisible;
         private bool _timerTickDataSaved = true;
+        private DateTime _lastPingTime = DateTime.MinValue;
 
         public enum FlashMode
         {
@@ -99,13 +103,13 @@ namespace SlepoffStore
                 try
                 {
                     using var repo = Program.CreateRepository();
-                    if (!_timerTickDataSaved || 
+                    if (!_timerTickDataSaved ||
                         textBox.Text != Entry.Text)
                     {
                         Entry.Text = textBox.Text;
                         await repo.UpdateEntry(Entry);
                     }
-                    if (!_timerTickDataSaved || 
+                    if (!_timerTickDataSaved ||
                         this.Location.X != UISheet.PosX || this.Location.Y != UISheet.PosY ||
                         this.Width != UISheet.Width || this.Height != UISheet.Height)
                     {
@@ -116,7 +120,7 @@ namespace SlepoffStore
                         await repo.UpdateUISheet(UISheet);
                     }
                     _timerTickDataSaved = true;
-                    this.Opacity = 1.0;
+                    this.Opacity = OPACITY_OK;
                 }
                 catch (RemoteException ex)
                 {
@@ -126,11 +130,32 @@ namespace SlepoffStore
                         ExceptionForm.ShowConnectingError(ex, () => _timerTickExceptionVisible = false);
                     }
                     _timerTickDataSaved = false;
-                    this.Opacity = 0.3;
+                    this.Opacity = OPACITY_ERROR;
                 }
                 finally
                 {
                     WaitMode = false;
+                }
+            }
+            else
+            {
+                if ((DateTime.Now - _lastPingTime).TotalSeconds > 60)
+                {
+                    WaitMode = true;
+                    try
+                    {
+                        using var repo = Program.CreateRepository();
+                        this.Opacity = await repo.Ping() ? OPACITY_OK : OPACITY_ERROR;
+                    }
+                    catch
+                    {
+                        this.Opacity = OPACITY_ERROR;
+                    }
+                    finally
+                    {
+                        _lastPingTime = DateTime.Now;
+                        WaitMode = false;
+                    }
                 }
             }
         }
