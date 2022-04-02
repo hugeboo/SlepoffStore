@@ -88,16 +88,18 @@
             // 
             // label2
             // 
+            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label2.Image = global::SlepoffStore.Properties.Resources.icons8_user_28;
-            this.label2.Location = new System.Drawing.Point(150, 33);
+            this.label2.Location = new System.Drawing.Point(151, 33);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 35);
             this.label2.TabIndex = 4;
             // 
             // label3
             // 
+            this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label3.Image = global::SlepoffStore.Properties.Resources.icons8_key_28;
-            this.label3.Location = new System.Drawing.Point(150, 74);
+            this.label3.Location = new System.Drawing.Point(151, 74);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(32, 35);
             this.label3.TabIndex = 5;
